@@ -4,13 +4,18 @@ import {View, Text, StyleSheet} from 'react-native';
 const SettingsScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Ayarlar</Text>
+      <View style={styles.content}>
+        <Text style={styles.text}>Ayarlar</Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  content: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
