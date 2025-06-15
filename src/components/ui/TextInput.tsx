@@ -1,22 +1,22 @@
 import React from 'react';
-import {
-  View,
-  TextInput as RNTextInput,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {StyleSheet} from 'react-native';
+import {TextInput as PaperTextInput, useTheme} from 'react-native-paper';
+import {useTheme as useAppTheme} from '../../context/ThemeContext';
 
 interface TextInputProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
-  leftIcon?: {
-    name: string;
-    size?: number;
-    color?: string;
-  };
-  showClearButton?: boolean;
+  leftIcon?: string;
+  rightIcon?: string;
+  onRightIconPress?: () => void;
+  secureTextEntry?: boolean;
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  multiline?: boolean;
+  numberOfLines?: number;
+  error?: boolean;
+  isFilled?: boolean;
 }
 
 export const TextInput = ({
@@ -24,67 +24,54 @@ export const TextInput = ({
   onChangeText,
   placeholder = '',
   leftIcon,
-  showClearButton = true,
+  rightIcon,
+  onRightIconPress,
+  secureTextEntry,
+  keyboardType = 'default',
+  autoCapitalize = 'none',
+  multiline = false,
+  numberOfLines = 1,
+  error = false,
+  isFilled,
 }: TextInputProps) => {
+  const theme = useTheme();
+  const {theme: appTheme} = useAppTheme();
+
+  const inputStyle = {};
+
+  const outlineStyle = {
+    borderRadius: appTheme.ui.radius,
+    borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
+    borderColor: appTheme.colors.outline,
+    elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
+    backgroundColor:
+      isFilled ?? appTheme.ui.isFilled ? theme.colors.surface : 'transparent',
+  };
+
   return (
-    <View style={styles.container}>
-      {leftIcon && (
-        <MaterialIcons
-          name={leftIcon.name}
-          size={leftIcon.size || 24}
-          color={leftIcon.color || '#666'}
-          style={styles.leftIcon}
-        />
-      )}
-      <RNTextInput
-        style={[
-          styles.input,
-          leftIcon && styles.inputWithLeftIcon,
-          showClearButton && styles.inputWithRightIcon,
-        ]}
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-      />
-      {showClearButton && value.length > 0 && (
-        <TouchableOpacity
-          onPress={() => onChangeText('')}
-          style={styles.clearButton}>
-          <MaterialIcons name="close" size={20} color="#666" />
-        </TouchableOpacity>
-      )}
-    </View>
+    <PaperTextInput
+      mode="outlined"
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      left={leftIcon ? <PaperTextInput.Icon icon={leftIcon} /> : undefined}
+      right={
+        rightIcon ? (
+          <PaperTextInput.Icon icon={rightIcon} onPress={onRightIconPress} />
+        ) : undefined
+      }
+      style={[inputStyle]}
+      outlineStyle={outlineStyle}
+      outlineColor={error ? theme.colors.error : theme.colors.outline}
+      activeOutlineColor={theme.colors.primary}
+      textColor={theme.colors.onSurface}
+      placeholderTextColor={theme.colors.onSurfaceVariant}
+      secureTextEntry={secureTextEntry}
+      keyboardType={keyboardType}
+      autoCapitalize={autoCapitalize}
+      multiline={multiline}
+      numberOfLines={numberOfLines}
+      error={error}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    fontSize: 16,
-  },
-  inputWithLeftIcon: {
-    paddingLeft: 40,
-  },
-  inputWithRightIcon: {
-    paddingRight: 40,
-  },
-  leftIcon: {
-    position: 'absolute',
-    left: 12,
-    zIndex: 1,
-  },
-  clearButton: {
-    position: 'absolute',
-    right: 12,
-    padding: 4,
-  },
-});

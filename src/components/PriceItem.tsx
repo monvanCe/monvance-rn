@@ -1,59 +1,107 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
+import {Text, useTheme} from 'react-native-paper';
+import {useTheme as useAppTheme} from '../context/ThemeContext';
+import {CustomSwitch} from './ui/CustomSwitch';
+
+const PRICE_COLOR = '#2E7D32';
 
 interface PriceItemProps {
   coin: string;
   pair: string;
   price: string;
+  isFilled?: boolean;
+  switchValue?: boolean;
+  onSwitchChange?: (value: boolean) => void;
 }
 
-export const PriceItem = ({coin, pair, price}: PriceItemProps) => {
+export const PriceItem = ({
+  coin,
+  pair,
+  price,
+  isFilled,
+  switchValue,
+  onSwitchChange,
+}: PriceItemProps) => {
+  const theme = useTheme();
+  const {theme: appTheme} = useAppTheme();
+
+  const containerStyle = {
+    borderRadius: appTheme.ui.radius,
+    borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
+    backgroundColor:
+      isFilled ?? appTheme.ui.isFilled ? theme.colors.surface : 'transparent',
+    borderColor: theme.colors.outline,
+    padding: appTheme.ui.spacing,
+    elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.symbolContainer}>
-        <Text style={styles.coinText}>{coin}</Text>
-        <Text style={styles.pairText}>{pair}</Text>
+    <View style={[styles.container, containerStyle]}>
+      <View style={styles.contentContainer}>
+        <View style={styles.symbolContainer}>
+          <Text
+            variant="bodyLarge"
+            style={[
+              styles.coinText,
+              {
+                color: theme.colors.onSurface,
+              },
+            ]}>
+            {coin}
+          </Text>
+          <Text
+            variant="bodyLarge"
+            style={[
+              styles.pairText,
+              {
+                color: theme.colors.onSurfaceVariant,
+                marginLeft: appTheme.ui.spacing / 2,
+              },
+            ]}>
+            {pair}
+          </Text>
+        </View>
+        <Text
+          variant="bodyLarge"
+          style={[
+            styles.price,
+            {
+              color: PRICE_COLOR,
+              fontWeight: '900',
+            },
+          ]}>
+          {parseFloat(price).toFixed(2)}
+        </Text>
       </View>
-      <Text style={styles.price}>{parseFloat(price).toFixed(2)}</Text>
+      {switchValue !== undefined && onSwitchChange && (
+        <CustomSwitch value={switchValue} onValueChange={onSwitchChange} />
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
     marginBottom: 8,
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  contentContainer: {
+    flex: 1,
   },
   symbolContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   coinText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#000',
+    fontWeight: '700',
   },
   pairText: {
-    fontSize: 16,
-    color: '#666',
-    marginLeft: 4,
+    fontWeight: '400',
   },
   price: {
-    fontSize: 16,
-    color: '#666',
+    marginTop: 4,
   },
 });

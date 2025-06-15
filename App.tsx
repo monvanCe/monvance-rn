@@ -1,19 +1,31 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {StyleSheet} from 'react-native';
-import TabNavigator from './src/navigation/TabNavigator';
 
-const App = () => {
+import {PaperProvider} from 'react-native-paper';
+import StackNavigator from './src/navigation/StackNavigator';
+import {ThemeProvider, useTheme} from './src/context/ThemeContext';
+
+const AppContent = () => {
+  const {theme} = useTheme();
+
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <TabNavigator />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <PaperProvider theme={theme}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <StackNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 };
 
-const styles = StyleSheet.create({});
+const App = () => {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
+};
 
 export default App;
