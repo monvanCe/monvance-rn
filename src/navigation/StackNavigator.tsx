@@ -1,7 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import TabNavigator from './TabNavigator';
-import ChatScreen from '../screens/ChatScreen';
+import TabNavigationWrapper from './TabNavigationWrapper';
 
 export type RootStackParamList = {
   Main: undefined;
@@ -16,8 +15,7 @@ const StackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="Main" component={TabNavigator} />
-      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="Main" component={TabNavigationWrapper} />
     </Stack.Navigator>
   );
 };

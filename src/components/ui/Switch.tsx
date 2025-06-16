@@ -1,24 +1,24 @@
 import React from 'react';
-import {Switch} from 'react-native-paper';
+import {Switch as PaperSwitch} from 'react-native-paper';
 import {useTheme} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 
-interface CustomSwitchProps {
+interface SwitchProps {
   value: boolean;
   onValueChange: (value: boolean) => void;
   disabled?: boolean;
 }
 
-export const CustomSwitch = ({
+export const Switch = ({
   value,
   onValueChange,
   disabled = false,
-}: CustomSwitchProps) => {
+}: SwitchProps) => {
   const theme = useTheme();
   const {theme: appTheme} = useAppTheme();
 
   return (
-    <Switch
+    <PaperSwitch
       value={value}
       onValueChange={onValueChange}
       disabled={disabled}

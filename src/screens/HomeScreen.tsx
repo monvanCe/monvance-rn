@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
-import {Button, useTheme, Surface} from 'react-native-paper';
+import {useTheme, Surface, IconButton} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/StackNavigator';
@@ -9,6 +9,7 @@ import {binanceService, BinanceTickerPrice} from '../service/externalServices';
 import {PriceItem} from '../components/PriceItem';
 import {TextInput} from '../components/ui/TextInput';
 import {Dropdown} from '../components/ui/Dropdown';
+import {Button} from '../components/ui/Button';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 
 const pairs = [
@@ -54,11 +55,13 @@ interface ProcessedPrice {
   price: string;
 }
 
-const HomeScreen = () => {
-  const paperTheme = useTheme();
-  const {isDarkMode, toggleTheme, theme, theme: appTheme} = useAppTheme();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+interface HomeScreenProps {
+  onNavigateToChat: () => void;
+}
+
+const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
+  const theme = useTheme();
+  const {theme: appTheme, isDarkMode, toggleTheme} = useAppTheme();
   const [prices, setPrices] = useState<ProcessedPrice[]>([]);
   const [filteredPrices, setFilteredPrices] = useState<ProcessedPrice[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -127,35 +130,38 @@ const HomeScreen = () => {
       <Surface
         style={[
           styles.loadingContainer,
-          {backgroundColor: theme.colors.background},
+          {backgroundColor: appTheme.colors.background},
         ]}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
+        <ActivityIndicator size="large" color={appTheme.colors.primary} />
       </Surface>
     );
   }
 
   return (
     <Surface
-      style={[styles.container, {backgroundColor: theme.colors.background}]}>
-      <View style={styles.headerContainer}>
-        <View style={styles.headerButtons}>
-          <Button
-            mode="contained"
-            onPress={toggleTheme}
-            style={styles.themeButton}
-            icon={isDarkMode ? 'white-balance-sunny' : 'moon-waning-crescent'}>
-            {isDarkMode ? 'Açık Tema' : 'Koyu Tema'}
-          </Button>
-          <Button
-            mode="contained"
-            onPress={() => navigation.navigate('Chat')}
-            style={styles.themeButton}
-            icon="chat">
-            Chat
-          </Button>
-        </View>
+      style={[styles.container, {backgroundColor: appTheme.colors.background}]}>
+      <View
+        style={[
+          styles.headerContainer,
+          {
+            padding: appTheme.ui.spacing,
+            borderBottomWidth: appTheme.ui.borderWidth,
+            borderBottomColor: appTheme.colors.outline,
+          },
+        ]}>
+        <IconButton
+          icon="send"
+          size={24}
+          onPress={onNavigateToChat}
+          iconColor={appTheme.colors.primary}
+          style={[styles.chatButton, {transform: [{rotate: '180deg'}]}]}
+        />
       </View>
-      <View style={styles.filterContainer}>
+      <View
+        style={[
+          styles.filterContainer,
+          {padding: appTheme.ui.spacing * 2, gap: appTheme.ui.spacing * 2},
+        ]}>
         <TextInput
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -177,7 +183,10 @@ const HomeScreen = () => {
         renderItem={renderItem}
         estimatedItemSize={60}
         keyExtractor={item => item.symbol}
-        contentContainerStyle={styles.listContainer}
+        contentContainerStyle={{
+          paddingTop: 5,
+          paddingHorizontal: appTheme.ui.spacing * 2,
+        }}
       />
     </Surface>
   );
@@ -186,17 +195,15 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingBottom: 60,
   },
   headerContainer: {
-    padding: 16,
-    paddingBottom: 0,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
   },
-  headerButtons: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  themeButton: {
-    borderRadius: 8,
+  chatButton: {
+    margin: 0,
+    justifyContent: 'center',
   },
   loadingContainer: {
     flex: 1,
@@ -204,13 +211,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   filterContainer: {
-    padding: 16,
     gap: 16,
-  },
-  listContainer: {
-    paddingBottom: 65,
-    paddingHorizontal: 16,
-    paddingTop: 5,
   },
 });
 

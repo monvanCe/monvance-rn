@@ -2,7 +2,7 @@ import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
-import {CustomSwitch} from './ui/CustomSwitch';
+import {Switch} from './ui/Switch';
 
 const PRICE_COLOR = '#2E7D32';
 
@@ -75,7 +75,7 @@ export const PriceItem = ({
         </Text>
       </View>
       {switchValue !== undefined && onSwitchChange && (
-        <CustomSwitch value={switchValue} onValueChange={onSwitchChange} />
+        <Switch value={switchValue} onValueChange={onSwitchChange} />
       )}
     </View>
   );

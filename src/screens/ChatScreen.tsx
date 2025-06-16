@@ -1,17 +1,15 @@
-import React, {useRef, useMemo, useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
   Image,
-  Keyboard,
-  Platform,
   TextInput,
 } from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
-import {useNavigation} from '@react-navigation/native';
+
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const COLORS = [
@@ -58,35 +56,17 @@ const SAMPLE_MESSAGES: IMessage[] = [
   },
 ];
 
-export default function ChatScreen() {
+interface ChatScreenProps {
+  onNavigateToTab: () => void;
+}
+
+export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
   const theme = useTheme();
   const {theme: appTheme} = useAppTheme();
-  const navigation = useNavigation();
   const scrollViewRef = useRef<ScrollView>(null);
   const userColorsRef = useRef<{[key: string]: string}>({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<IMessage[]>(SAMPLE_MESSAGES);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  useEffect(() => {
-    const keyboardWillShow = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-      e => {
-        setKeyboardHeight(e.endCoordinates.height);
-      },
-    );
-    const keyboardWillHide = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-      () => {
-        setKeyboardHeight(0);
-      },
-    );
-
-    return () => {
-      keyboardWillShow.remove();
-      keyboardWillHide.remove();
-    };
-  }, []);
 
   const uniqueMessages = messages.reduce((acc: IMessage[], message) => {
     const existing = acc.find(m => m._id === message._id);
@@ -161,7 +141,6 @@ export default function ChatScreen() {
     messagesContainer: {
       flex: 1,
       paddingVertical: appTheme.ui.spacing,
-      paddingBottom: appTheme.ui.spacing * 2 + keyboardHeight + 60,
     },
     messageWrapper: {
       marginBottom: appTheme.ui.spacing / 4,
@@ -205,10 +184,6 @@ export default function ChatScreen() {
       backgroundColor: theme.colors.surface,
       borderTopWidth: appTheme.ui.borderWidth,
       borderTopColor: theme.colors.outline,
-      position: 'absolute',
-      bottom: keyboardHeight,
-      left: 0,
-      right: 0,
       height: 60,
     },
     input: {
@@ -236,9 +211,7 @@ export default function ChatScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.backButton} onPress={onNavigateToTab}>
           <Icon name="arrow-left" size={20} color={theme.colors.onSurface} />
         </TouchableOpacity>
         <Text style={styles.title}>Sohbetler</Text>
@@ -247,7 +220,7 @@ export default function ChatScreen() {
         ref={scrollViewRef}
         style={styles.messagesContainer}
         contentContainerStyle={{
-          paddingBottom: appTheme.ui.spacing * 2 + 60 + keyboardHeight,
+          paddingBottom: appTheme.ui.spacing * 2,
         }}
         onContentSizeChange={() => scrollToBottom(false)}>
         {uniqueMessages.map((msg, index) => {
@@ -341,7 +314,7 @@ export default function ChatScreen() {
           placeholderTextColor={theme.colors.onSurfaceVariant}
           value={message}
           onChangeText={setMessage}
-          onPress={() => scrollToBottom(true)}
+          onFocus={() => scrollToBottom(true)}
         />
         <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
           <Icon name="send" size={16} color={theme.colors.onSurface} />

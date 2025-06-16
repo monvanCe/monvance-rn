@@ -9,12 +9,27 @@ import {useTheme as useAppTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator = () => {
+interface TabNavigationProps {
+  setScreenName: (screenName: string) => void;
+  onNavigateToChat: () => void;
+}
+
+const TabNavigation = ({
+  setScreenName,
+  onNavigateToChat,
+}: TabNavigationProps) => {
   const paperTheme = useTheme();
   const {theme} = useAppTheme();
 
   return (
     <Tab.Navigator
+      screenListeners={{
+        state: e => {
+          const index = e.data.state.index;
+          const tabName = e.data.state.routeNames[index];
+          setScreenName(tabName);
+        },
+      }}
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
@@ -29,7 +44,6 @@ const TabNavigator = () => {
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
         options={{
           title: 'Ana Sayfa',
           tabBarIcon: ({color, size, focused}) => (
@@ -39,11 +53,11 @@ const TabNavigator = () => {
               color={color}
             />
           ),
-        }}
-      />
+        }}>
+        {() => <HomeScreen onNavigateToChat={onNavigateToChat} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
         options={{
           title: 'Ayarlar',
           tabBarIcon: ({color, size, focused}) => (
@@ -53,8 +67,9 @@ const TabNavigator = () => {
               color={color}
             />
           ),
-        }}
-      />
+        }}>
+        {() => <SettingsScreen />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
@@ -72,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TabNavigator;
+export default TabNavigation;
