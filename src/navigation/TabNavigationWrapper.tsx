@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {StyleSheet, Dimensions, View, Keyboard} from 'react-native';
 import {
   Gesture,
@@ -15,6 +15,10 @@ import {Surface} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import TabNavigation from './TabNavigation';
 import ChatScreen from '../screens/ChatScreen';
+import {useAppDispatch} from '../store/store';
+import {setHasNewMessages} from '../store/slices/chatSlice';
+import {setEvent} from '../store/slices/eventSlice';
+import {EventNames} from '../const/enums';
 
 const {width, height} = Dimensions.get('window');
 
@@ -22,9 +26,15 @@ const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [screenName, setScreenName] = useState<string>('Home');
-
+  const dispatch = useAppDispatch();
   const translateX = useSharedValue(width);
   const overlayOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (isChatOpen) {
+      dispatch(setEvent({slug: EventNames.CHAT_SCREEN_OPENED, data: {}}));
+    }
+  }, [isChatOpen]);
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -46,7 +56,6 @@ const TabNavigationWrapper = () => {
   const panGesture = Gesture.Pan()
     .onUpdate(event => {
       const {translationX} = event;
-      console.log('Gesture Update:', translationX);
 
       if (!isChatOpen) {
         const newTranslateX = Math.max(0, width + translationX);
@@ -66,7 +75,6 @@ const TabNavigationWrapper = () => {
     })
     .onEnd(event => {
       const {translationX, velocityX} = event;
-      console.log('Gesture End:', translationX, velocityX);
       const threshold = width * 0.3;
       const velocityThreshold = 500;
 

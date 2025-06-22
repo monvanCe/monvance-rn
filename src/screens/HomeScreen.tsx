@@ -2,15 +2,14 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
 import {useTheme, Surface, IconButton} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/StackNavigator';
 import {binanceService, BinanceTickerPrice} from '../service/externalServices';
 import {PriceItem} from '../components/PriceItem';
 import {TextInput} from '../components/ui/TextInput';
 import {Dropdown} from '../components/ui/Dropdown';
-import {Button} from '../components/ui/Button';
+import {useAppDispatch, useAppSelector} from '../store/store';
+
 import {useTheme as useAppTheme} from '../context/ThemeContext';
+import {setHasNewMessages} from '../store/slices/chatSlice';
 
 const pairs = [
   'USDC',
@@ -61,12 +60,14 @@ interface HomeScreenProps {
 
 const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
   const theme = useTheme();
-  const {theme: appTheme, isDarkMode, toggleTheme} = useAppTheme();
+  const {theme: appTheme} = useAppTheme();
   const [prices, setPrices] = useState<ProcessedPrice[]>([]);
   const [filteredPrices, setFilteredPrices] = useState<ProcessedPrice[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPair, setSelectedPair] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const hasNewMessages = useAppSelector(state => state.chat.hasNewMessages);
 
   useEffect(() => {
     fetchPrices();
@@ -149,13 +150,28 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
             borderBottomColor: appTheme.colors.outline,
           },
         ]}>
-        <IconButton
-          icon="send"
-          size={24}
-          onPress={onNavigateToChat}
-          iconColor={appTheme.colors.primary}
-          style={[styles.chatButton, {transform: [{rotate: '180deg'}]}]}
-        />
+        <View style={{position: 'relative'}}>
+          <IconButton
+            icon="chat-outline"
+            size={24}
+            onPress={onNavigateToChat}
+            iconColor={appTheme.colors.primary}
+            style={styles.chatButton}
+          />
+          {hasNewMessages && (
+            <View
+              style={{
+                position: 'absolute',
+                top: 7,
+                right: 7,
+                backgroundColor: 'red',
+                width: 10,
+                height: 10,
+                borderRadius: 100,
+              }}
+            />
+          )}
+        </View>
       </View>
       <View
         style={[

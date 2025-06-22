@@ -7,9 +7,11 @@ import StackNavigator from './src/navigation/StackNavigator';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 import {store} from './src/store/store';
 import {Provider} from 'react-redux';
+import {useEvent} from './src/hooks/useEvent';
 
 const AppContent = () => {
   const {theme} = useTheme();
+  useEvent();
 
   return (
     <PaperProvider theme={theme}>

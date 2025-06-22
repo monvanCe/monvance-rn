@@ -26,3 +26,8 @@ interface IMessage {
   message: string;
   avatar: string;
 }
+
+interface IChatState {
+  messages: IMessage[];
+  hasNewMessages: boolean;
+}
