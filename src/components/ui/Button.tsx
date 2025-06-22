@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {Button as PaperButton, useTheme} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -12,7 +12,7 @@ interface ButtonProps {
   disabled?: boolean;
   loading?: boolean;
   isFilled?: boolean;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const Button = ({

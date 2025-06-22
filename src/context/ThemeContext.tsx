@@ -1,5 +1,8 @@
-import React, {createContext, useState, useContext} from 'react';
+import React, {createContext, useContext} from 'react';
 import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
+import {useDispatch} from 'react-redux';
+import {setAppTheme} from '../store/slices/appConfigSlice';
+import {useAppSelector} from '../store/store';
 
 const uiProperties = {
   radius: 8,
@@ -66,10 +69,14 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export const ThemeProvider = ({children}: {children: React.ReactNode}) => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const dispatch = useDispatch();
+  const currentTheme = useAppSelector(state => state.appConfig.appTheme);
+
+  const isDarkMode = currentTheme === 'dark';
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
+    const newTheme = isDarkMode ? 'light' : 'dark';
+    dispatch(setAppTheme(newTheme));
   };
 
   const theme = isDarkMode ? darkTheme : lightTheme;

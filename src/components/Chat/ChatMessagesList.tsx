@@ -1,0 +1,53 @@
+import React from 'react';
+import {StyleSheet} from 'react-native';
+import {FlashList} from '@shopify/flash-list';
+import {useTheme} from 'react-native-paper';
+import {useTheme as useAppTheme} from '../../context/ThemeContext';
+import {ChatMessage} from './ChatMessage';
+
+interface ChatMessagesListProps {
+  scrollViewRef: React.RefObject<FlashList<IMessage> | null>;
+  messages: IMessage[];
+  getUserColor: (userId: string) => string;
+  scrollToBottom: (withTimeout?: boolean) => void;
+}
+
+export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
+  scrollViewRef,
+  messages,
+  getUserColor,
+  scrollToBottom,
+}) => {
+  const theme = useTheme();
+  const {theme: appTheme} = useAppTheme();
+
+  const styles = StyleSheet.create({
+    messagesContainer: {
+      flex: 1,
+    },
+  });
+
+  const renderMessage = ({item, index}: {item: IMessage; index: number}) => (
+    <ChatMessage
+      message={item}
+      index={index}
+      messages={messages}
+      getUserColor={getUserColor}
+    />
+  );
+
+  return (
+    <FlashList
+      ref={scrollViewRef}
+      data={messages}
+      renderItem={renderMessage}
+      keyExtractor={item => item._id}
+      estimatedItemSize={80}
+      contentContainerStyle={{
+        paddingVertical: appTheme.ui.spacing,
+        paddingBottom: appTheme.ui.spacing * 2,
+      }}
+      onContentSizeChange={() => scrollToBottom(false)}
+    />
+  );
+};

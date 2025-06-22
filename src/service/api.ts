@@ -9,7 +9,7 @@ export const api = {
 
   post: async <T>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.post(
@@ -22,7 +22,7 @@ export const api = {
 
   put: async <T>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.put(
@@ -40,7 +40,7 @@ export const api = {
 
   patch: async <T>(
     url: string,
-    data?: any,
+    data?: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> => {
     const response: AxiosResponse<T> = await axiosInstance.patch(

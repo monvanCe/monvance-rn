@@ -1,80 +1,157 @@
-import React, {useRef, useState} from 'react';
-import {FlatList, StyleSheet, Dimensions, View} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {StyleSheet, Dimensions, View, Keyboard} from 'react-native';
+import {
+  Gesture,
+  GestureDetector,
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
 import {Surface} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import TabNavigation from './TabNavigation';
 import ChatScreen from '../screens/ChatScreen';
 
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();
-  const flatListRef = useRef<FlatList>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [screenName, setScreenName] = useState<string>('Home');
 
+  const translateX = useSharedValue(width);
+  const opacity = useSharedValue(0);
+
+  const dismissKeyboard = () => {
+    Keyboard.dismiss();
+  };
+
   const navigateToChat = () => {
-    flatListRef.current?.scrollToIndex({index: 1, animated: true});
+    setIsChatOpen(true);
+    translateX.value = withTiming(0, {duration: 300});
+    opacity.value = withTiming(1, {duration: 300});
   };
 
   const navigateToTab = () => {
-    flatListRef.current?.scrollToIndex({index: 0, animated: true});
+    setIsChatOpen(false);
+    dismissKeyboard();
+    translateX.value = withTiming(width, {duration: 300});
+    opacity.value = withTiming(0, {duration: 300});
   };
 
-  const screens = [
-    <View style={styles.screenContainer}>
-      <TabNavigation
-        setScreenName={setScreenName}
-        onNavigateToChat={navigateToChat}
-      />
-    </View>,
-    <View style={styles.screenContainer}>
-      <ChatScreen onNavigateToTab={navigateToTab} />
-    </View>,
-  ];
+  const panGesture = Gesture.Pan()
+    .onUpdate(event => {
+      const {translationX} = event;
+      console.log('Gesture Update:', translationX);
 
-  const handleScroll = (event: any) => {
-    const newIndex = Math.round(event.nativeEvent.contentOffset.x / width);
-    if (newIndex !== currentIndex) {
-      setCurrentIndex(newIndex);
-    }
-  };
+      if (!isChatOpen) {
+        const newTranslateX = Math.max(0, width + translationX);
+        translateX.value = newTranslateX;
+        opacity.value = Math.max(0, Math.min(1, -translationX / width));
+      } else {
+        const newTranslateX = Math.min(width, translationX);
+        translateX.value = newTranslateX;
+        opacity.value = Math.max(0, Math.min(1, 1 - translationX / width));
+      }
+    })
+    .onEnd(event => {
+      const {translationX, velocityX} = event;
+      console.log('Gesture End:', translationX, velocityX);
+      const threshold = width * 0.3;
+      const velocityThreshold = 500;
+
+      if (!isChatOpen) {
+        if (translationX < -threshold || velocityX < -velocityThreshold) {
+          runOnJS(setIsChatOpen)(true);
+          translateX.value = withTiming(0, {duration: 300});
+          opacity.value = withTiming(1, {duration: 300});
+        } else {
+          translateX.value = withTiming(width, {duration: 300});
+          opacity.value = withTiming(0, {duration: 300});
+        }
+      } else {
+        if (translationX > threshold || velocityX > velocityThreshold) {
+          runOnJS(setIsChatOpen)(false);
+          runOnJS(dismissKeyboard)();
+          translateX.value = withTiming(width, {duration: 300});
+          opacity.value = withTiming(0, {duration: 300});
+        } else {
+          translateX.value = withTiming(0, {duration: 300});
+          opacity.value = withTiming(1, {duration: 300});
+        }
+      }
+    });
+
+  const chatAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{translateX: translateX.value}],
+      opacity: opacity.value,
+    };
+  });
 
   return (
-    <Surface
-      style={[styles.container, {backgroundColor: appTheme.colors.background}]}>
-      <FlatList
-        ref={flatListRef}
-        data={screens}
-        renderItem={({item}) => item}
-        horizontal
-        pagingEnabled
-        scrollEnabled={screenName === 'Home'}
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        getItemLayout={(_, index) => ({
-          length: width,
-          offset: width * index,
-          index,
-        })}
-        snapToInterval={width}
-        decelerationRate="fast"
-        snapToAlignment="center"
-        bounces={false}
-        overScrollMode="never"
-      />
-    </Surface>
+    <GestureHandlerRootView style={{flex: 1}}>
+      {screenName === 'Home' ? (
+        <GestureDetector gesture={panGesture}>
+          <Surface
+            style={[
+              styles.container,
+              {backgroundColor: appTheme.colors.background},
+            ]}>
+            <View style={styles.mainContainer}>
+              <TabNavigation
+                setScreenName={setScreenName}
+                onNavigateToChat={navigateToChat}
+              />
+            </View>
+
+            <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
+              <ChatScreen onNavigateToTab={navigateToTab} />
+            </Animated.View>
+          </Surface>
+        </GestureDetector>
+      ) : (
+        <Surface
+          style={[
+            styles.container,
+            {backgroundColor: appTheme.colors.background},
+          ]}>
+          <View style={styles.mainContainer}>
+            <TabNavigation
+              setScreenName={setScreenName}
+              onNavigateToChat={navigateToChat}
+            />
+          </View>
+
+          <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
+            <ChatScreen onNavigateToTab={navigateToTab} />
+          </Animated.View>
+        </Surface>
+      )}
+    </GestureHandlerRootView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    position: 'relative',
   },
-  screenContainer: {
-    width: width,
+  mainContainer: {
     flex: 1,
+  },
+  chatOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'white',
+    zIndex: 1000,
   },
 });
 

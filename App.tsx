@@ -5,6 +5,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {PaperProvider} from 'react-native-paper';
 import StackNavigator from './src/navigation/StackNavigator';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
+import {store} from './src/store/store';
+import {Provider} from 'react-redux';
 
 const AppContent = () => {
   const {theme} = useTheme();
@@ -22,9 +24,11 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </Provider>
   );
 };
 
