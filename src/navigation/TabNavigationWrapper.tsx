@@ -24,7 +24,7 @@ const TabNavigationWrapper = () => {
   const [screenName, setScreenName] = useState<string>('Home');
 
   const translateX = useSharedValue(width);
-  const opacity = useSharedValue(0);
+  const overlayOpacity = useSharedValue(0);
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -33,14 +33,14 @@ const TabNavigationWrapper = () => {
   const navigateToChat = () => {
     setIsChatOpen(true);
     translateX.value = withTiming(0, {duration: 300});
-    opacity.value = withTiming(1, {duration: 300});
+    overlayOpacity.value = withTiming(0.5, {duration: 300});
   };
 
   const navigateToTab = () => {
     setIsChatOpen(false);
     dismissKeyboard();
     translateX.value = withTiming(width, {duration: 300});
-    opacity.value = withTiming(0, {duration: 300});
+    overlayOpacity.value = withTiming(0, {duration: 300});
   };
 
   const panGesture = Gesture.Pan()
@@ -51,11 +51,17 @@ const TabNavigationWrapper = () => {
       if (!isChatOpen) {
         const newTranslateX = Math.max(0, width + translationX);
         translateX.value = newTranslateX;
-        opacity.value = Math.max(0, Math.min(1, -translationX / width));
+        overlayOpacity.value = Math.max(
+          0,
+          Math.min(0.5, (-translationX / width) * 0.5),
+        );
       } else {
         const newTranslateX = Math.min(width, translationX);
         translateX.value = newTranslateX;
-        opacity.value = Math.max(0, Math.min(1, 1 - translationX / width));
+        overlayOpacity.value = Math.max(
+          0,
+          Math.min(0.5, 0.5 - (translationX / width) * 0.5),
+        );
       }
     })
     .onEnd(event => {
@@ -68,20 +74,20 @@ const TabNavigationWrapper = () => {
         if (translationX < -threshold || velocityX < -velocityThreshold) {
           runOnJS(setIsChatOpen)(true);
           translateX.value = withTiming(0, {duration: 300});
-          opacity.value = withTiming(1, {duration: 300});
+          overlayOpacity.value = withTiming(0.5, {duration: 300});
         } else {
           translateX.value = withTiming(width, {duration: 300});
-          opacity.value = withTiming(0, {duration: 300});
+          overlayOpacity.value = withTiming(0, {duration: 300});
         }
       } else {
         if (translationX > threshold || velocityX > velocityThreshold) {
           runOnJS(setIsChatOpen)(false);
           runOnJS(dismissKeyboard)();
           translateX.value = withTiming(width, {duration: 300});
-          opacity.value = withTiming(0, {duration: 300});
+          overlayOpacity.value = withTiming(0, {duration: 300});
         } else {
           translateX.value = withTiming(0, {duration: 300});
-          opacity.value = withTiming(1, {duration: 300});
+          overlayOpacity.value = withTiming(0.5, {duration: 300});
         }
       }
     });
@@ -89,7 +95,13 @@ const TabNavigationWrapper = () => {
   const chatAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [{translateX: translateX.value}],
-      opacity: opacity.value,
+      opacity: 1,
+    };
+  });
+
+  const overlayAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: overlayOpacity.value,
     };
   });
 
@@ -109,6 +121,11 @@ const TabNavigationWrapper = () => {
               />
             </View>
 
+            <Animated.View
+              style={[styles.darkOverlay, overlayAnimatedStyle]}
+              pointerEvents="none"
+            />
+
             <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
               <ChatScreen onNavigateToTab={navigateToTab} />
             </Animated.View>
@@ -127,6 +144,11 @@ const TabNavigationWrapper = () => {
             />
           </View>
 
+          <Animated.View
+            style={[styles.darkOverlay, overlayAnimatedStyle]}
+            pointerEvents="none"
+          />
+
           <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
             <ChatScreen onNavigateToTab={navigateToTab} />
           </Animated.View>
@@ -143,6 +165,15 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
+  },
+  darkOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'black',
+    zIndex: 500,
   },
   chatOverlay: {
     position: 'absolute',
