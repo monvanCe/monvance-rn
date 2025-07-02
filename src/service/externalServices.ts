@@ -8,6 +8,9 @@ export interface BinanceTickerPrice {
 
 export const binanceService = {
   getTickerPrices: async (): Promise<BinanceTickerPrice[]> => {
-    return api.get<BinanceTickerPrice[]>(BINANCE_ENDPOINTS.TICKER_PRICE);
+    return api.get<BinanceTickerPrice[]>(
+      BINANCE_ENDPOINTS.TICKER_PRICE,
+      'external',
+    );
   },
 };

@@ -3,6 +3,8 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
   appLanguage: 'en',
   appTheme: 'light',
+  externalUrl: 'https://www.binance.com/en/price/bitcoin',
+  internalUrl: 'https://monvance-apiv2-192419154766.europe-west1.run.app',
 } as IAppConfig;
 
 const appConfigSlice = createSlice({
