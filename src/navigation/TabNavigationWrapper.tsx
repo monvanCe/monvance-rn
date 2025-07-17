@@ -50,6 +50,15 @@ const TabNavigationWrapper = () => {
   };
 
   const panGesture = Gesture.Pan()
+    .activeOffsetX([-10, 10])
+    .failOffsetY([-10, 10])
+    .onBegin(event => {
+      if (event.x > 50) {
+        return false;
+      }
+    })
+    .shouldCancelWhenOutside(true)
+    .simultaneousWithExternalGesture(Gesture.Pan())
     .onUpdate(event => {
       const {translationX} = event;
 

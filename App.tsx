@@ -4,22 +4,22 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {PaperProvider} from 'react-native-paper';
 import StackNavigator from './src/navigation/StackNavigator';
-import {ThemeProvider, useTheme} from './src/context/ThemeContext';
+import {ThemeProvider} from './src/context/ThemeContext';
 import {store} from './src/store/store';
 import {Provider} from 'react-redux';
 import {eventBus} from './src/middleware/eventMiddleware';
+import {useAuth} from './src/hooks/useAuth';
+import {useReduxEvents} from './src/hooks/useReduxEvents';
 
 const AppContent = () => {
-  const {theme} = useTheme();
-
+  useAuth();
+  useReduxEvents();
   useEffect(() => {
-    eventBus.on('appStarted', () => {
-      console.log('appStarted');
-    });
+    eventBus.emit('appStarted', null);
   }, []);
 
   return (
-    <PaperProvider theme={theme}>
+    <PaperProvider>
       <SafeAreaProvider>
         <NavigationContainer>
           <StackNavigator />

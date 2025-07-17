@@ -1,27 +1,20 @@
+import {useEffect} from 'react';
 import {internalService} from '../service/internalServices';
-import {setUser} from '../store/slices/authSlice';
-import {useAppDispatch} from '../store/store';
-import {useChatService} from './useChatService';
+
+import {eventBus} from '../middleware/eventMiddleware';
 
 export const useAuth = () => {
-  const {getChatToken} = useChatService();
-  const dispatch = useAppDispatch();
-  const setUserFunction = (user: IUser) => {
-    dispatch(setUser(user));
-  };
-
-  const removeUserFunction = () => {
-    dispatch(setUser(null));
-  };
+  useEffect(() => {
+    eventBus.on('appStarted', () => {
+      login();
+    });
+  }, []);
 
   const login = async () => {
     const res = await internalService.login();
-    if (res.token) {
-      getChatToken(res.token);
-    }
-    setUserFunction(res);
+    eventBus.emit('loginSuccess', {user: res});
     return res;
   };
 
-  return {login, setUserFunction, removeUserFunction};
+  return {};
 };
