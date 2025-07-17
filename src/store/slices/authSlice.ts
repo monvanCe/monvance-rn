@@ -12,6 +12,7 @@ const initialState: IUser = {
   },
   avatar: '',
   isPremium: false,
+  isOnline: false,
   notificationId: '',
   isAdmin: false,
   version: 0,

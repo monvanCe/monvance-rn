@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
-import {useTheme} from 'react-native-paper';
+
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import {ChatMessage} from './ChatMessage';
+import {useTheme} from '../../context/ThemeContext';
 
 interface ChatMessagesListProps {
   scrollViewRef: React.RefObject<FlashList<IMessage> | null>;

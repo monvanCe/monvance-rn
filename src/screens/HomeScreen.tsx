@@ -1,7 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, ActivityIndicator} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
-import {useTheme, Surface, IconButton} from 'react-native-paper';
+
 import {binanceService, BinanceTickerPrice} from '../service/externalServices';
 import {PriceItem} from '../components/PriceItem';
 import {TextInput} from '../components/ui/TextInput';
@@ -9,7 +14,7 @@ import {Dropdown} from '../components/ui/Dropdown';
 import {useAppDispatch, useAppSelector} from '../store/store';
 
 import {useTheme as useAppTheme} from '../context/ThemeContext';
-import {setHasNewMessages} from '../store/slices/chatSlice';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const pairs = [
   'USDC',
@@ -59,7 +64,6 @@ interface HomeScreenProps {
 }
 
 const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
-  const theme = useTheme();
   const {theme: appTheme} = useAppTheme();
   const [prices, setPrices] = useState<ProcessedPrice[]>([]);
   const [filteredPrices, setFilteredPrices] = useState<ProcessedPrice[]>([]);
@@ -128,18 +132,18 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
 
   if (loading) {
     return (
-      <Surface
+      <View
         style={[
           styles.loadingContainer,
           {backgroundColor: appTheme.colors.background},
         ]}>
         <ActivityIndicator size="large" color={appTheme.colors.primary} />
-      </Surface>
+      </View>
     );
   }
 
   return (
-    <Surface
+    <View
       style={[styles.container, {backgroundColor: appTheme.colors.background}]}>
       <View
         style={[
@@ -151,19 +155,21 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
           },
         ]}>
         <View style={{position: 'relative'}}>
-          <IconButton
-            icon="chat-outline"
-            size={24}
+          <TouchableOpacity
             onPress={onNavigateToChat}
-            iconColor={appTheme.colors.primary}
-            style={styles.chatButton}
-          />
+            style={styles.chatButton}>
+            <Icon
+              name="chat-outline"
+              size={24}
+              color={appTheme.colors.primary}
+            />
+          </TouchableOpacity>
           {hasNewMessages && (
             <View
               style={{
                 position: 'absolute',
-                top: 7,
-                right: 7,
+                top: 2,
+                right: 2,
                 backgroundColor: 'red',
                 width: 10,
                 height: 10,
@@ -204,7 +210,7 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
           paddingHorizontal: appTheme.ui.spacing * 2,
         }}
       />
-    </Surface>
+    </View>
   );
 };
 

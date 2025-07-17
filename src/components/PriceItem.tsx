@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {Switch} from './ui/Switch';
+import {useTheme} from '../context/ThemeContext';
 
 const PRICE_COLOR = '#2E7D32';
 
@@ -30,8 +31,10 @@ export const PriceItem = ({
     borderRadius: appTheme.ui.radius,
     borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
     backgroundColor:
-      isFilled ?? appTheme.ui.isFilled ? theme.colors.surface : 'transparent',
-    borderColor: theme.colors.outline,
+      isFilled ?? appTheme.ui.isFilled
+        ? theme.theme.colors.surface
+        : 'transparent',
+    borderColor: theme.theme.colors.outline,
     padding: appTheme.ui.spacing,
     elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
   };
@@ -41,21 +44,19 @@ export const PriceItem = ({
       <View style={styles.contentContainer}>
         <View style={styles.symbolContainer}>
           <Text
-            variant="bodyLarge"
             style={[
               styles.coinText,
               {
-                color: theme.colors.onSurface,
+                color: theme.theme.colors.onSurface,
               },
             ]}>
             {coin}
           </Text>
           <Text
-            variant="bodyLarge"
             style={[
               styles.pairText,
               {
-                color: theme.colors.onSurfaceVariant,
+                color: theme.theme.colors.onSurfaceVariant,
                 marginLeft: appTheme.ui.spacing / 2,
               },
             ]}>
@@ -63,7 +64,6 @@ export const PriceItem = ({
           </Text>
         </View>
         <Text
-          variant="bodyLarge"
           style={[
             styles.price,
             {

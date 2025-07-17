@@ -1,8 +1,9 @@
 import React from 'react';
 import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
-import {Button as PaperButton, useTheme} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useTheme} from '../../context/ThemeContext';
+import {Button as PaperButton} from 'react-native-paper';
 
 interface ButtonProps {
   onPress: () => void;
@@ -25,9 +26,8 @@ export const Button = ({
   isFilled,
   style,
 }: ButtonProps) => {
-  const theme = useTheme();
   const {theme: appTheme} = useAppTheme();
-
+  const theme = useTheme();
   const buttonStyle = {
     borderRadius: appTheme.ui.radius,
     borderWidth: appTheme.ui.borderWidth,
@@ -58,12 +58,21 @@ export const Button = ({
   return (
     <PaperButton
       mode={isFilled ?? appTheme.ui.isFilled ? 'contained' : 'outlined'}
+      style={[
+        styles.button,
+        buttonStyle,
+        style,
+        {
+          backgroundColor: theme.theme.colors.background,
+          borderColor: theme.theme.colors.outline,
+        },
+      ]}
+      textColor={theme.theme.colors.onSurface}
       onPress={onPress}
       disabled={disabled}
       loading={loading}
-      style={[styles.button, buttonStyle, style]}
       contentStyle={contentStyle}
-      icon={({size, color}) => (
+      icon={({size, color}: {size: number; color: string}) => (
         <View style={styles.iconContainer}>
           {leftIcon && (
             <Icon

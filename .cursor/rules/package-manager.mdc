@@ -1,0 +1,5 @@
+---
+description: Use npm as the package manager.
+globs:
+alwaysApply: true
+---

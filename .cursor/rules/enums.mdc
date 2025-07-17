@@ -1,0 +1,5 @@
+---
+description: Keys must never be hardcoded as strings. They should be added to @enums.ts and used from there.
+globs:
+alwaysApply: true
+---

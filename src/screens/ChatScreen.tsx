@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {useTheme} from 'react-native-paper';
 import {useChatScreen} from '../hooks/useChatScreen';
 import {ChatHeader} from '../components/Chat/ChatHeader';
 import {ChatMessagesList} from '../components/Chat/ChatMessagesList';
 import {ChatInput} from '../components/Chat/ChatInput';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {useTheme} from '../context/ThemeContext';
 
 interface ChatScreenProps {
   onNavigateToTab: () => void;
@@ -26,7 +26,7 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.theme.colors.background,
     },
   });
 

@@ -7,16 +7,15 @@ import StackNavigator from './src/navigation/StackNavigator';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext';
 import {store} from './src/store/store';
 import {Provider} from 'react-redux';
-import {useEvent} from './src/hooks/useEvent';
-import {useAuth} from './src/hooks/useAuth';
+import {eventBus} from './src/middleware/eventMiddleware';
 
 const AppContent = () => {
   const {theme} = useTheme();
-  useEvent();
-  const {login} = useAuth();
 
   useEffect(() => {
-    login();
+    eventBus.on('appStarted', () => {
+      console.log('appStarted');
+    });
   }, []);
 
   return (

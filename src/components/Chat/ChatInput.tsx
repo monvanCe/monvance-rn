@@ -1,8 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
-import {useTheme} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useTheme} from '../../context/ThemeContext';
 
 interface ChatInputProps {
   message: string;
@@ -25,30 +25,30 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     inputContainer: {
       flexDirection: 'row',
       padding: appTheme.ui.spacing,
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.theme.colors.surface,
       borderTopWidth: appTheme.ui.borderWidth,
-      borderTopColor: theme.colors.outline,
+      borderTopColor: theme.theme.colors.outline,
       height: 60,
     },
     input: {
       flex: 1,
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.theme.colors.background,
       borderRadius: appTheme.ui.radius,
       paddingHorizontal: appTheme.ui.spacing,
       paddingVertical: appTheme.ui.spacing / 2,
       marginRight: appTheme.ui.spacing,
-      color: theme.colors.onSurface,
+      color: theme.theme.colors.onSurface,
       height: 36,
     },
     sendButton: {
-      backgroundColor: theme.colors.background,
+      backgroundColor: theme.theme.colors.background,
       width: 36,
       height: 36,
       borderRadius: 18,
       justifyContent: 'center',
       alignItems: 'center',
       borderWidth: appTheme.ui.borderWidth,
-      borderColor: theme.colors.outline,
+      borderColor: theme.theme.colors.outline,
     },
   });
 
@@ -57,13 +57,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       <TextInput
         style={styles.input}
         placeholder="Mesajınızı yazın..."
-        placeholderTextColor={theme.colors.onSurfaceVariant}
+        placeholderTextColor={theme.theme.colors.onSurfaceVariant}
         value={message}
         onChangeText={setMessage}
         onFocus={() => scrollToBottom(true)}
       />
       <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-        <Icon name="send" size={16} color={theme.colors.onSurface} />
+        <Icon name="send" size={16} color={theme.theme.colors.onSurface} />
       </TouchableOpacity>
     </View>
   );

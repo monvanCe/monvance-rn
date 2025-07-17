@@ -1,5 +1,5 @@
 import React, {createContext, useContext} from 'react';
-import {MD3DarkTheme, MD3LightTheme} from 'react-native-paper';
+
 import {useDispatch} from 'react-redux';
 import {setAppTheme} from '../store/slices/appConfigSlice';
 import {useAppSelector} from '../store/store';
@@ -13,9 +13,7 @@ const uiProperties = {
 } as const;
 
 const darkTheme = {
-  ...MD3DarkTheme,
   colors: {
-    ...MD3DarkTheme.colors,
     primary: '#FFFFFF',
     secondary: '#000000',
     background: '#000000',
@@ -30,14 +28,14 @@ const darkTheme = {
     text: '#FFFFFF',
     error: '#CF6679',
     shadow: '#000000',
+    premium: '#FFD700',
+    green: '#00FF00',
   },
   ui: uiProperties,
 };
 
 const lightTheme = {
-  ...MD3LightTheme,
   colors: {
-    ...MD3LightTheme.colors,
     primary: '#000000',
     secondary: '#FFFFFF',
     background: '#FFFFFF',
@@ -52,6 +50,8 @@ const lightTheme = {
     text: '#000000',
     error: '#B00020',
     shadow: '#000000',
+    premium: '#FFD700',
+    green: '#00FF00',
   },
   ui: uiProperties,
 };

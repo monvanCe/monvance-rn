@@ -1,0 +1,5 @@
+---
+description: All interfaces will be placed inside @types.d.ts. Since this file is global, there's no need to import or export them.
+globs:
+alwaysApply: true
+---

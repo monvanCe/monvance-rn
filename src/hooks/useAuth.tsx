@@ -1,10 +1,10 @@
 import {internalService} from '../service/internalServices';
 import {setUser} from '../store/slices/authSlice';
 import {useAppDispatch} from '../store/store';
-import {setEvent} from '../store/slices/eventSlice';
-import {EventNames} from '../const/enums';
+import {useChatService} from './useChatService';
 
 export const useAuth = () => {
+  const {getChatToken} = useChatService();
   const dispatch = useAppDispatch();
   const setUserFunction = (user: IUser) => {
     dispatch(setUser(user));
@@ -16,10 +16,12 @@ export const useAuth = () => {
 
   const login = async () => {
     const res = await internalService.login();
+    if (res.token) {
+      getChatToken(res.token);
+    }
     setUserFunction(res);
-    dispatch(setEvent({slug: EventNames.LOGIN_SUCCESS, data: res}));
     return res;
   };
 
-  return {login};
+  return {login, setUserFunction, removeUserFunction};
 };

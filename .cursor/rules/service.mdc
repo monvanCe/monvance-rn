@@ -1,0 +1,5 @@
+---
+description: No service may use its own axios.get directly. All endpoints must be defined in @internalEndpoints.ts or @externalEndpoints.ts, and then used via @internalServices.ts or @externalServices.ts.
+globs:
+alwaysApply: true
+---

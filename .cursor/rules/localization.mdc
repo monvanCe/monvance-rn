@@ -1,0 +1,5 @@
+---
+description: All application texts will be localized using JSON files inside the localization directory, with translations written per language. These will be managed through @index.ts.
+globs:
+alwaysApply: true
+---

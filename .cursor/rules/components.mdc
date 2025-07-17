@@ -1,0 +1,5 @@
+---
+description: The components/ui folder will only contain simple UI elements. More complex components will be placed in the main components folder. If a specific area contains multiple related components, they will be grouped in a dedicated subfolder.
+globs:
+alwaysApply: true
+---

@@ -15,6 +15,7 @@ interface IUser {
   };
   avatar?: any;
   isPremium?: boolean;
+  isOnline?: boolean;
   notificationId?: string;
   isAdmin?: boolean;
   version?: number;
@@ -22,22 +23,6 @@ interface IUser {
     credits: number;
   };
   token?: string;
-}
-
-interface INotificationEvent {
-  title: string;
-  body: string;
-  data: string;
-}
-
-interface ILoginSuccessEvent {
-  token: string;
-  user: IUser;
-}
-
-interface IEvent {
-  slug: string;
-  data: INotificationEvent | ILoginSuccessEvents;
 }
 
 interface IMessage {

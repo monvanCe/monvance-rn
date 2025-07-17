@@ -1,5 +1,8 @@
 import {FlashList} from '@shopify/flash-list';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+
+import {useAppDispatch} from '../store/store';
+import {setHasNewMessages} from '../store/slices/chatSlice';
 
 const COLORS = [
   '#FF6B6B',
@@ -42,6 +45,7 @@ export const useChatScreen = () => {
   const userColorsRef = useRef<{[key: string]: string}>({});
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<IMessage[]>(SAMPLE_MESSAGES);
+  const dispatch = useAppDispatch();
 
   const uniqueMessages = messages.reduce((acc: IMessage[], message) => {
     const existing = acc.find(m => m._id === message._id);

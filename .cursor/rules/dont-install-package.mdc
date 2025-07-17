@@ -1,0 +1,5 @@
+---
+description: Do not install libraries unless absolutely necessary. Only use external libraries when critically needed.
+globs:
+alwaysApply: true
+---

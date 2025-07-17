@@ -1,10 +1,9 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {StyleSheet} from 'react-native';
-import {useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '../screens/HomeScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 
 const Tab = createBottomTabNavigator();
@@ -18,7 +17,6 @@ const TabNavigation = ({
   setScreenName,
   onNavigateToChat,
 }: TabNavigationProps) => {
-  const paperTheme = useTheme();
   const {theme} = useAppTheme();
 
   return (
@@ -57,18 +55,18 @@ const TabNavigation = ({
         {() => <HomeScreen onNavigateToChat={onNavigateToChat} />}
       </Tab.Screen>
       <Tab.Screen
-        name="Settings"
+        name="Profile"
         options={{
-          title: 'Ayarlar',
+          title: 'Profil',
           tabBarIcon: ({color, size, focused}) => (
             <Icon
-              name={focused ? 'cog' : 'cog-outline'}
+              name={focused ? 'account' : 'account-outline'}
               size={focused ? size + 4 : size}
               color={color}
             />
           ),
         }}>
-        {() => <SettingsScreen />}
+        {() => <ProfileScreen />}
       </Tab.Screen>
     </Tab.Navigator>
   );

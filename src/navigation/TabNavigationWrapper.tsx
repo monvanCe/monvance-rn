@@ -11,14 +11,11 @@ import Animated, {
   withTiming,
   runOnJS,
 } from 'react-native-reanimated';
-import {Surface} from 'react-native-paper';
+
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import TabNavigation from './TabNavigation';
 import ChatScreen from '../screens/ChatScreen';
-import {useAppDispatch} from '../store/store';
-import {setHasNewMessages} from '../store/slices/chatSlice';
-import {setEvent} from '../store/slices/eventSlice';
-import {EventNames} from '../const/enums';
+import {eventBus} from '../middleware/eventMiddleware';
 
 const {width, height} = Dimensions.get('window');
 
@@ -26,13 +23,12 @@ const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [screenName, setScreenName] = useState<string>('Home');
-  const dispatch = useAppDispatch();
   const translateX = useSharedValue(width);
   const overlayOpacity = useSharedValue(0);
 
   useEffect(() => {
     if (isChatOpen) {
-      dispatch(setEvent({slug: EventNames.CHAT_SCREEN_OPENED, data: {}}));
+      eventBus.emit('chatScreenOpened', null);
     }
   }, [isChatOpen]);
 
@@ -117,7 +113,7 @@ const TabNavigationWrapper = () => {
     <GestureHandlerRootView style={{flex: 1}}>
       {screenName === 'Home' ? (
         <GestureDetector gesture={panGesture}>
-          <Surface
+          <View
             style={[
               styles.container,
               {backgroundColor: appTheme.colors.background},
@@ -137,10 +133,10 @@ const TabNavigationWrapper = () => {
             <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
               <ChatScreen onNavigateToTab={navigateToTab} />
             </Animated.View>
-          </Surface>
+          </View>
         </GestureDetector>
       ) : (
-        <Surface
+        <View
           style={[
             styles.container,
             {backgroundColor: appTheme.colors.background},
@@ -160,7 +156,7 @@ const TabNavigationWrapper = () => {
           <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
             <ChatScreen onNavigateToTab={navigateToTab} />
           </Animated.View>
-        </Surface>
+        </View>
       )}
     </GestureHandlerRootView>
   );

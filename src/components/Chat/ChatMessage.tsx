@@ -1,7 +1,8 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
+import {Text} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
+import {useTheme} from '../../context/ThemeContext';
 
 interface ChatMessageProps {
   message: IMessage;
@@ -48,16 +49,16 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       height: 32,
       borderRadius: 16,
       borderWidth: appTheme.ui.borderWidth,
-      borderColor: theme.colors.outline,
+      borderColor: theme.theme.colors.outline,
       marginHorizontal: appTheme.ui.spacing / 2,
     },
     messageBubble: {
       padding: appTheme.ui.spacing,
       borderRadius: appTheme.ui.radius,
-      backgroundColor: theme.colors.surface,
+      backgroundColor: theme.theme.colors.surface,
     },
     messageText: {
-      color: theme.colors.onSurface,
+      color: theme.theme.colors.onSurface,
       fontSize: 14,
     },
     username: {
@@ -112,8 +113,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               styles.messageBubble,
               {
                 backgroundColor: isCurrentUser
-                  ? theme.colors.primary
-                  : theme.colors.surfaceVariant,
+                  ? theme.theme.colors.primary
+                  : theme.theme.colors.surfaceVariant,
               },
             ]}>
             <Text
@@ -121,8 +122,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                 styles.messageText,
                 {
                   color: isCurrentUser
-                    ? theme.colors.onPrimary
-                    : theme.colors.onSurface,
+                    ? theme.theme.colors.primary
+                    : theme.theme.colors.onSurface,
                 },
               ]}>
               {message.message}

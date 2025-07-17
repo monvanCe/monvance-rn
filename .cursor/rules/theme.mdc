@@ -1,0 +1,5 @@
+---
+description: All theme colors, variations, and sizing will be managed from @ThemeContext.tsx. These values will remain static, except for light and dark mode toggling.
+globs:
+alwaysApply: true
+---
