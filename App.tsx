@@ -10,10 +10,12 @@ import {Provider} from 'react-redux';
 import {eventBus} from './src/middleware/eventMiddleware';
 import {useAuth} from './src/hooks/useAuth';
 import {useReduxEvents} from './src/hooks/useReduxEvents';
+import {useNotification} from './src/hooks/useNotification';
 
 const AppContent = () => {
   useAuth();
   useReduxEvents();
+  useNotification();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);

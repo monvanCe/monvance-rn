@@ -5,6 +5,9 @@ type eventType = {
   logoutSuccess: null;
   notification: {title: string; body: string; data: string};
   error: string;
+  tokenRefreshed: string;
+  tokenCreated: string;
+  tokenInitialized: string;
 };
 
 class EventManager<Events extends Record<string, any>> {

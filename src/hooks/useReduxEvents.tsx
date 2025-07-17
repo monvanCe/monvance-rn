@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {eventBus} from '../middleware/eventMiddleware';
 import {useAppDispatch} from '../store/store';
-import {setUser} from '../store/slices/authSlice';
+import {setToken, setUser} from '../store/slices/authSlice';
 import {setHasNewMessages, setMessages} from '../store/slices/chatSlice';
 
 export const useReduxEvents = () => {
@@ -18,6 +18,18 @@ export const useReduxEvents = () => {
 
     eventBus.on('chatScreenOpened', () => {
       dispatch(setHasNewMessages(false));
+    });
+
+    eventBus.on('tokenCreated', token => {
+      dispatch(setToken(token));
+    });
+
+    eventBus.on('tokenRefreshed', token => {
+      dispatch(setToken(token));
+    });
+
+    eventBus.on('tokenInitialized', token => {
+      dispatch(setToken(token));
     });
   }, []);
 };
