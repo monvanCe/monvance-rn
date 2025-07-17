@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1008369970183",
+    "project_id": "monvace-a6823",
+    "storage_bucket": "monvace-a6823.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008369970183:android:c0e9ad90aaa719ea4a0ea2",
+        "android_client_info": {
+          "package_name": "com.cekolabs.monvance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUy4t7_1lxMBSnlEnhErk-oWQcZEjnrQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
