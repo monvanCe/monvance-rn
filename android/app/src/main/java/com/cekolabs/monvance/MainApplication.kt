@@ -1,4 +1,4 @@
-package com.klyra
+package com.cekolabs.monvance
 
 import android.app.Application
 import com.facebook.react.PackageList

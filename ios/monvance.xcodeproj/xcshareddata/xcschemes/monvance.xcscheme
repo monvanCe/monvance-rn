@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "klyra.app"
-               BlueprintName = "klyra"
-               ReferencedContainer = "container:klyra.xcodeproj">
+               BuildableName = "monvance.app"
+               BlueprintName = "monvance"
+               ReferencedContainer = "container:monvance.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "klyraTests.xctest"
-               BlueprintName = "klyraTests"
-               ReferencedContainer = "container:klyra.xcodeproj">
+               BuildableName = "monvanceTests.xctest"
+               BlueprintName = "monvanceTests"
+               ReferencedContainer = "container:monvance.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "klyra.app"
-            BlueprintName = "klyra"
-            ReferencedContainer = "container:klyra.xcodeproj">
+            BuildableName = "monvance.app"
+            BlueprintName = "monvance"
+            ReferencedContainer = "container:monvance.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "klyra.app"
-            BlueprintName = "klyra"
-            ReferencedContainer = "container:klyra.xcodeproj">
+            BuildableName = "monvance.app"
+            BlueprintName = "monvance"
+            ReferencedContainer = "container:monvance.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
