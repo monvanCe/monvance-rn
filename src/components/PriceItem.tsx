@@ -1,9 +1,9 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Text} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {Switch} from './ui/Switch';
 import {useTheme} from '../context/ThemeContext';
+import {Text} from './ui/Text';
 
 const PRICE_COLOR = '#2E7D32';
 
@@ -25,16 +25,15 @@ export const PriceItem = ({
   onSwitchChange,
 }: PriceItemProps) => {
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
 
   const containerStyle = {
     borderRadius: appTheme.ui.radius,
     borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
     backgroundColor:
-      isFilled ?? appTheme.ui.isFilled
-        ? theme.theme.colors.surface
-        : 'transparent',
-    borderColor: theme.theme.colors.outline,
+      isFilled ?? appTheme.ui.isFilled ? colors.surface : 'transparent',
+    borderColor: colors.outline,
     padding: appTheme.ui.spacing,
     elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
   };
@@ -47,7 +46,7 @@ export const PriceItem = ({
             style={[
               styles.coinText,
               {
-                color: theme.theme.colors.onSurface,
+                color: colors.onSurface,
               },
             ]}>
             {coin}
@@ -56,7 +55,7 @@ export const PriceItem = ({
             style={[
               styles.pairText,
               {
-                color: theme.theme.colors.onSurfaceVariant,
+                color: colors.onSurfaceVariant,
                 marginLeft: appTheme.ui.spacing / 2,
               },
             ]}>

@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
-import {TextInput as PaperTextInput, useTheme} from 'react-native-paper';
+
+import {TextInput as PaperTextInput} from 'react-native-paper';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
+import {useTheme} from '../../context/ThemeContext';
 
 interface TextInputProps {
   value: string;
@@ -35,6 +36,7 @@ export const TextInput = ({
   isFilled,
 }: TextInputProps) => {
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
 
   const inputStyle = {};
@@ -42,10 +44,10 @@ export const TextInput = ({
   const outlineStyle = {
     borderRadius: appTheme.ui.radius,
     borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
-    borderColor: appTheme.colors.outline,
+    borderColor: colors.outline,
     elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
     backgroundColor:
-      isFilled ?? appTheme.ui.isFilled ? theme.colors.surface : 'transparent',
+      isFilled ?? appTheme.ui.isFilled ? colors.surface : 'transparent',
   };
 
   return (
@@ -62,10 +64,10 @@ export const TextInput = ({
       }
       style={[inputStyle]}
       outlineStyle={outlineStyle}
-      outlineColor={error ? theme.colors.error : theme.colors.outline}
-      activeOutlineColor={theme.colors.primary}
-      textColor={theme.colors.onSurface}
-      placeholderTextColor={theme.colors.onSurfaceVariant}
+      outlineColor={error ? colors.error : colors.outline}
+      activeOutlineColor={colors.primary}
+      textColor={colors.onSurface}
+      placeholderTextColor={colors.onSurfaceVariant}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}

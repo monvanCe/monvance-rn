@@ -28,6 +28,7 @@ export const Button = ({
 }: ButtonProps) => {
   const {theme: appTheme} = useAppTheme();
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const buttonStyle = {
     borderRadius: appTheme.ui.radius,
     borderWidth: appTheme.ui.borderWidth,
@@ -63,11 +64,11 @@ export const Button = ({
         buttonStyle,
         style,
         {
-          backgroundColor: theme.theme.colors.background,
-          borderColor: theme.theme.colors.outline,
+          backgroundColor: colors.background,
+          borderColor: colors.outline,
         },
       ]}
-      textColor={theme.theme.colors.onSurface}
+      textColor={colors.onSurface}
       onPress={onPress}
       disabled={disabled}
       loading={loading}

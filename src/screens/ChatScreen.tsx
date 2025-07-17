@@ -13,6 +13,7 @@ interface ChatScreenProps {
 
 export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const {
     scrollViewRef,
     message,
@@ -26,7 +27,7 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: theme.theme.colors.background,
+      backgroundColor: colors.background,
     },
   });
 

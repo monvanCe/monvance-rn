@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import {Text} from 'react-native-paper';
+
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import {useTheme} from '../../context/ThemeContext';
+import {Text} from '../ui/Text';
 
 interface ChatMessageProps {
   message: IMessage;
@@ -18,6 +19,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   getUserColor,
 }) => {
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
 
   const isCurrentUser = message.userId === 'user1';
@@ -49,16 +51,16 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       height: 32,
       borderRadius: 16,
       borderWidth: appTheme.ui.borderWidth,
-      borderColor: theme.theme.colors.outline,
+      borderColor: colors.outline,
       marginHorizontal: appTheme.ui.spacing / 2,
     },
     messageBubble: {
       padding: appTheme.ui.spacing,
       borderRadius: appTheme.ui.radius,
-      backgroundColor: theme.theme.colors.surface,
+      backgroundColor: colors.surface,
     },
     messageText: {
-      color: theme.theme.colors.onSurface,
+      color: colors.onSurface,
       fontSize: 14,
     },
     username: {
@@ -113,17 +115,15 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               styles.messageBubble,
               {
                 backgroundColor: isCurrentUser
-                  ? theme.theme.colors.primary
-                  : theme.theme.colors.surfaceVariant,
+                  ? colors.primary
+                  : colors.surfaceVariant,
               },
             ]}>
             <Text
               style={[
                 styles.messageText,
                 {
-                  color: isCurrentUser
-                    ? theme.theme.colors.primary
-                    : theme.theme.colors.onSurface,
+                  color: isCurrentUser ? colors.secondary : colors.onSurface,
                 },
               ]}>
               {message.message}

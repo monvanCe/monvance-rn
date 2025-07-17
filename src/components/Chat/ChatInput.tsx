@@ -18,37 +18,37 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   scrollToBottom,
 }) => {
   const theme = useTheme();
-
+  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
 
   const styles = StyleSheet.create({
     inputContainer: {
       flexDirection: 'row',
       padding: appTheme.ui.spacing,
-      backgroundColor: theme.theme.colors.surface,
+      backgroundColor: colors.surface,
       borderTopWidth: appTheme.ui.borderWidth,
-      borderTopColor: theme.theme.colors.outline,
+      borderTopColor: colors.outline,
       height: 60,
     },
     input: {
       flex: 1,
-      backgroundColor: theme.theme.colors.background,
+      backgroundColor: colors.background,
       borderRadius: appTheme.ui.radius,
       paddingHorizontal: appTheme.ui.spacing,
       paddingVertical: appTheme.ui.spacing / 2,
       marginRight: appTheme.ui.spacing,
-      color: theme.theme.colors.onSurface,
+      color: colors.onSurface,
       height: 36,
     },
     sendButton: {
-      backgroundColor: theme.theme.colors.background,
+      backgroundColor: colors.background,
       width: 36,
       height: 36,
       borderRadius: 18,
       justifyContent: 'center',
       alignItems: 'center',
       borderWidth: appTheme.ui.borderWidth,
-      borderColor: theme.theme.colors.outline,
+      borderColor: colors.outline,
     },
   });
 
@@ -57,13 +57,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       <TextInput
         style={styles.input}
         placeholder="Mesajınızı yazın..."
-        placeholderTextColor={theme.theme.colors.onSurfaceVariant}
+        placeholderTextColor={colors.onSurfaceVariant}
         value={message}
         onChangeText={setMessage}
         onFocus={() => scrollToBottom(true)}
       />
       <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-        <Icon name="send" size={16} color={theme.theme.colors.onSurface} />
+        <Icon name="send" size={16} color={colors.onSurface} />
       </TouchableOpacity>
     </View>
   );

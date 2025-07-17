@@ -1,7 +1,8 @@
 import React from 'react';
 import {Switch as PaperSwitch} from 'react-native-paper';
-import {useTheme} from 'react-native-paper';
+
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
+import {useTheme} from '../../context/ThemeContext';
 
 interface SwitchProps {
   value: boolean;
@@ -15,6 +16,7 @@ export const Switch = ({
   disabled = false,
 }: SwitchProps) => {
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
 
   return (
@@ -22,7 +24,7 @@ export const Switch = ({
       value={value}
       onValueChange={onValueChange}
       disabled={disabled}
-      color={theme.colors.primary}
+      color={colors.primary}
       style={{
         transform: [{scale: 0.9}],
       }}

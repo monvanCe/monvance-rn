@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {
-  Button,
-  Menu,
-  Divider,
-  useTheme,
-  Text,
-  Surface,
-} from 'react-native-paper';
+import {Menu, Divider} from 'react-native-paper';
+
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
+import {useTheme} from '../../context/ThemeContext';
+import {Text} from './Text';
+import {Button} from './Button';
 
 interface DropdownItem {
   label: string;
@@ -40,17 +37,16 @@ export const Dropdown = ({
 }: DropdownProps) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const theme = useTheme();
+  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
   const selectedItem = items.find(item => item.value === selectedValue);
 
   const containerStyle = {
-    borderColor: theme.colors.outline,
+    borderColor: colors.outline,
     borderRadius: appTheme.ui.radius,
     borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
     backgroundColor:
-      isFilled ?? appTheme.ui.isFilled
-        ? theme.colors.surfaceVariant
-        : 'transparent',
+      isFilled ?? appTheme.ui.isFilled ? colors.surfaceVariant : 'transparent',
     elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
   };
 
@@ -58,7 +54,7 @@ export const Dropdown = ({
     borderRadius: appTheme.ui.radius,
     borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
     backgroundColor:
-      isFilled ?? appTheme.ui.isFilled ? theme.colors.surface : 'transparent',
+      isFilled ?? appTheme.ui.isFilled ? colors.surface : 'transparent',
   };
 
   const contentStyle = {
@@ -80,9 +76,7 @@ export const Dropdown = ({
               styles.label,
               labelStyle,
               {
-                color: error
-                  ? theme.colors.error
-                  : theme.colors.onSurfaceVariant,
+                color: error ? colors.error : colors.onSurfaceVariant,
                 marginBottom: appTheme.ui.spacing,
               },
             ]}>
@@ -94,12 +88,9 @@ export const Dropdown = ({
           onDismiss={() => setMenuVisible(false)}
           anchor={
             <Button
-              mode="outlined"
               onPress={() => setMenuVisible(true)}
               style={[styles.button, buttonStyle]}
-              contentStyle={styles.buttonContent}
-              textColor={error ? theme.colors.error : theme.colors.onSurface}
-              icon={selectedValue ? 'check' : undefined}
+              leftIcon={selectedValue ? 'check' : undefined}
               disabled={disabled}>
               {selectedItem?.label || placeholder}
             </Button>
@@ -109,8 +100,8 @@ export const Dropdown = ({
             {
               borderRadius: appTheme.ui.radius,
               borderWidth: appTheme.ui.borderWidth,
-              backgroundColor: theme.colors.surface,
-              borderColor: theme.colors.outline,
+              backgroundColor: colors.surface,
+              borderColor: colors.outline,
             },
           ]}>
           {items.map(item => (
@@ -122,12 +113,12 @@ export const Dropdown = ({
                 }}
                 title={item.label}
                 titleStyle={{
-                  color: theme.colors.onSurface,
+                  color: colors.onSurface,
                 }}
                 leadingIcon={selectedValue === item.value ? 'check' : undefined}
               />
               {item.value !== items[items.length - 1].value && (
-                <Divider style={{backgroundColor: theme.colors.outline}} />
+                <Divider style={{backgroundColor: colors.outline}} />
               )}
             </React.Fragment>
           ))}
@@ -139,7 +130,7 @@ export const Dropdown = ({
           style={[
             styles.helperText,
             {
-              color: error ? theme.colors.error : theme.colors.onSurfaceVariant,
+              color: error ? colors.error : colors.onSurfaceVariant,
               padding: appTheme.ui.spacing,
             },
           ]}>
