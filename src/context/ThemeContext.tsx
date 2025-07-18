@@ -9,7 +9,7 @@ const uiProperties = {
   borderWidth: 0.5,
   spacing: 8,
   elevation: 1,
-  isFilled: false,
+  variant: 'text',
 } as const;
 
 const darkTheme = {

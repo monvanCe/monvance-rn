@@ -29,12 +29,12 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       return action.payload;
     },
-    setToken: (state, action) => {
-      state.token = action.payload;
+    setNotificationId: (state, action) => {
+      state.notificationId = action.payload;
     },
   },
 });
 
-export const {setUser, setToken} = authSlice.actions;
+export const {setUser, setNotificationId} = authSlice.actions;
 
 export default authSlice;

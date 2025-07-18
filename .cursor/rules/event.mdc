@@ -1,0 +1,5 @@
+---
+description: Triggering will be done through events. All triggering should be done through the event system.
+globs:
+alwaysApply: true
+---

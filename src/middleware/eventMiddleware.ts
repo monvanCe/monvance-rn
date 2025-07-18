@@ -8,6 +8,7 @@ type eventType = {
   tokenRefreshed: string;
   tokenCreated: string;
   tokenInitialized: string;
+  updateUserSuccess: {user: IUserUpdate};
 };
 
 class EventManager<Events extends Record<string, any>> {

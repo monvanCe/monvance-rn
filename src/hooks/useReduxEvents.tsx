@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {eventBus} from '../middleware/eventMiddleware';
 import {useAppDispatch} from '../store/store';
-import {setToken, setUser} from '../store/slices/authSlice';
-import {setHasNewMessages, setMessages} from '../store/slices/chatSlice';
+import {setNotificationId, setUser} from '../store/slices/authSlice';
+import {setHasNewMessages} from '../store/slices/chatSlice';
 
 export const useReduxEvents = () => {
   const dispatch = useAppDispatch();
@@ -21,15 +21,15 @@ export const useReduxEvents = () => {
     });
 
     eventBus.on('tokenCreated', token => {
-      dispatch(setToken(token));
+      dispatch(setNotificationId(token));
     });
 
     eventBus.on('tokenRefreshed', token => {
-      dispatch(setToken(token));
+      dispatch(setNotificationId(token));
     });
 
     eventBus.on('tokenInitialized', token => {
-      dispatch(setToken(token));
+      dispatch(setNotificationId(token));
     });
   }, []);
 };

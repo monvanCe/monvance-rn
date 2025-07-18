@@ -1,17 +1,29 @@
-import messaging from '@react-native-firebase/messaging';
+import {getApp} from '@react-native-firebase/app';
+import {
+  getMessaging,
+  requestPermission,
+  getToken,
+  hasPermission,
+  onMessage,
+  setBackgroundMessageHandler,
+  isDeviceRegisteredForRemoteMessages,
+  registerDeviceForRemoteMessages,
+  AuthorizationStatus,
+} from '@react-native-firebase/messaging';
 import {getItem, setItem} from './storage';
 import {eventBus} from '../middleware/eventMiddleware';
-import {Platform} from 'react-native';
 
 const NOTIFICATION_TOKEN_KEY = 'notification_token';
 
+const app = getApp();
+const messaging = getMessaging(app);
+
 export const requestNotificationPermission = async (): Promise<boolean> => {
   try {
-    const authStatus = await messaging().requestPermission();
+    const authStatus = await requestPermission(messaging);
     const enabled =
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
+      authStatus === AuthorizationStatus.AUTHORIZED ||
+      authStatus === AuthorizationStatus.PROVISIONAL;
     return enabled;
   } catch (error) {
     console.error('Notification permission request failed:', error);
@@ -21,10 +33,10 @@ export const requestNotificationPermission = async (): Promise<boolean> => {
 
 export const checkNotificationPermission = async (): Promise<boolean> => {
   try {
-    const authStatus = await messaging().hasPermission();
+    const authStatus = await hasPermission(messaging);
     return (
-      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+      authStatus === AuthorizationStatus.AUTHORIZED ||
+      authStatus === AuthorizationStatus.PROVISIONAL
     );
   } catch (error) {
     console.error('Notification permission check failed:', error);
@@ -34,7 +46,11 @@ export const checkNotificationPermission = async (): Promise<boolean> => {
 
 export const getNotificationToken = async (): Promise<string | null> => {
   try {
-    const token = await messaging().getToken();
+    // Ensure device is registered for remote messages (required for iOS)
+    if (!(await isDeviceRegisteredForRemoteMessages(messaging))) {
+      await registerDeviceForRemoteMessages(messaging);
+    }
+    const token = await getToken(messaging);
     return token;
   } catch (error) {
     console.error('Failed to get notification token:', error);
@@ -60,7 +76,8 @@ export const getStoredNotificationToken = async (): Promise<string | null> => {
 };
 
 export const setupNotificationListeners = () => {
-  messaging().onMessage(async remoteMessage => {
+  onMessage(messaging, async remoteMessage => {
+    console.log('onmessage');
     eventBus.emit('notification', {
       title: remoteMessage.notification?.title || '',
       body: remoteMessage.notification?.body || '',
@@ -68,7 +85,7 @@ export const setupNotificationListeners = () => {
     });
   });
 
-  messaging().setBackgroundMessageHandler(async remoteMessage => {
+  setBackgroundMessageHandler(messaging, async remoteMessage => {
     eventBus.emit('notification', {
       title: remoteMessage.notification?.title || '',
       body: remoteMessage.notification?.body || '',
@@ -79,24 +96,20 @@ export const setupNotificationListeners = () => {
 
 export const initializeNotification = async (): Promise<void> => {
   try {
-    const hasPermission = await checkNotificationPermission();
-
-    if (!hasPermission) {
+    const hasPerm = await checkNotificationPermission();
+    if (!hasPerm) {
       const permissionGranted = await requestNotificationPermission();
       if (!permissionGranted) {
         console.log('Notification permission denied');
         return;
       }
     }
-
     const currentToken = await getNotificationToken();
     if (!currentToken) {
       console.log('Failed to get notification token');
       return;
     }
-
     const storedToken = await getStoredNotificationToken();
-
     if (storedToken === currentToken) {
       eventBus.emit('tokenInitialized', currentToken);
     } else if (!storedToken) {
@@ -106,7 +119,6 @@ export const initializeNotification = async (): Promise<void> => {
       await saveNotificationToken(currentToken);
       eventBus.emit('tokenRefreshed', currentToken);
     }
-
     setupNotificationListeners();
   } catch (error) {
     console.error('Notification initialization failed:', error);

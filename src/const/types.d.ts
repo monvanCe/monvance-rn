@@ -22,7 +22,26 @@ interface IUser {
   limits?: {
     credits: number;
   };
-  token?: string;
+  token: string;
+}
+
+interface IUserUpdate {
+  _id: string;
+  bio?: string;
+  avatar?: any;
+  isPremium?: boolean;
+  isOnline?: boolean;
+  notificationId?: string;
+  isPremium?: boolean;
+  isAdmin?: boolean;
+  version?: number;
+  limits?: {
+    credits: number;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+  deviceId?: string;
+  platform?: string;
 }
 
 interface IMessage {

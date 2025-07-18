@@ -7,6 +7,10 @@ export const useNotification = () => {
     eventBus.on('appStarted', () => {
       initializeNotification();
     });
+
+    eventBus.on('notification', async ({title, body, data}) => {
+      console.log(title, body, data);
+    });
   }, []);
 
   return {};

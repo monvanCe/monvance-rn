@@ -3,6 +3,7 @@ import {INTERNAL_ENDPOINTS} from '../const/internalEndpoints';
 import DeviceInfo from 'react-native-device-info';
 import {Platform} from 'react-native';
 import {ANDROID_VERSION, IOS_VERSION} from '../const/env';
+import {eventBus} from '../middleware/eventMiddleware';
 
 export const internalService = {
   getChatToken: async (
@@ -21,10 +22,38 @@ export const internalService = {
 
   login: async (): Promise<IUser> => {
     const deviceId = await DeviceInfo.getUniqueId();
-    return api.post<IUser>(INTERNAL_ENDPOINTS.LOGIN, 'internal', {
+    const user = await api.post<IUser>(INTERNAL_ENDPOINTS.LOGIN, 'internal', {
       deviceId,
       platform: Platform.OS === 'ios' ? 'IOS' : 'ANDROID',
       version: Platform.OS === 'ios' ? IOS_VERSION : ANDROID_VERSION,
     });
+    eventBus.emit('loginSuccess', {user});
+    return user;
+  },
+
+  updateUser: async (
+    token: string,
+    data: {
+      username?: string;
+      country?: string;
+      location?: {latitude?: number; longitude?: number};
+      platform?: string;
+      notificationId?: string;
+      avatar?: string;
+      language?: string;
+    },
+  ): Promise<IUserUpdate> => {
+    const user = await api.put<IUserUpdate>(
+      INTERNAL_ENDPOINTS.UPDATE_USER,
+      'internal',
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    eventBus.emit('updateUserSuccess', {user});
+    return user;
   },
 };
