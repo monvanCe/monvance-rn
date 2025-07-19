@@ -55,6 +55,34 @@ const TabNavigation = ({
         {() => <HomeScreen onNavigateToChat={onNavigateToChat} />}
       </Tab.Screen>
       <Tab.Screen
+        name="Watchlist"
+        options={{
+          title: 'Whatchlist',
+          tabBarIcon: ({color, size, focused}) => (
+            <Icon
+              name={focused ? 'heart' : 'heart-outline'}
+              size={focused ? size + 4 : size}
+              color={color}
+            />
+          ),
+        }}>
+        {() => <></>}
+      </Tab.Screen>
+      <Tab.Screen
+        name="Signals"
+        options={{
+          title: 'Signals',
+          tabBarIcon: ({color, size, focused}) => (
+            <Icon
+              name={focused ? 'chart-box' : 'chart-box-outline'}
+              size={focused ? size + 4 : size}
+              color={color}
+            />
+          ),
+        }}>
+        {() => <></>}
+      </Tab.Screen>
+      <Tab.Screen
         name="Profile"
         options={{
           title: 'Profil',

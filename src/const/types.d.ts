@@ -25,6 +25,14 @@ interface IUser {
   token: string;
 }
 
+interface ITheme {
+  radius: number;
+  borderWidth: number;
+  spacing: number;
+  elevation: number;
+  defaultVariant: 'text' | 'contained' | 'outlined';
+}
+
 interface IUserUpdate {
   _id: string;
   bio?: string;

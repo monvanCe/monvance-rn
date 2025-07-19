@@ -12,7 +12,7 @@ interface ButtonProps {
   rightIcon?: string;
   disabled?: boolean;
   loading?: boolean;
-  isFilled?: boolean;
+  variant?: 'text' | 'contained' | 'outlined';
   style?: StyleProp<ViewStyle>;
 }
 
@@ -23,7 +23,7 @@ export const Button = ({
   rightIcon,
   disabled = false,
   loading = false,
-  isFilled,
+  variant,
   style,
 }: ButtonProps) => {
   const {theme: appTheme} = useAppTheme();
@@ -31,7 +31,7 @@ export const Button = ({
   const colors = theme.theme.colors;
   const buttonStyle = {
     borderRadius: appTheme.ui.radius,
-    borderWidth: appTheme.ui.borderWidth,
+    borderWidth: variant === 'outlined' ? appTheme.ui.borderWidth : 0,
   };
 
   const contentStyle = {
@@ -43,6 +43,13 @@ export const Button = ({
   const styles = StyleSheet.create({
     button: {
       justifyContent: 'center',
+      backgroundColor:
+        variant === 'contained'
+          ? colors.primary
+          : variant === 'outlined'
+          ? 'transparent'
+          : 'transparent',
+      borderColor: variant === 'outlined' ? colors.outline : 'transparent',
     },
     iconContainer: {
       flexDirection: 'row',
@@ -58,17 +65,9 @@ export const Button = ({
 
   return (
     <PaperButton
-      mode={isFilled ?? appTheme.ui.isFilled ? 'contained' : 'outlined'}
-      style={[
-        styles.button,
-        buttonStyle,
-        style,
-        {
-          backgroundColor: colors.background,
-          borderColor: colors.outline,
-        },
-      ]}
-      textColor={colors.onSurface}
+      mode={variant || appTheme.ui.defaultVariant}
+      style={[styles.button, buttonStyle, style]}
+      textColor={variant === 'contained' ? colors.onSurface : colors.primary}
       onPress={onPress}
       disabled={disabled}
       loading={loading}

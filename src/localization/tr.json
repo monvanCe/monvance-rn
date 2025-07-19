@@ -1,1 +1,23 @@
-{}
+{
+  "settings": "Ayarlar",
+  "dark_mode": "Karanlık Mod",
+  "switch_to_light": "Açık temaya geç",
+  "language": "DİL",
+  "choose_language": "Tercih ettiğiniz dili seçin",
+  "english": "İngilizce",
+  "turkish": "Türkçe",
+  "about": "HAKKINDA",
+  "version": "Sürüm",
+  "support": "DESTEK",
+  "feedback": "Geri Bildirim",
+  "clear_cache": "Önbelleği Temizle",
+  "clear_cache_desc": "Uygulama önbelleğini ve verileri temizle",
+  "markets": "Piyasalar",
+  "search_by_symbol": "Sembole göre ara...",
+  "sohbetler": "Sohbetler",
+  "write_message": "Mesajınızı yazın...",
+  "volume": "Hacim {volume}M (USDT)",
+  "period": "Periyot",
+  "percent": "Yüzde",
+  "change": "Değişim"
+}

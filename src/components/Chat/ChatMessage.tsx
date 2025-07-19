@@ -10,6 +10,7 @@ interface ChatMessageProps {
   index: number;
   messages: IMessage[];
   getUserColor: (userId: string) => string;
+  variant?: 'contained' | 'outlined' | 'text';
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({
@@ -17,10 +18,15 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   index,
   messages,
   getUserColor,
+  variant,
 }) => {
   const theme = useTheme();
   const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
+
+  const resolvedVariant = variant || theme.theme.ui.defaultVariant;
+  const isContained = resolvedVariant === 'contained';
+  const isOutlined = resolvedVariant === 'outlined';
 
   const isCurrentUser = message.userId === 'user1';
   const previousMessage = index > 0 ? messages[index - 1] : null;
@@ -55,9 +61,17 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
       marginHorizontal: appTheme.ui.spacing / 2,
     },
     messageBubble: {
-      padding: appTheme.ui.spacing,
+      padding: appTheme.ui.spacing * 1.5,
       borderRadius: appTheme.ui.radius,
-      backgroundColor: colors.surface,
+      backgroundColor: isContained
+        ? isCurrentUser
+          ? colors.primary
+          : colors.surface
+        : isOutlined
+        ? 'transparent'
+        : colors.surface,
+      borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
+      borderColor: isOutlined ? colors.outline : 'transparent',
     },
     messageText: {
       color: colors.onSurface,
@@ -96,37 +110,61 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           />
         )}
         <View style={styles.messageContent}>
-          {isFirstInGroup && (
+          {isFirstInGroup && !isCurrentUser && (
             <Text
               style={[
                 styles.username,
                 {
-                  color: userColor,
-                  textAlign: isCurrentUser ? 'right' : 'left',
-                  marginLeft: isCurrentUser ? 0 : appTheme.ui.spacing / 2,
-                  marginRight: isCurrentUser ? appTheme.ui.spacing / 2 : 0,
+                  color: colors.primary,
+                  textAlign: 'left',
+                  marginLeft: appTheme.ui.spacing / 2,
+                  marginRight: 0,
                 },
               ]}>
               {message.username}
             </Text>
           )}
+          {isFirstInGroup && isCurrentUser ? (
+            <View
+              style={{
+                height: styles.username.fontSize + styles.username.marginBottom,
+              }}
+            />
+          ) : null}
           <View
             style={[
               styles.messageBubble,
               {
                 backgroundColor: isCurrentUser
                   ? colors.primary
-                  : colors.surfaceVariant,
+                  : colors.surface,
+                borderRadius: 20,
+                marginBottom: 2,
+                minWidth: 80,
+                maxWidth: '100%',
               },
             ]}>
             <Text
               style={[
                 styles.messageText,
                 {
-                  color: isCurrentUser ? colors.secondary : colors.onSurface,
+                  color: isCurrentUser ? colors.background : colors.onSurface,
                 },
               ]}>
               {message.message}
+            </Text>
+            <Text
+              style={{
+                color: isCurrentUser
+                  ? colors.background
+                  : colors.onSurfaceVariant,
+                fontSize: 13,
+                marginTop: 8,
+                marginLeft: isCurrentUser ? 0 : 2,
+                marginRight: isCurrentUser ? 2 : 0,
+                textAlign: 'left',
+              }}>
+              {(message as any).createdAt || '10:00'}
             </Text>
           </View>
         </View>

@@ -1,0 +1,5 @@
+---
+description: When creating a UI, creating the components in components/ui is your priority. You should also create your own components. Depending on the situation, they can be in the components/ui folder or the components folder.
+globs:
+alwaysApply: true
+---

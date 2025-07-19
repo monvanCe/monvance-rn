@@ -3,6 +3,7 @@ import {eventBus} from '../middleware/eventMiddleware';
 import {useAppDispatch} from '../store/store';
 import {setNotificationId, setUser} from '../store/slices/authSlice';
 import {setHasNewMessages} from '../store/slices/chatSlice';
+import {setAppLanguage} from '../store/slices/appConfigSlice';
 
 export const useReduxEvents = () => {
   const dispatch = useAppDispatch();
@@ -30,6 +31,10 @@ export const useReduxEvents = () => {
 
     eventBus.on('tokenInitialized', token => {
       dispatch(setNotificationId(token));
+    });
+
+    eventBus.on('languageChanged', lang => {
+      dispatch(setAppLanguage(lang));
     });
   }, []);
 };

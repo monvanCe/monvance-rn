@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Dimensions, View, Keyboard} from 'react-native';
 import {
   Gesture,
@@ -17,7 +17,7 @@ import TabNavigation from './TabNavigation';
 import ChatScreen from '../screens/ChatScreen';
 import {eventBus} from '../middleware/eventMiddleware';
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();

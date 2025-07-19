@@ -21,7 +21,7 @@ interface DropdownProps {
   disabled?: boolean;
   error?: boolean;
   helperText?: string;
-  isFilled?: boolean;
+  variant?: 'text' | 'contained' | 'outlined';
 }
 
 export const Dropdown = ({
@@ -29,11 +29,10 @@ export const Dropdown = ({
   onSelect,
   items,
   placeholder = 'Select...',
-  label,
   disabled = false,
   error = false,
   helperText,
-  isFilled,
+  variant,
 }: DropdownProps) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const theme = useTheme();
@@ -41,103 +40,59 @@ export const Dropdown = ({
   const {theme: appTheme} = useAppTheme();
   const selectedItem = items.find(item => item.value === selectedValue);
 
-  const containerStyle = {
-    borderColor: colors.outline,
-    borderRadius: appTheme.ui.radius,
-    borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
-    backgroundColor:
-      isFilled ?? appTheme.ui.isFilled ? colors.surfaceVariant : 'transparent',
-    elevation: isFilled ?? appTheme.ui.isFilled ? appTheme.ui.elevation : 0,
-  };
+  const resolvedVariant = variant || theme.theme.ui.defaultVariant;
+  const isContained = resolvedVariant === 'contained';
+  const isOutlined = resolvedVariant === 'outlined';
 
   const buttonStyle = {
     borderRadius: appTheme.ui.radius,
-    borderWidth: isFilled ?? appTheme.ui.isFilled ? 0 : appTheme.ui.borderWidth,
-    backgroundColor:
-      isFilled ?? appTheme.ui.isFilled ? colors.surface : 'transparent',
+    borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
+    backgroundColor: isContained ? colors.surface : 'transparent',
   };
 
-  const contentStyle = {
-    padding: appTheme.ui.spacing,
-    gap: appTheme.ui.spacing / 2,
-  };
-
-  const labelStyle = {
-    paddingHorizontal: appTheme.ui.spacing / 2,
-  };
-
+  // Sadece buton ve açılır menü render edilecek
   return (
-    <View style={[styles.container, containerStyle]}>
-      <View style={[styles.content, contentStyle]}>
-        {label && (
-          <Text
-            variant="bodySmall"
-            style={[
-              styles.label,
-              labelStyle,
-              {
-                color: error ? colors.error : colors.onSurfaceVariant,
-                marginBottom: appTheme.ui.spacing,
-              },
-            ]}>
-            {label}
-          </Text>
-        )}
-        <Menu
-          visible={menuVisible}
-          onDismiss={() => setMenuVisible(false)}
-          anchor={
-            <Button
-              onPress={() => setMenuVisible(true)}
-              style={[styles.button, buttonStyle]}
-              leftIcon={selectedValue ? 'check' : undefined}
-              disabled={disabled}>
-              {selectedItem?.label || placeholder}
-            </Button>
-          }
-          contentStyle={[
-            styles.menu,
-            {
-              borderRadius: appTheme.ui.radius,
-              borderWidth: appTheme.ui.borderWidth,
-              backgroundColor: colors.surface,
-              borderColor: colors.outline,
-            },
-          ]}>
-          {items.map(item => (
-            <React.Fragment key={item.value}>
-              <Menu.Item
-                onPress={() => {
-                  onSelect(item.value);
-                  setMenuVisible(false);
-                }}
-                title={item.label}
-                titleStyle={{
-                  color: colors.onSurface,
-                }}
-                leadingIcon={selectedValue === item.value ? 'check' : undefined}
-              />
-              {item.value !== items[items.length - 1].value && (
-                <Divider style={{backgroundColor: colors.outline}} />
-              )}
-            </React.Fragment>
-          ))}
-        </Menu>
-      </View>
-      {helperText && (
-        <Text
-          variant="bodySmall"
-          style={[
-            styles.helperText,
-            {
-              color: error ? colors.error : colors.onSurfaceVariant,
-              padding: appTheme.ui.spacing,
-            },
-          ]}>
-          {helperText}
-        </Text>
-      )}
-    </View>
+    <Menu
+      visible={menuVisible}
+      onDismiss={() => setMenuVisible(false)}
+      anchor={
+        <Button
+          onPress={() => setMenuVisible(true)}
+          style={buttonStyle}
+          leftIcon={selectedValue ? 'check' : undefined}
+          disabled={disabled}
+          variant={resolvedVariant}>
+          {selectedItem?.label || placeholder}
+        </Button>
+      }
+      contentStyle={[
+        styles.menu,
+        {
+          borderRadius: appTheme.ui.radius,
+          borderWidth: appTheme.ui.borderWidth,
+          backgroundColor: colors.surface,
+          borderColor: colors.outline,
+        },
+      ]}>
+      {items.map(item => (
+        <React.Fragment key={item.value}>
+          <Menu.Item
+            onPress={() => {
+              onSelect(item.value);
+              setMenuVisible(false);
+            }}
+            title={item.label}
+            titleStyle={{
+              color: colors.onSurface,
+            }}
+            leadingIcon={selectedValue === item.value ? 'check' : undefined}
+          />
+          {item.value !== items[items.length - 1].value && (
+            <Divider style={{backgroundColor: colors.outline}} />
+          )}
+        </React.Fragment>
+      ))}
+    </Menu>
   );
 };
 

@@ -5,6 +5,7 @@ import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../context/ThemeContext';
 import {Text} from '../ui/Text';
+import {t} from '../../localization';
 
 interface ChatHeaderProps {
   onNavigateToTab: () => void;
@@ -19,29 +20,36 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({onNavigateToTab}) => {
     headerContainer: {
       flexDirection: 'row',
       alignItems: 'center',
-      padding: appTheme.ui.spacing,
-      borderBottomWidth: appTheme.ui.borderWidth,
-      borderBottomColor: colors.outline,
+      justifyContent: 'center',
+      backgroundColor: colors.background,
+      height: 56,
+      paddingHorizontal: appTheme.ui.spacing,
+      paddingTop: appTheme.ui.spacing,
+      paddingBottom: appTheme.ui.spacing / 2,
     },
     backButton: {
-      padding: appTheme.ui.spacing / 2,
-      marginRight: appTheme.ui.spacing / 2,
-      backgroundColor: colors.surface,
-      borderRadius: appTheme.ui.radius,
+      position: 'absolute',
+      left: appTheme.ui.spacing,
+      backgroundColor: 'transparent',
+      padding: 8,
+      borderRadius: 999,
+      zIndex: 2,
     },
     title: {
-      fontSize: 20,
+      fontSize: 18,
       color: colors.onSurface,
-      fontWeight: 'bold',
+      fontWeight: '700',
+      textAlign: 'center',
+      flex: 1,
     },
   });
 
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity style={styles.backButton} onPress={onNavigateToTab}>
-        <Icon name="arrow-left" size={20} color={colors.onSurface} />
+        <Icon name="arrow-left" size={22} color={colors.onSurfaceVariant} />
       </TouchableOpacity>
-      <Text style={styles.title}>Sohbetler</Text>
+      <Text style={styles.title}>{t('sohbetler')}</Text>
     </View>
   );
 };

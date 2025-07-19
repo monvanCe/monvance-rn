@@ -1,1 +1,23 @@
-{}
+{
+  "settings": "Settings",
+  "dark_mode": "Dark Mode",
+  "switch_to_light": "Switch to light theme",
+  "language": "LANGUAGE",
+  "choose_language": "Choose your preferred language",
+  "english": "English",
+  "turkish": "Türkçe",
+  "about": "ABOUT",
+  "version": "Version",
+  "support": "SUPPORT",
+  "feedback": "Feedback",
+  "clear_cache": "Clear Cache",
+  "clear_cache_desc": "Clear app cache and data",
+  "markets": "Markets",
+  "search_by_symbol": "Search by symbol...",
+  "sohbetler": "Chats",
+  "write_message": "Type your message...",
+  "volume": "Vol {volume}M (USDT)",
+  "period": "Period",
+  "percent": "Percent",
+  "change": "Change"
+}

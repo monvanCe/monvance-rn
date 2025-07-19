@@ -4,54 +4,54 @@ import {useDispatch} from 'react-redux';
 import {setAppTheme} from '../store/slices/appConfigSlice';
 import {useAppSelector} from '../store/store';
 
-const uiProperties = {
+const uiProperties: ITheme = {
   radius: 8,
   borderWidth: 0.5,
   spacing: 8,
   elevation: 1,
-  variant: 'text',
+  defaultVariant: 'text',
 } as const;
 
 const darkTheme = {
   colors: {
-    primary: '#FFFFFF',
-    secondary: '#000000',
-    background: '#000000',
-    surface: '#121212',
-    surfaceVariant: '#1E1E1E',
-    surfaceDisabled: '#2A2A2A',
-    onSurface: '#FFFFFF',
-    onSurfaceVariant: '#CCCCCC',
-    onSurfaceDisabled: '#666666',
-    outline: '#333333',
-    outlineVariant: '#444444',
-    text: '#FFFFFF',
-    error: '#CF6679',
-    shadow: '#000000',
-    premium: '#FFD700',
-    green: '#00FF00',
+    primary: '#16C784', // primary color for buttons and links
+    secondary: '#23262F', // secondary color for background
+    background: '#181A20', // background color for the app
+    surface: '#23262F', // surface color for cards and other elements
+    surfaceVariant: '#23262F', // surface variant color for cards and other elements
+    surfaceDisabled: '#23262F', // surface disabled color for cards and other elements
+    onSurface: '#FFFFFF', // on surface color for text and icons
+    onSurfaceVariant: '#A3A3A3', // on surface variant color for text and icons
+    onSurfaceDisabled: '#666666', // on surface disabled color for text and icons
+    outline: '#333333', // outline color for cards and other elements
+    outlineVariant: '#23262F', // outline variant color for cards and other elements
+    text: '#FFFFFF', // text color for text and icons
+    error: '#CF6679', // error color for errors
+    shadow: '#000000', // shadow color for shadows
+    premium: '#FFD700', // premium color for premium elements
+    green: '#16C784', // green color for success
   },
   ui: uiProperties,
 };
 
 const lightTheme = {
   colors: {
-    primary: '#000000',
-    secondary: '#FFFFFF',
-    background: '#FFFFFF',
-    surface: '#F5F5F5',
-    surfaceVariant: '#E5E5E5',
-    surfaceDisabled: '#EEEEEE',
-    onSurface: '#000000',
-    onSurfaceVariant: '#333333',
-    onSurfaceDisabled: '#999999',
-    outline: '#CCCCCC',
-    outlineVariant: '#DDDDDD',
-    text: '#000000',
-    error: '#B00020',
-    shadow: '#000000',
-    premium: '#FFD700',
-    green: '#00FF00',
+    primary: '#059669', // primary color for buttons and links - emerald green to match dark theme
+    secondary: '#F8FAFC', // secondary color for background - light gray
+    background: '#FFFFFF', // background color for the app
+    surface: '#F1F5F9', // surface color for cards and other elements - light gray
+    surfaceVariant: '#E2E8F0', // surface variant color for cards and other elements - slightly darker gray
+    surfaceDisabled: '#F1F5F9', // surface disabled color for cards and other elements
+    onSurface: '#1E293B', // on surface color for text and icons - dark slate
+    onSurfaceVariant: '#64748B', // on surface variant color for text and icons - medium gray
+    onSurfaceDisabled: '#94A3B8', // on surface disabled color for text and icons - light gray
+    outline: '#CBD5E1', // outline color for cards and other elements - light gray
+    outlineVariant: '#E2E8F0', // outline variant color for cards and other elements
+    text: '#0F172A', // text color for text and icons - very dark slate
+    error: '#DC2626', // error color for errors - red
+    shadow: '#000000', // shadow color for shadows
+    premium: '#F59E0B', // premium color for premium elements - amber
+    green: '#059669', // green color for success - emerald green
   },
   ui: uiProperties,
 };

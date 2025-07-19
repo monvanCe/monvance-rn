@@ -11,6 +11,7 @@ interface ChatMessagesListProps {
   messages: IMessage[];
   getUserColor: (userId: string) => string;
   scrollToBottom: (withTimeout?: boolean) => void;
+  variant?: 'text' | 'contained' | 'outlined';
 }
 
 export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
@@ -18,6 +19,7 @@ export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
   messages,
   getUserColor,
   scrollToBottom,
+  variant,
 }) => {
   const theme = useTheme();
   const {theme: appTheme} = useAppTheme();
@@ -34,6 +36,7 @@ export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
       index={index}
       messages={messages}
       getUserColor={getUserColor}
+      variant={variant}
     />
   );
 

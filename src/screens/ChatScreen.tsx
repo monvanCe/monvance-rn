@@ -39,6 +39,7 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
         messages={uniqueMessages}
         getUserColor={getUserColor}
         scrollToBottom={scrollToBottom}
+        variant="text"
       />
       <ChatInput
         message={message}

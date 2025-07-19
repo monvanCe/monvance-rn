@@ -11,11 +11,13 @@ import {eventBus} from './src/middleware/eventMiddleware';
 import {useAuth} from './src/hooks/useAuth';
 import {useReduxEvents} from './src/hooks/useReduxEvents';
 import {useNotification} from './src/hooks/useNotification';
+import useLocalization from './src/hooks/useLocalization';
 
 const AppContent = () => {
   useAuth();
   useReduxEvents();
   useNotification();
+  useLocalization();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);

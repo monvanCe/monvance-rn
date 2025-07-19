@@ -3,6 +3,7 @@ import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../context/ThemeContext';
+import {t} from '../../localization';
 
 interface ChatInputProps {
   message: string;
@@ -33,7 +34,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     input: {
       flex: 1,
       backgroundColor: colors.background,
-      borderRadius: appTheme.ui.radius,
+      borderRadius: 999,
       paddingHorizontal: appTheme.ui.spacing,
       paddingVertical: appTheme.ui.spacing / 2,
       marginRight: appTheme.ui.spacing,
@@ -56,7 +57,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
-        placeholder="Mesajınızı yazın..."
+        placeholder={t('write_message')}
         placeholderTextColor={colors.onSurfaceVariant}
         value={message}
         onChangeText={setMessage}
