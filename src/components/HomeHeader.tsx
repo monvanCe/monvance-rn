@@ -1,8 +1,10 @@
 import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 import {Text} from './ui/Text';
 import {t} from '../localization';
+import {useAppSelector} from '../store/store';
 
 type HomeHeaderProps = {
   onNavigateToChat: () => void;
@@ -15,6 +17,8 @@ const HomeHeader = ({
   hasNewMessages,
   appTheme,
 }: HomeHeaderProps) => {
+  const navigation = useNavigation();
+  const {unreadCount} = useAppSelector(state => state.notification);
   return (
     <View
       style={[
@@ -45,6 +49,7 @@ const HomeHeader = ({
         }}>
         <View style={{position: 'relative', marginRight: appTheme.ui.spacing}}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('Notifications' as never)}
             style={{
               backgroundColor: appTheme.colors.surfaceVariant,
               borderRadius: 100,
@@ -56,6 +61,7 @@ const HomeHeader = ({
               color={appTheme.colors.premium}
             />
           </TouchableOpacity>
+
           <View
             style={{
               position: 'absolute',
@@ -76,7 +82,7 @@ const HomeHeader = ({
                 fontWeight: '700',
                 fontSize: appTheme.ui.spacing * 1.1,
               }}>
-              2
+              {unreadCount}
             </Text>
           </View>
         </View>

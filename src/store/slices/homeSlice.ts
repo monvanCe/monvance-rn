@@ -35,4 +35,4 @@ const homeSlice = createSlice({
 });
 
 export const {setPrices, setLoading} = homeSlice.actions;
-export default homeSlice.reducer;
+export default homeSlice;

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {loggerInterceptor} from '../middleware/loggerInterceptor';
+import {authInterceptor} from '../middleware/authInterceptor';
 
 const instance = axios.create({
   timeout: 10000,
@@ -9,5 +10,6 @@ const instance = axios.create({
 });
 
 loggerInterceptor(instance);
+authInterceptor(instance);
 
 export default instance;

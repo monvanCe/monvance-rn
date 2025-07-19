@@ -13,6 +13,7 @@ import {useReduxEvents} from './src/hooks/useReduxEvents';
 import {useNotification} from './src/hooks/useNotification';
 import useLocalization from './src/hooks/useLocalization';
 import {useHomeService} from './src/hooks/useHomeService';
+import {useNotificationService} from './src/hooks/useNotificationService';
 
 const AppContent = () => {
   useAuth();
@@ -20,6 +21,7 @@ const AppContent = () => {
   useNotification();
   useLocalization();
   useHomeService();
+  useNotificationService();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);

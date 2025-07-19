@@ -82,8 +82,8 @@ export const useChatService = () => {
     }
   };
 
-  const getChatToken = async (token: string) => {
-    const res = await internalService.getChatToken(token);
+  const getChatToken = async () => {
+    const res = await internalService.getChatToken();
     connect(res.wsUrl, res.token);
     return res;
   };

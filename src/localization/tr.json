@@ -19,5 +19,7 @@
   "volume": "Hacim {volume}M (USDT)",
   "period": "Periyot",
   "percent": "Yüzde",
-  "change": "Değişim"
+  "change": "Değişim",
+  "notifications": "Bildirimler",
+  "no_notifications": "Henüz bildirim yok"
 }

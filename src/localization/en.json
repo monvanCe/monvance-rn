@@ -19,5 +19,7 @@
   "volume": "Vol {volume}M (USDT)",
   "period": "Period",
   "percent": "Percent",
-  "change": "Change"
+  "change": "Change",
+  "notifications": "Notifications",
+  "no_notifications": "No notifications yet"
 }

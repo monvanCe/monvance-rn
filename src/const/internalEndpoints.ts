@@ -2,4 +2,11 @@ export const INTERNAL_ENDPOINTS = {
   GET_CHAT_TOKEN: '/users/ws-token',
   LOGIN: '/auth/login',
   UPDATE_USER: '/users/',
+  GET_NOTIFICATIONS: '/notifications',
+  GET_SIGNALS: '/notifications/signals',
+  GET_UNREAD_COUNT: '/notifications/unread/count',
+  MARK_AS_READ: '/notifications',
+  MARK_ALL_AS_READ: '/notifications/read-all',
+  DELETE_NOTIFICATION: '/notifications',
+  DELETE_ALL_NOTIFICATIONS: '/notifications',
 };

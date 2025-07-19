@@ -111,13 +111,13 @@ export const initializeNotification = async (): Promise<void> => {
     }
     const storedToken = await getStoredNotificationToken();
     if (storedToken === currentToken) {
-      eventBus.emit('tokenInitialized', currentToken);
+      eventBus.emit('notificationIdInitialized', currentToken);
     } else if (!storedToken) {
       await saveNotificationToken(currentToken);
-      eventBus.emit('tokenCreated', currentToken);
+      eventBus.emit('notificationIdCreated', currentToken);
     } else {
       await saveNotificationToken(currentToken);
-      eventBus.emit('tokenRefreshed', currentToken);
+      eventBus.emit('notificationIdRefreshed', currentToken);
     }
     setupNotificationListeners();
   } catch (error) {

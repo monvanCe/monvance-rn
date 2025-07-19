@@ -5,12 +5,19 @@ type eventType = {
   logoutSuccess: null;
   notification: {title: string; body: string; data: string};
   error: string;
-  tokenRefreshed: string;
-  tokenCreated: string;
-  tokenInitialized: string;
+  notificationIdRefreshed: string;
+  notificationIdCreated: string;
+  notificationIdInitialized: string;
   updateUserSuccess: {user: IUserUpdate};
   languageChanged: string;
   tickerPricesFetched: BinanceTickerPrice[];
+  getNotificationsSuccess: INotificationResponse;
+  getSignalsSuccess: INotificationResponse;
+  getUnreadCountSuccess: IUnreadCountResponse;
+  markAsReadSuccess: {slug: string};
+  markAllAsReadSuccess: null;
+  deleteNotificationSuccess: {slug: string};
+  deleteAllNotificationsSuccess: null;
 };
 
 class EventManager<Events extends Record<string, any>> {

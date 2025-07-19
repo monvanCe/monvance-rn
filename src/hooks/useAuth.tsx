@@ -11,10 +11,10 @@ export const useAuth = () => {
       login();
     });
 
-    eventBus.on('tokenCreated', async notificationId => {
-      const token = await waitForEvent('loginSuccess');
-      await internalService.updateUser(token.user.token, {
-        notificationId: notificationId,
+    eventBus.on('notificationIdCreated', async notificationId => {
+      await waitForEvent('loginSuccess');
+      await internalService.updateUser({
+        notificationId,
       });
     });
   }, []);

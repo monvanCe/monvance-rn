@@ -84,3 +84,27 @@ interface BinanceTickerPrice {
   symbol: string;
   price: string;
 }
+
+interface INotification {
+  _id: string;
+  title: string;
+  message: string;
+  timestamp: string;
+  isRead: boolean;
+  type: 'info' | 'warning' | 'success' | 'error';
+  slug: string;
+}
+
+interface INotificationState {
+  notifications: INotification[];
+  unreadCount: number;
+  loading: boolean;
+}
+
+interface INotificationResponse {
+  notifications: INotification[];
+}
+
+interface IUnreadCountResponse {
+  count: number;
+}

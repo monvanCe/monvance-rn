@@ -11,6 +11,7 @@ import Animated, {
   withTiming,
   runOnJS,
 } from 'react-native-reanimated';
+import {useNavigation} from '@react-navigation/native';
 
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import TabNavigation from './TabNavigation';
@@ -21,6 +22,7 @@ const {width} = Dimensions.get('window');
 
 const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();
+  const navigation = useNavigation();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [screenName, setScreenName] = useState<string>('Home');
   const translateX = useSharedValue(width);

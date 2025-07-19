@@ -5,6 +5,15 @@ import {setNotificationId, setUser} from '../store/slices/authSlice';
 import {setHasNewMessages} from '../store/slices/chatSlice';
 import {setAppLanguage} from '../store/slices/appConfigSlice';
 import {setPrices} from '../store/slices/homeSlice';
+import {
+  setNotifications,
+  setUnreadCount,
+  setLoading,
+  markAsRead,
+  markAllAsRead,
+  deleteNotification,
+  deleteAllNotifications,
+} from '../store/slices/notificationSlice';
 
 export const useReduxEvents = () => {
   const dispatch = useAppDispatch();
@@ -22,15 +31,15 @@ export const useReduxEvents = () => {
       dispatch(setHasNewMessages(false));
     });
 
-    eventBus.on('tokenCreated', token => {
+    eventBus.on('notificationIdCreated', token => {
       dispatch(setNotificationId(token));
     });
 
-    eventBus.on('tokenRefreshed', token => {
+    eventBus.on('notificationIdRefreshed', token => {
       dispatch(setNotificationId(token));
     });
 
-    eventBus.on('tokenInitialized', token => {
+    eventBus.on('notificationIdInitialized', token => {
       dispatch(setNotificationId(token));
     });
 
@@ -49,6 +58,39 @@ export const useReduxEvents = () => {
         switchValue: Math.random() > 0.5,
       }));
       dispatch(setPrices(processedData));
+    });
+
+    eventBus.on(
+      'getNotificationsSuccess',
+      (response: INotificationResponse) => {
+        dispatch(setNotifications(response.notifications));
+        dispatch(setLoading(false));
+      },
+    );
+
+    eventBus.on('getSignalsSuccess', (response: INotificationResponse) => {
+      dispatch(setNotifications(response.notifications));
+      dispatch(setLoading(false));
+    });
+
+    eventBus.on('getUnreadCountSuccess', (response: IUnreadCountResponse) => {
+      dispatch(setUnreadCount(response.count));
+    });
+
+    eventBus.on('markAsReadSuccess', ({slug}: {slug: string}) => {
+      dispatch(markAsRead(slug));
+    });
+
+    eventBus.on('markAllAsReadSuccess', () => {
+      dispatch(markAllAsRead());
+    });
+
+    eventBus.on('deleteNotificationSuccess', ({slug}: {slug: string}) => {
+      dispatch(deleteNotification(slug));
+    });
+
+    eventBus.on('deleteAllNotificationsSuccess', () => {
+      dispatch(deleteAllNotifications());
     });
   }, []);
 };
