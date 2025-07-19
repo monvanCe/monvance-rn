@@ -64,3 +64,23 @@ interface IChatState {
   messages: IMessage[];
   hasNewMessages: boolean;
 }
+
+interface ProcessedPrice {
+  symbol: string;
+  price: string;
+  volume: string;
+  change: string;
+  changePercent: string;
+  isFavorite: boolean;
+  switchValue: boolean;
+}
+
+interface IHomeState {
+  prices: ProcessedPrice[];
+  loading: boolean;
+}
+
+interface BinanceTickerPrice {
+  symbol: string;
+  price: string;
+}

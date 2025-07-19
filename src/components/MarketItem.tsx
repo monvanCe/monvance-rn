@@ -49,7 +49,7 @@ export const MarketItem = ({
     borderRadius: 0,
     borderWidth: 0,
     backgroundColor: colors.background,
-    paddingVertical: 18,
+    paddingVertical: theme.theme.ui.spacing * 1.5,
     paddingHorizontal: 0,
     marginBottom: 0,
     flexDirection: 'row',

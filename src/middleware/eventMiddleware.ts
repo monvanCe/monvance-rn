@@ -10,6 +10,7 @@ type eventType = {
   tokenInitialized: string;
   updateUserSuccess: {user: IUserUpdate};
   languageChanged: string;
+  tickerPricesFetched: BinanceTickerPrice[];
 };
 
 class EventManager<Events extends Record<string, any>> {

@@ -12,12 +12,14 @@ import {useAuth} from './src/hooks/useAuth';
 import {useReduxEvents} from './src/hooks/useReduxEvents';
 import {useNotification} from './src/hooks/useNotification';
 import useLocalization from './src/hooks/useLocalization';
+import {useHomeService} from './src/hooks/useHomeService';
 
 const AppContent = () => {
   useAuth();
   useReduxEvents();
   useNotification();
   useLocalization();
+  useHomeService();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);
