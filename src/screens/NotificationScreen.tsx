@@ -134,14 +134,12 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 16,
-    paddingTop: 60,
-    paddingBottom: 16,
+    paddingVertical: 16,
     borderBottomWidth: 1,
   },
   headerContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
   },
   backButton: {
     padding: 8,
@@ -174,7 +172,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   actionButton: {
-    padding: 8,
     borderRadius: 8,
   },
   notificationsList: {
