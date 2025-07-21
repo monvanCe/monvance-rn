@@ -63,18 +63,18 @@ export const useReduxEvents = () => {
     eventBus.on(
       'getNotificationsSuccess',
       (response: INotificationResponse) => {
-        dispatch(setNotifications(response.notifications));
+        dispatch(setNotifications(response.data));
         dispatch(setLoading(false));
       },
     );
 
     eventBus.on('getSignalsSuccess', (response: INotificationResponse) => {
-      dispatch(setNotifications(response.notifications));
+      dispatch(setNotifications(response.data));
       dispatch(setLoading(false));
     });
 
     eventBus.on('getUnreadCountSuccess', (response: IUnreadCountResponse) => {
-      dispatch(setUnreadCount(response.count));
+      dispatch(setUnreadCount(response.data.total));
     });
 
     eventBus.on('markAsReadSuccess', ({slug}: {slug: string}) => {

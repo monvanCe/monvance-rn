@@ -86,9 +86,9 @@ interface BinanceTickerPrice {
 }
 
 interface INotification {
-  _id: string;
+  id: string;
   title: string;
-  message: string;
+  body: string;
   timestamp: string;
   isRead: boolean;
   type: 'info' | 'warning' | 'success' | 'error';
@@ -102,9 +102,22 @@ interface INotificationState {
 }
 
 interface INotificationResponse {
-  notifications: INotification[];
+  data: INotification[];
+  pagination: {
+    page: number;
+    totalPages: number;
+    total: number;
+    limit: number;
+  };
+  message: string;
 }
 
 interface IUnreadCountResponse {
-  count: number;
+  data: {
+    total: number;
+    signal: number;
+    notification: number;
+    event: number;
+  };
+  message: string;
 }
