@@ -1,0 +1,61 @@
+# creating-ui
+---
+description: When creating a UI, creating the components in components/ui is your priority. You should also create your own components. Depending on the situation, they can be in the components/ui folder or the components folder.
+globs:
+alwaysApply: true
+---
+# event
+---
+description: Triggering will be done through events. All triggering should be done through the event system.
+globs:
+alwaysApply: true
+---
+# package-manager
+---
+description: Use npm as the package manager.
+globs:
+alwaysApply: true
+---
+# dont-install-package
+---
+description: Do not install libraries unless absolutely necessary. Only use external libraries when critically needed.
+globs:
+alwaysApply: true
+---
+# enums
+---
+description: Keys must never be hardcoded as strings. They should be added to @enums.ts and used from there.
+globs:
+alwaysApply: true
+---
+# service
+---
+description: No service may use its own axios.get directly. All endpoints must be defined in @internalEndpoints.ts or @externalEndpoints.ts, and then used via @internalServices.ts or @externalServices.ts.
+globs:
+alwaysApply: true
+---
+# localization
+---
+description: All application texts will be localized using JSON files inside the localization directory, with translations written per language. These will be managed through @index.ts.
+globs:
+alwaysApply: true
+---
+# theme
+---
+description: All theme colors, variations, and sizing will be managed from @ThemeContext.tsx. These values will remain static, except for light and dark mode toggling.
+globs:
+alwaysApply: true
+---
+# components
+---
+description: The components/ui folder will only contain simple UI elements. More complex components will be placed in the main components folder. If a specific area contains multiple related components, they will be grouped in a dedicated subfolder.
+globs:
+alwaysApply: true
+---
+# types
+---
+description: All interfaces will be placed inside @types.d.ts. Since this file is global, there's no need to import or export them.
+globs:
+alwaysApply: true
+---
+
