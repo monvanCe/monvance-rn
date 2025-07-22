@@ -15,6 +15,7 @@ import ThemeToggle from '../components/ui/ThemeSwitch';
 import {Dropdown} from '../components/ui/Dropdown';
 import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
+import NotificationIcon from '../components/NotificationIcon';
 
 const AVATAR_SIZE = 64;
 const PLACEHOLDER =
@@ -46,14 +47,7 @@ const ProfileScreen = () => {
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>{t('settings')}</Text>
-        <TouchableOpacity style={styles.notificationButton}>
-          <View style={styles.notificationIconWrapper}>
-            <Icon name="bell" size={28} color={theme.colors.premium} />
-            <View style={styles.unreadBadge}>
-              <Text style={styles.unreadText}>2</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <NotificationIcon />
       </View>
       <View style={styles.avatarContainer}>
         <Image source={{uri: avatar}} style={styles.avatar} />
@@ -221,32 +215,6 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       fontSize: theme.ui.fontSize * 2,
       fontWeight: '700',
       color: theme.colors.onSurface,
-    },
-    notificationButton: {
-      position: 'relative',
-    },
-    notificationIconWrapper: {
-      backgroundColor: theme.colors.surfaceVariant,
-      borderRadius: 100,
-      padding: theme.ui.spacing,
-    },
-    unreadBadge: {
-      position: 'absolute',
-      top: theme.ui.spacing * 0.5,
-      right: theme.ui.spacing * 0.5,
-      backgroundColor: theme.colors.error,
-      minWidth: 18,
-      height: 18,
-      borderRadius: 9,
-      alignItems: 'center',
-      justifyContent: 'center',
-      zIndex: 2,
-      paddingHorizontal: 3,
-    },
-    unreadText: {
-      color: theme.colors.onSurface,
-      fontWeight: '700',
-      fontSize: theme.ui.fontSize * 0.7,
     },
     avatarContainer: {
       alignItems: 'center',
