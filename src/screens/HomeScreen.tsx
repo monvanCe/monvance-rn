@@ -14,6 +14,7 @@ import {t} from '../localization';
 import ExpandableFilter from '../components/ExpandableFilter';
 import HomeHeader from '../components/HomeHeader';
 import WatchAll from '../components/WatchAll';
+import FavoriteSortButton from '../components/ui/FavoriteSortButton';
 
 interface HomeScreenProps {
   onNavigateToChat: () => void;
@@ -25,20 +26,32 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
 
   const hasNewMessages = useAppSelector(state => state.chat.hasNewMessages);
   const {prices, loading} = useAppSelector(state => state.home);
+  const favoriteSymbols = useAppSelector(state => state.favorites.favorites);
 
   const [filteredPrices, setFilteredPrices] = useState(prices);
 
   useEffect(() => {
     let filtered = prices;
-
     if (searchQuery) {
       filtered = filtered.filter(item =>
         item.symbol.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
-
     setFilteredPrices(filtered);
   }, [searchQuery, prices]);
+
+  // Favorilere göre sıralama fonksiyonu
+  const sortByFavorites = () => {
+    setFilteredPrices(prev => {
+      if (!favoriteSymbols.length) return prev;
+      return [...prev].sort((a, b) => {
+        const aFav = favoriteSymbols.includes(a.symbol);
+        const bFav = favoriteSymbols.includes(b.symbol);
+        if (aFav === bFav) return 0;
+        return aFav ? -1 : 1;
+      });
+    });
+  };
 
   const renderItem = ({item}: {item: ProcessedPrice}) => {
     if (loading) {
@@ -86,7 +99,18 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
 
       <ExpandableFilter />
 
-      <WatchAll />
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingHorizontal: appTheme.ui.spacing * 2,
+          marginTop: appTheme.ui.spacing,
+          marginBottom: appTheme.ui.spacing,
+        }}>
+        <FavoriteSortButton onPress={sortByFavorites} />
+        <WatchAll />
+      </View>
 
       <FlashList
         data={loading ? Array(10).fill({}) : filteredPrices}

@@ -18,12 +18,8 @@ const WatchAll = () => {
     <View
       style={{
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
         gap: appTheme.ui.spacing,
-        marginTop: appTheme.ui.spacing * 2,
-        marginBottom: appTheme.ui.spacing,
-        paddingHorizontal: appTheme.ui.spacing * 2,
+        alignItems: 'center',
       }}>
       <Text
         style={{
