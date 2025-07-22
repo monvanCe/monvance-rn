@@ -1,10 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {WatchlistPercent, WatchlistPeriod} from '../../const/enums';
 
 const initialState: IWatchlistState = {
   watchAll: false,
   coins: [],
-  period: 0,
-  percent: 0,
+  period: WatchlistPeriod.MINUTE_1,
+  percent: WatchlistPercent.PERCENT_1,
   loading: true,
 };
 

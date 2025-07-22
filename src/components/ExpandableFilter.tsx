@@ -5,6 +5,8 @@ import {Text} from './ui/Text';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {t} from '../localization';
 import {WatchlistPeriod, WatchlistPercent} from '../const/enums';
+import {eventBus} from '../middleware/eventMiddleware';
+import {useAppSelector} from '../store/store';
 
 type Option = {label: string; value: string};
 
@@ -33,8 +35,7 @@ const percentOptions: Option[] = [
 const ExpandableFilter = () => {
   const {theme: appTheme} = useAppTheme();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [currentPeriod, setCurrentPeriod] = useState('1m');
-  const [currentPercent, setCurrentPercent] = useState('1');
+  const {period, percent} = useAppSelector(state => state.watchlist);
 
   return (
     <View
@@ -79,7 +80,7 @@ const ExpandableFilter = () => {
                 fontSize: appTheme.ui.spacing * 2,
                 fontWeight: '700',
               }}>
-              {currentPeriod}
+              {period}
             </Text>
           </View>
           <View
@@ -105,7 +106,7 @@ const ExpandableFilter = () => {
                 fontSize: appTheme.ui.spacing * 2,
                 fontWeight: '700',
               }}>
-              {currentPercent}%
+              {percent}%
             </Text>
           </View>
         </View>
@@ -139,10 +140,12 @@ const ExpandableFilter = () => {
               {periodOptions.map(option => (
                 <Button
                   key={option.value}
-                  onPress={() => setCurrentPeriod(option.value)}
+                  onPress={() => {
+                    eventBus.emit('periodChanged', option.value);
+                  }}
                   style={{
                     backgroundColor:
-                      currentPeriod === option.value
+                      period === Number(option.value)
                         ? appTheme.colors.primary
                         : appTheme.colors.surfaceVariant,
                   }}>
@@ -176,10 +179,10 @@ const ExpandableFilter = () => {
               {percentOptions.map(option => (
                 <Button
                   key={option.value}
-                  onPress={() => setCurrentPercent(option.value)}
+                  onPress={() => eventBus.emit('percentChanged', option.value)}
                   style={{
                     backgroundColor:
-                      currentPercent === option.value
+                      percent === Number(option.value)
                         ? appTheme.colors.primary
                         : appTheme.colors.surfaceVariant,
                   }}>

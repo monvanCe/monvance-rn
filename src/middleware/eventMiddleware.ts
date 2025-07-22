@@ -22,6 +22,10 @@ type eventType = {
   getWatchlistSuccess: IWatchlistResponse;
   coinSwitched: string;
   updateWatchlistCoinsSuccess: IWatchlistResponse;
+  periodChanged: string;
+  updateWatchlistPeriodSuccess: IWatchlistResponse;
+  percentChanged: string;
+  updateWatchlistPercentSuccess: IWatchlistResponse;
 };
 
 class EventManager<Events extends Record<string, any>> {

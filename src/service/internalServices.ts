@@ -63,6 +63,30 @@ export const internalService = {
     return response;
   },
 
+  updateWatchlistPeriod: async (
+    period: string,
+  ): Promise<IWatchlistResponse> => {
+    const response = await api.put<IWatchlistResponse>(
+      `${INTERNAL_ENDPOINTS.WATCHLIST}`,
+      'internal',
+      {period: Number(period)},
+    );
+    eventBus.emit('updateWatchlistPeriodSuccess', response);
+    return response;
+  },
+
+  updateWatchlistPercent: async (
+    percent: string,
+  ): Promise<IWatchlistResponse> => {
+    const response = await api.put<IWatchlistResponse>(
+      `${INTERNAL_ENDPOINTS.WATCHLIST}`,
+      'internal',
+      {percent: Number(percent)},
+    );
+    eventBus.emit('updateWatchlistPercentSuccess', response);
+    return response;
+  },
+
   getNotifications: async (): Promise<INotificationResponse> => {
     const response = await api.get<INotificationResponse>(
       INTERNAL_ENDPOINTS.GET_NOTIFICATIONS,

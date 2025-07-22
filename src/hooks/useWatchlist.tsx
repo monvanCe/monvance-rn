@@ -28,12 +28,23 @@ export const useWatchlist = () => {
       switchCoin(symbol);
     };
 
+    const handlePeriodChange = (period: string) => {
+      internalService.updateWatchlistPeriod(period);
+    };
+    const handlePercentChange = (percent: string) => {
+      internalService.updateWatchlistPercent(percent);
+    };
+
     eventBus.on('loginSuccess', handleLogin);
     eventBus.on('coinSwitched', handleCoinSwitch);
+    eventBus.on('periodChanged', handlePeriodChange);
+    eventBus.on('percentChanged', handlePercentChange);
 
     return () => {
       eventBus.off('loginSuccess', handleLogin);
       eventBus.off('coinSwitched', handleCoinSwitch);
+      eventBus.off('periodChanged', handlePeriodChange);
+      eventBus.off('percentChanged', handlePercentChange);
     };
   }, [switchCoin]);
 

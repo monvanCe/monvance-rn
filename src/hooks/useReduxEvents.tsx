@@ -112,5 +112,13 @@ export const useReduxEvents = () => {
     eventBus.on('updateWatchlistCoinsSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
+
+    eventBus.on('updateWatchlistPeriodSuccess', response => {
+      dispatch(setWatchlist(response.data));
+    });
+
+    eventBus.on('updateWatchlistPercentSuccess', response => {
+      dispatch(setWatchlist(response.data));
+    });
   }, []);
 };
