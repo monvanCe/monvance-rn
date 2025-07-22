@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
+import WatchListScreen from '../screens/WatchListScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -60,13 +61,13 @@ const TabNavigation = ({
           title: 'Whatchlist',
           tabBarIcon: ({color, size, focused}) => (
             <Icon
-              name={focused ? 'heart' : 'heart-outline'}
+              name={focused ? 'clock-outline' : 'clock-outline'}
               size={focused ? size + 4 : size}
               color={color}
             />
           ),
         }}>
-        {() => <></>}
+        {() => <WatchListScreen />}
       </Tab.Screen>
       <Tab.Screen
         name="Signals"

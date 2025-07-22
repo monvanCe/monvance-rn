@@ -4,26 +4,30 @@ import {Button} from './ui/Button';
 import {Text} from './ui/Text';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {t} from '../localization';
+import {WatchlistPeriod, WatchlistPercent} from '../const/enums';
 
 type Option = {label: string; value: string};
 
 const periodOptions: Option[] = [
-  {label: '1m', value: '1m'},
-  {label: '5m', value: '5m'},
-  {label: '15m', value: '15m'},
-  {label: '30m', value: '30m'},
-  {label: '1h', value: '1h'},
-  {label: '4h', value: '4h'},
-  {label: '1d', value: '1d'},
+  {label: '1m', value: WatchlistPeriod.MINUTE_1.toString()},
+  {label: '2m', value: WatchlistPeriod.MINUTE_2.toString()},
+  {label: '3m', value: WatchlistPeriod.MINUTE_3.toString()},
+  {label: '5m', value: WatchlistPeriod.MINUTE_5.toString()},
+  {label: '15m', value: WatchlistPeriod.MINUTE_15.toString()},
+  {label: '30m', value: WatchlistPeriod.MINUTE_30.toString()},
+  {label: '1h', value: WatchlistPeriod.HOUR_1.toString()},
+  {label: '4h', value: WatchlistPeriod.HOUR_4.toString()},
 ];
 
 const percentOptions: Option[] = [
-  {label: '0.1%', value: '0.1'},
-  {label: '0.5%', value: '0.5'},
-  {label: '1%', value: '1'},
-  {label: '2%', value: '2'},
-  {label: '5%', value: '5'},
-  {label: '10%', value: '10'},
+  {label: '1%', value: WatchlistPercent.PERCENT_1.toString()},
+  {label: '2%', value: WatchlistPercent.PERCENT_2.toString()},
+  {label: '3%', value: WatchlistPercent.PERCENT_3.toString()},
+  {label: '5%', value: WatchlistPercent.PERCENT_5.toString()},
+  {label: '10%', value: WatchlistPercent.PERCENT_10.toString()},
+  {label: '25%', value: WatchlistPercent.PERCENT_25.toString()},
+  {label: '50%', value: WatchlistPercent.PERCENT_50.toString()},
+  {label: '100%', value: WatchlistPercent.PERCENT_100.toString()},
 ];
 
 const ExpandableFilter = () => {

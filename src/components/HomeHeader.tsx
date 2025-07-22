@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Text} from './ui/Text';
 import {t} from '../localization';
 import {useAppSelector} from '../store/store';
+import NotificationIcon from './NotificationIcon';
 
 type HomeHeaderProps = {
   onNavigateToChat: () => void;
@@ -18,7 +19,6 @@ const HomeHeader = ({
   appTheme,
 }: HomeHeaderProps) => {
   const navigation = useNavigation();
-  const {unreadCount} = useAppSelector(state => state.notification);
   return (
     <View
       style={[
@@ -47,45 +47,8 @@ const HomeHeader = ({
           alignItems: 'center',
           gap: appTheme.ui.spacing * 1.5,
         }}>
-        <View style={{position: 'relative', marginRight: appTheme.ui.spacing}}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Notifications' as never)}
-            style={{
-              backgroundColor: appTheme.colors.surfaceVariant,
-              borderRadius: 100,
-              padding: appTheme.ui.spacing,
-            }}>
-            <Icon
-              name="notifications"
-              size={appTheme.ui.spacing * 3.5}
-              color={appTheme.colors.premium}
-            />
-          </TouchableOpacity>
+        <NotificationIcon />
 
-          <View
-            style={{
-              position: 'absolute',
-              top: appTheme.ui.spacing / 2.5,
-              right: appTheme.ui.spacing / 2.5,
-              backgroundColor: appTheme.colors.error,
-              minWidth: appTheme.ui.spacing * 2.2,
-              height: appTheme.ui.spacing * 2.2,
-              borderRadius: appTheme.ui.spacing * 1.1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 2,
-              paddingHorizontal: appTheme.ui.spacing / 2,
-            }}>
-            <Text
-              style={{
-                color: appTheme.colors.onSurface,
-                fontWeight: '700',
-                fontSize: appTheme.ui.spacing * 1.1,
-              }}>
-              {unreadCount}
-            </Text>
-          </View>
-        </View>
         <View style={{position: 'relative'}}>
           <TouchableOpacity
             onPress={onNavigateToChat}
