@@ -117,30 +117,24 @@ export const useReduxEvents = () => {
     eventBus.on('getWatchlistSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
-
     eventBus.on('updateWatchlistCoinsSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
-
     eventBus.on('updateWatchlistPeriodSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
-
     eventBus.on('updateWatchlistPercentSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
-
     eventBus.on('updateWatchlistWatchAllSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
     eventBus.on('coinSwitched', (symbol: string) => {
       dispatch(coinSwitched(symbol));
     });
-
     eventBus.on('watchAllChanged', (watchAll: boolean) => {
       dispatch(watchAllChanged(watchAll));
     });
-
     eventBus.on('periodChanged', period => {
       dispatch(periodChanged(Number(period)));
     });

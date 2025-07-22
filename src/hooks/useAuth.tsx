@@ -12,9 +12,7 @@ export const useAuth = () => {
     });
 
     eventBus.on('notificationIdCreated', async notificationId => {
-      console.log('waiting for login success');
       await waitForEvent('loginSuccess');
-      console.log('login success');
       await internalService.updateUser({
         notificationId,
       });
