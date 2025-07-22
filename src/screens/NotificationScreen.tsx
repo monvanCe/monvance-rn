@@ -69,10 +69,7 @@ const NotificationScreen = () => {
         <View style={styles.headerActions}>
           {unreadCount > 0 && (
             <TouchableOpacity
-              style={[
-                styles.actionButton,
-                {backgroundColor: appTheme.colors.surfaceVariant},
-              ]}
+              style={[styles.actionButton]}
               onPress={markAllAsRead}>
               <Icon
                 name="done-all"
@@ -83,10 +80,7 @@ const NotificationScreen = () => {
           )}
           {notifications.length > 0 && (
             <TouchableOpacity
-              style={[
-                styles.actionButton,
-                {backgroundColor: appTheme.colors.surfaceVariant},
-              ]}
+              style={[styles.actionButton]}
               onPress={deleteAllNotifications}>
               <Icon
                 name="delete-sweep"
