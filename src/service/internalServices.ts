@@ -127,7 +127,11 @@ export const internalService = {
   },
 
   markAsRead: async (slug: string): Promise<void> => {
-    await api.put(`${INTERNAL_ENDPOINTS.MARK_AS_READ}/${slug}`, 'internal', {});
+    await api.put(
+      `${INTERNAL_ENDPOINTS.MARK_AS_READ}/${slug}/read`,
+      'internal',
+      {},
+    );
     eventBus.emit('markAsReadSuccess', {slug});
   },
 

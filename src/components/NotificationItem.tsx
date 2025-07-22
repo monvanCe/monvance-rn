@@ -40,14 +40,14 @@ const NotificationItem = ({
           duration: 200,
           useNativeDriver: true,
         }).start();
-        onMarkAsRead(item.slug);
+        onMarkAsRead(item._id);
       } else if (translationX < -100) {
         Animated.timing(translateX, {
           toValue: 0,
           duration: 200,
           useNativeDriver: true,
         }).start();
-        onDelete(item.slug);
+        onDelete(item._id);
       } else {
         Animated.timing(translateX, {
           toValue: 0,
