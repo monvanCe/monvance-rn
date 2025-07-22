@@ -9,6 +9,7 @@ import {MarketItem} from '../components/MarketItem';
 import {useAppSelector} from '../store/store';
 import {useFocusEffect} from '@react-navigation/native';
 import NotificationIcon from '../components/NotificationIcon';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const WatchListScreen = () => {
   const {theme: appTheme} = useAppTheme();
@@ -34,8 +35,6 @@ const WatchListScreen = () => {
       volume={item.volume}
       change={item.change}
       changePercent={item.changePercent}
-      isFavorite={item.isFavorite}
-      onStarPress={() => {}}
     />
   );
 
@@ -48,13 +47,30 @@ const WatchListScreen = () => {
 
       <ExpandableFilter />
 
-      <FlashList
-        data={filteredPrices}
-        renderItem={renderItem}
-        estimatedItemSize={60}
-        keyExtractor={item => item.symbol}
-        contentContainerStyle={{paddingBottom: 60}}
-      />
+      {filteredPrices.length === 0 ? (
+        <View style={styles.emptyState}>
+          <Icon
+            name="visibility-off"
+            size={appTheme.ui.spacing * 8}
+            color={appTheme.colors.onSurfaceDisabled}
+          />
+          <Text
+            style={[
+              styles.emptyText,
+              {color: appTheme.colors.onSurfaceDisabled},
+            ]}>
+            {t('no_coins_active') || 'Hiçbir coin aktif değil.'}
+          </Text>
+        </View>
+      ) : (
+        <FlashList
+          data={filteredPrices}
+          renderItem={renderItem}
+          estimatedItemSize={60}
+          keyExtractor={item => item.symbol}
+          contentContainerStyle={{paddingBottom: 60}}
+        />
+      )}
     </View>
   );
 };
@@ -76,6 +92,17 @@ const style = (appTheme: ReturnType<typeof useAppTheme>['theme']) =>
     headerTitle: {
       fontSize: appTheme.ui.spacing * 3.5,
       fontWeight: '700',
+    },
+    emptyState: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: 60,
+    },
+    emptyText: {
+      fontSize: 16,
+      marginTop: 16,
+      textAlign: 'center',
     },
   });
 

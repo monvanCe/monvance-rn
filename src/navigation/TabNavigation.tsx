@@ -44,7 +44,7 @@ const TabNavigation = ({
       <Tab.Screen
         name="Home"
         options={{
-          title: 'Ana Sayfa',
+          title: 'Home',
           tabBarIcon: ({color, size, focused}) => (
             <Icon
               name={focused ? 'home' : 'home-outline'}
@@ -86,7 +86,7 @@ const TabNavigation = ({
       <Tab.Screen
         name="Profile"
         options={{
-          title: 'Profil',
+          title: 'Profile',
           tabBarIcon: ({color, size, focused}) => (
             <Icon
               name={focused ? 'account' : 'account-outline'}

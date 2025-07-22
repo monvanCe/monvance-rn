@@ -28,6 +28,8 @@ type eventType = {
   updateWatchlistPercentSuccess: IWatchlistResponse;
   watchAllChanged: boolean;
   updateWatchlistWatchAllSuccess: IWatchlistResponse;
+  addFavorite: string;
+  removeFavorite: string;
 };
 
 class EventManager<Events extends Record<string, any>> {

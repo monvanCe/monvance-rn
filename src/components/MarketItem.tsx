@@ -19,8 +19,6 @@ interface MarketItemProps {
   variant?: 'text' | 'contained' | 'outlined';
   switchValue?: boolean;
   onSwitchChange?: (value: boolean) => void;
-  isFavorite?: boolean;
-  onStarPress?: () => void;
 }
 
 export const MarketItem = ({
@@ -30,8 +28,6 @@ export const MarketItem = ({
   change = '0',
   changePercent = '0',
   variant,
-  isFavorite = false,
-  onStarPress = () => {},
 }: MarketItemProps) => {
   const theme = useTheme();
   const styles = style(theme.theme);
@@ -39,12 +35,22 @@ export const MarketItem = ({
   const {watchAll, coins, period, percent, loading} = useAppSelector(
     state => state.watchlist,
   );
+  const favorites = useAppSelector(state => state.favorites.favorites);
+  const isFav = favorites.includes(symbol);
   const switchValue = watchAll
     ? !coins.includes(symbol)
     : coins.includes(symbol);
 
   const onSwitchChange = (symbol: string) => {
     eventBus.emit('coinSwitched', symbol);
+  };
+
+  const onHeartPress = () => {
+    if (isFav) {
+      eventBus.emit('removeFavorite', symbol);
+    } else {
+      eventBus.emit('addFavorite', symbol);
+    }
   };
 
   const resolvedVariant = variant || theme.theme.ui.defaultVariant;
@@ -55,11 +61,11 @@ export const MarketItem = ({
   return (
     <View style={styles.container}>
       <View style={styles.leftRow}>
-        <TouchableOpacity onPress={onStarPress} style={styles.starButton}>
+        <TouchableOpacity onPress={onHeartPress} style={styles.starButton}>
           <Icon
-            name={isFavorite ? 'star' : 'star-border'}
+            name={isFav ? 'favorite' : 'favorite-border'}
             size={22}
-            color={isFavorite ? colors.premium : colors.onSurfaceVariant}
+            color={isFav ? colors.error : colors.onSurfaceVariant}
           />
         </TouchableOpacity>
         <View>

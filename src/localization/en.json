@@ -23,5 +23,6 @@
   "notifications": "Notifications",
   "no_notifications": "No notifications yet",
   "watchlist": "Watchlist",
-  "watch_all": "Watch All"
+  "watch_all": "Watch All",
+  "no_coins_active": "No coins active"
 }

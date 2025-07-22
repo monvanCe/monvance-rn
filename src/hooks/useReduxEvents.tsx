@@ -15,37 +15,56 @@ import {
   deleteAllNotifications,
   addNotification,
 } from '../store/slices/notificationSlice';
-import {setWatchlist} from '../store/slices/watchlistSlice';
+import {
+  coinSwitched,
+  percentChanged,
+  periodChanged,
+  setWatchlist,
+  watchAllChanged,
+} from '../store/slices/watchlistSlice';
 import {processTickerPrices} from '../utils/processTickerPrices';
+import {addFavorite, removeFavorite} from '../store/slices/favoritesSlice';
 
 export const useReduxEvents = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    //AUTH
     eventBus.on('loginSuccess', ({user}) => {
       dispatch(setUser(user));
     });
-
     eventBus.on('logoutSuccess', () => {
       dispatch(setUser(null));
     });
 
+    //CHAT
     eventBus.on('chatScreenOpened', () => {
       dispatch(setHasNewMessages(false));
     });
 
+    //APP
     eventBus.on('notificationIdCreated', token => {
       dispatch(setNotificationId(token));
     });
-
     eventBus.on('notificationIdRefreshed', token => {
       dispatch(setNotificationId(token));
     });
-
     eventBus.on('notificationIdInitialized', token => {
       dispatch(setNotificationId(token));
     });
+    eventBus.on('languageChanged', lang => {
+      dispatch(setAppLanguage(lang));
+    });
+    eventBus.on('tickerPricesFetched', (data: BinanceTickerPrice[]) => {
+      const processedData = processTickerPrices(data);
+      dispatch(setPrices(processedData));
+    });
+    eventBus.on('getSignalsSuccess', (response: INotificationResponse) => {
+      dispatch(setNotifications(response.data));
+      dispatch(setLoading(false));
+    });
 
+    //NOTIFICATIONS
     eventBus.on('notification', payload => {
       dispatch(
         addNotification({
@@ -60,31 +79,13 @@ export const useReduxEvents = () => {
         }),
       );
     });
-
-    eventBus.on('languageChanged', lang => {
-      dispatch(setAppLanguage(lang));
-    });
-
-    eventBus.on('tickerPricesFetched', (data: BinanceTickerPrice[]) => {
-      const processedData = processTickerPrices(data);
-      dispatch(setPrices(processedData));
-    });
-
     eventBus.on(
       'getNotificationsSuccess',
       (response: INotificationResponse) => {
-        response.data.forEach(item => {
-          dispatch(addNotification(item));
-        });
+        dispatch(setNotifications(response.data));
         dispatch(setLoading(false));
       },
     );
-
-    eventBus.on('getSignalsSuccess', (response: INotificationResponse) => {
-      dispatch(setNotifications(response.data));
-      dispatch(setLoading(false));
-    });
-
     eventBus.on('getUnreadCountSuccess', (response: IUnreadCountResponse) => {
       dispatch(setUnreadCount(response.data.total));
     });
@@ -96,7 +97,6 @@ export const useReduxEvents = () => {
     eventBus.on('markAllAsReadSuccess', () => {
       dispatch(markAllAsRead());
     });
-
     eventBus.on('deleteNotificationSuccess', ({slug}: {slug: string}) => {
       dispatch(deleteNotification(slug));
     });
@@ -105,6 +105,15 @@ export const useReduxEvents = () => {
       dispatch(deleteAllNotifications());
     });
 
+    //FAVORITES
+    eventBus.on('addFavorite', (symbol: string) => {
+      dispatch(addFavorite(symbol));
+    });
+    eventBus.on('removeFavorite', (symbol: string) => {
+      dispatch(removeFavorite(symbol));
+    });
+
+    //WATCHLIST
     eventBus.on('getWatchlistSuccess', response => {
       dispatch(setWatchlist(response.data));
     });
@@ -123,6 +132,20 @@ export const useReduxEvents = () => {
 
     eventBus.on('updateWatchlistWatchAllSuccess', response => {
       dispatch(setWatchlist(response.data));
+    });
+    eventBus.on('coinSwitched', (symbol: string) => {
+      dispatch(coinSwitched(symbol));
+    });
+
+    eventBus.on('watchAllChanged', (watchAll: boolean) => {
+      dispatch(watchAllChanged(watchAll));
+    });
+
+    eventBus.on('periodChanged', period => {
+      dispatch(periodChanged(Number(period)));
+    });
+    eventBus.on('percentChanged', percent => {
+      dispatch(percentChanged(Number(percent)));
     });
   }, []);
 };

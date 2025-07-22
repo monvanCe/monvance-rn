@@ -60,8 +60,6 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
         volume={item.volume}
         change={item.change}
         changePercent={item.changePercent}
-        isFavorite={item.isFavorite}
-        onStarPress={() => {}}
       />
     );
   };

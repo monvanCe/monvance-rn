@@ -141,3 +141,7 @@ interface IWatchlistState {
   percent: number;
   loading?: boolean;
 }
+
+interface IFavoritesState {
+  favorites: string[];
+}

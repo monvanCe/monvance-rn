@@ -7,6 +7,7 @@ import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {t} from '../localization';
 import {useNotificationService} from '../hooks/useNotificationService';
 import NotificationItem from '../components/NotificationItem';
+import {FlashList} from '@shopify/flash-list';
 
 const NotificationScreen = () => {
   const {theme: appTheme} = useAppTheme();
@@ -75,7 +76,7 @@ const NotificationScreen = () => {
               onPress={markAllAsRead}>
               <Icon
                 name="done-all"
-                size={appTheme.ui.spacing * 4}
+                size={appTheme.ui.spacing * 3}
                 color={appTheme.colors.primary}
               />
             </TouchableOpacity>
@@ -89,7 +90,7 @@ const NotificationScreen = () => {
               onPress={deleteAllNotifications}>
               <Icon
                 name="delete-sweep"
-                size={appTheme.ui.spacing * 4}
+                size={appTheme.ui.spacing * 3}
                 color={appTheme.colors.error}
               />
             </TouchableOpacity>
@@ -114,14 +115,18 @@ const NotificationScreen = () => {
             </Text>
           </View>
         ) : (
-          notifications.map(item => (
-            <NotificationItem
-              key={item._id}
-              item={item}
-              onMarkAsRead={markAsRead}
-              onDelete={deleteNotification}
-            />
-          ))
+          <FlashList
+            data={notifications}
+            renderItem={({item}) => (
+              <NotificationItem
+                item={item}
+                onMarkAsRead={markAsRead}
+                onDelete={deleteNotification}
+              />
+            )}
+            keyExtractor={item => item._id}
+            estimatedItemSize={80}
+          />
         )}
       </View>
     </View>

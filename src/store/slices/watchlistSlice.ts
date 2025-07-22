@@ -20,9 +20,32 @@ const watchlistSlice = createSlice({
       state.percent = action.payload.percent;
       state.loading = false;
     },
+    coinSwitched: (state, action: PayloadAction<string>) => {
+      if (state.coins.includes(action.payload)) {
+        state.coins = state.coins.filter(coin => coin !== action.payload);
+      } else {
+        state.coins.push(action.payload);
+      }
+    },
+    watchAllChanged: (state, action: PayloadAction<boolean>) => {
+      state.watchAll = action.payload;
+      state.coins = [];
+    },
+    periodChanged: (state, action: PayloadAction<WatchlistPeriod>) => {
+      state.period = action.payload;
+    },
+    percentChanged: (state, action: PayloadAction<WatchlistPercent>) => {
+      state.percent = action.payload;
+    },
   },
 });
 
-export const {setWatchlist} = watchlistSlice.actions;
+export const {
+  setWatchlist,
+  coinSwitched,
+  watchAllChanged,
+  periodChanged,
+  percentChanged,
+} = watchlistSlice.actions;
 
 export default watchlistSlice;

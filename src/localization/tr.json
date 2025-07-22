@@ -23,5 +23,6 @@
   "notifications": "Bildirimler",
   "no_notifications": "Henüz bildirim yok",
   "watchlist": "İzleme Listem",
-  "watch_all": "Tümünü İzle"
+  "watch_all": "Tümünü İzle",
+  "no_coins_active": "Hiçbir coin aktif değil."
 }

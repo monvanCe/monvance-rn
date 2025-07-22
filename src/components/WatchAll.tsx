@@ -8,7 +8,7 @@ import {eventBus} from '../middleware/eventMiddleware';
 
 const WatchAll = () => {
   const {theme: appTheme} = useAppTheme();
-  const {watchAll} = useAppSelector(state => state.watchlist);
+  const {watchAll, loading} = useAppSelector(state => state.watchlist);
 
   const handleWatchAllChange = () => {
     eventBus.emit('watchAllChanged', !watchAll);
@@ -33,7 +33,18 @@ const WatchAll = () => {
         }}>
         {t('watch_all')}
       </Text>
-      <Switch value={watchAll} onValueChange={handleWatchAllChange} />
+      {loading ? (
+        <View
+          style={{
+            width: 50,
+            height: 28,
+            borderRadius: 999,
+            backgroundColor: appTheme.colors.surface,
+          }}
+        />
+      ) : (
+        <Switch value={watchAll} onValueChange={handleWatchAllChange} />
+      )}
     </View>
   );
 };

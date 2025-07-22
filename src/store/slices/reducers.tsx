@@ -5,6 +5,7 @@ import chatSlice from './chatSlice';
 import homeSlice from './homeSlice';
 import notificationSlice from './notificationSlice';
 import watchlistSlice from './watchlistSlice';
+import favoritesSlice from './favoritesSlice';
 
 const rootReducer = combineReducers({
   appConfig: appConfigSlice.reducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   home: homeSlice.reducer,
   notification: notificationSlice.reducer,
   watchlist: watchlistSlice.reducer,
+  favorites: favoritesSlice.reducer,
 });
 
 export default rootReducer;
