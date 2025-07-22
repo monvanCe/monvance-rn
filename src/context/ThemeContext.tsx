@@ -10,6 +10,7 @@ const uiProperties: ITheme = {
   spacing: 8,
   elevation: 1,
   defaultVariant: 'text',
+  fontSize: 16,
 } as const;
 
 const darkTheme = {
@@ -56,7 +57,7 @@ const lightTheme = {
   ui: uiProperties,
 };
 
-type ThemeContextType = {
+export type ThemeContextType = {
   isDarkMode: boolean;
   toggleTheme: () => void;
   theme: typeof darkTheme;

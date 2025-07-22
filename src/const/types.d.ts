@@ -31,6 +31,7 @@ interface ITheme {
   spacing: number;
   elevation: number;
   defaultVariant: 'text' | 'contained' | 'outlined';
+  fontSize: number;
 }
 
 interface IUserUpdate {

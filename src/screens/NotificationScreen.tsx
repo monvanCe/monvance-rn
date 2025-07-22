@@ -75,7 +75,7 @@ const NotificationScreen = () => {
               onPress={markAllAsRead}>
               <Icon
                 name="done-all"
-                size={appTheme.ui.spacing * 2.5}
+                size={appTheme.ui.spacing * 4}
                 color={appTheme.colors.primary}
               />
             </TouchableOpacity>
@@ -89,7 +89,7 @@ const NotificationScreen = () => {
               onPress={deleteAllNotifications}>
               <Icon
                 name="delete-sweep"
-                size={appTheme.ui.spacing * 2.5}
+                size={appTheme.ui.spacing * 4}
                 color={appTheme.colors.error}
               />
             </TouchableOpacity>

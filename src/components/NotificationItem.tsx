@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Animated} from 'react-native';
+import {View, Animated} from 'react-native';
 import {
   GestureHandlerRootView,
   PanGestureHandler,
@@ -21,6 +21,7 @@ const NotificationItem = ({
   onDelete,
 }: NotificationItemProps) => {
   const {theme: appTheme} = useAppTheme();
+  const styles = style(appTheme);
   const translateX = new Animated.Value(0);
   const scale = new Animated.Value(1);
 
@@ -142,7 +143,9 @@ const NotificationItem = ({
                   styles.notificationTitle,
                   {
                     color: appTheme.colors.onSurface,
-                    fontWeight: item.isRead ? '400' : '700',
+                    fontWeight: item.isRead
+                      ? ('400' as const)
+                      : ('700' as const),
                   },
                 ]}>
                 {item.title}
@@ -177,71 +180,72 @@ const NotificationItem = ({
   );
 };
 
-const styles = StyleSheet.create({
+const style = (appTheme: any) => ({
   notificationContainer: {
-    position: 'relative',
-    marginBottom: 12,
+    position: 'relative' as const,
+    marginBottom: appTheme.ui.spacing * 1.5,
   },
   swipeActions: {
-    position: 'absolute',
+    position: 'absolute' as const,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
+    alignItems: 'center' as const,
     zIndex: 1,
   },
   swipeAction: {
+    height: '100%' as const,
     width: 80,
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
   },
   markAsReadAction: {
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
+    borderTopLeftRadius: appTheme.ui.radius,
+    borderBottomLeftRadius: appTheme.ui.radius,
   },
   deleteAction: {
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
+    borderTopRightRadius: appTheme.ui.radius,
+    borderBottomRightRadius: appTheme.ui.radius,
   },
   notificationItem: {
-    padding: 16,
-    borderRadius: 8,
-    borderWidth: 1,
+    padding: appTheme.ui.spacing * 2,
+    borderRadius: appTheme.ui.radius,
+    borderWidth: appTheme.ui.borderWidth,
     zIndex: 2,
   },
   notificationHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: 'row' as const,
+    alignItems: 'flex-start' as const,
   },
   notificationIcon: {
-    marginRight: 12,
+    marginRight: appTheme.ui.spacing * 1.5,
     marginTop: 2,
   },
   notificationContent: {
     flex: 1,
   },
   notificationTitle: {
-    fontSize: 16,
-    marginBottom: 4,
+    fontSize: appTheme.ui.fontSize * 1,
+    marginBottom: appTheme.ui.spacing * 0.5,
   },
   notificationMessage: {
-    fontSize: 14,
-    marginBottom: 8,
-    lineHeight: 20,
+    fontSize: appTheme.ui.fontSize * 0.875,
+    marginBottom: appTheme.ui.spacing,
+    lineHeight: appTheme.ui.fontSize * 1.25,
   },
   notificationTime: {
-    fontSize: 12,
+    fontSize: appTheme.ui.fontSize * 0.75,
   },
   unreadIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginLeft: 8,
-    marginTop: 4,
+    width: appTheme.ui.spacing,
+    height: appTheme.ui.spacing,
+    borderRadius: appTheme.ui.spacing / 2,
+    marginLeft: appTheme.ui.spacing * 0.5,
+    marginTop: appTheme.ui.spacing * 0.25,
   },
 });
 

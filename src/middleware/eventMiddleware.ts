@@ -26,6 +26,8 @@ type eventType = {
   updateWatchlistPeriodSuccess: IWatchlistResponse;
   percentChanged: string;
   updateWatchlistPercentSuccess: IWatchlistResponse;
+  watchAllChanged: boolean;
+  updateWatchlistWatchAllSuccess: IWatchlistResponse;
 };
 
 class EventManager<Events extends Record<string, any>> {

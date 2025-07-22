@@ -1,10 +1,8 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
 
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import {ChatMessage} from './ChatMessage';
-import {useTheme} from '../../context/ThemeContext';
 
 interface ChatMessagesListProps {
   scrollViewRef: React.RefObject<FlashList<IMessage> | null>;
@@ -21,14 +19,7 @@ export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
   scrollToBottom,
   variant,
 }) => {
-  const theme = useTheme();
   const {theme: appTheme} = useAppTheme();
-
-  const styles = StyleSheet.create({
-    messagesContainer: {
-      flex: 1,
-    },
-  });
 
   const renderMessage = ({item, index}: {item: IMessage; index: number}) => (
     <ChatMessage

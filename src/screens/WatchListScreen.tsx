@@ -15,6 +15,7 @@ const WatchListScreen = () => {
   const {prices} = useAppSelector(state => state.home);
   const {watchAll, coins} = useAppSelector(state => state.watchlist);
   const [filteredPrices, setFilteredPrices] = useState<any[]>([]);
+  const styles = style(appTheme);
 
   useFocusEffect(
     useCallback(() => {
@@ -39,16 +40,14 @@ const WatchListScreen = () => {
   );
 
   return (
-    <View
-      style={[styles.container, {backgroundColor: appTheme.colors.background}]}>
-      {/* Header */}
+    <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>{t('watchlist') || 'Watchlist'}</Text>
         <NotificationIcon />
       </View>
-      {/* ExpandableFilter */}
+
       <ExpandableFilter />
-      {/* MarketItems List */}
+
       <FlashList
         data={filteredPrices}
         renderItem={renderItem}
@@ -60,46 +59,24 @@ const WatchListScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 16,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '700',
-  },
-  notificationButton: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 100,
-    padding: 10,
-    position: 'relative',
-  },
-  unreadBadge: {
-    position: 'absolute',
-    top: 2,
-    right: 2,
-    backgroundColor: '#FF5252',
-    minWidth: 18,
-    height: 18,
-    borderRadius: 9,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
-    paddingHorizontal: 3,
-  },
-  unreadText: {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: 11,
-  },
-});
+const style = (appTheme: ReturnType<typeof useAppTheme>['theme']) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: appTheme.colors.background,
+    },
+    headerContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: appTheme.ui.spacing * 3,
+      paddingTop: appTheme.ui.spacing * 3,
+      paddingBottom: appTheme.ui.spacing * 2,
+    },
+    headerTitle: {
+      fontSize: appTheme.ui.spacing * 3.5,
+      fontWeight: '700',
+    },
+  });
 
 export default WatchListScreen;

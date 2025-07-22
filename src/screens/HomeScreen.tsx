@@ -13,6 +13,7 @@ import {t} from '../localization';
 
 import ExpandableFilter from '../components/ExpandableFilter';
 import HomeHeader from '../components/HomeHeader';
+import WatchAll from '../components/WatchAll';
 
 interface HomeScreenProps {
   onNavigateToChat: () => void;
@@ -86,6 +87,8 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
       </View>
 
       <ExpandableFilter />
+
+      <WatchAll />
 
       <FlashList
         data={loading ? Array(10).fill({}) : filteredPrices}

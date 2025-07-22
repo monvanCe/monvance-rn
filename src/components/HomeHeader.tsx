@@ -1,10 +1,10 @@
 import React from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useNavigation} from '@react-navigation/native';
+
 import {Text} from './ui/Text';
 import {t} from '../localization';
-import {useAppSelector} from '../store/store';
+
 import NotificationIcon from './NotificationIcon';
 
 type HomeHeaderProps = {
@@ -18,71 +18,68 @@ const HomeHeader = ({
   hasNewMessages,
   appTheme,
 }: HomeHeaderProps) => {
-  const navigation = useNavigation();
+  const styles = style(appTheme);
   return (
-    <View
-      style={[
-        {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingHorizontal: appTheme.ui.spacing * 2,
-          paddingTop: appTheme.ui.spacing * 2,
-          paddingBottom: appTheme.ui.spacing * 2,
-        },
-      ]}>
-      <Text
-        style={[
-          {
-            fontSize: appTheme.ui.spacing * 3.5,
-            fontWeight: '700',
-            color: appTheme.colors.onSurface,
-          },
-        ]}>
-        {t('markets')}
-      </Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: appTheme.ui.spacing * 1.5,
-        }}>
+    <View style={styles.container}>
+      <Text style={styles.headerTitle}>{t('markets')}</Text>
+      <View style={styles.rightRow}>
         <NotificationIcon />
-
-        <View style={{position: 'relative'}}>
+        <View style={styles.chatWrapper}>
           <TouchableOpacity
             onPress={onNavigateToChat}
-            style={{
-              backgroundColor: appTheme.colors.surfaceVariant,
-              borderRadius: 100,
-              padding: appTheme.ui.spacing,
-            }}>
+            style={styles.chatButton}>
             <Icon
               name="chat"
               size={appTheme.ui.spacing * 3.5}
               color={appTheme.colors.primary}
             />
           </TouchableOpacity>
-          {hasNewMessages && (
-            <View
-              style={{
-                position: 'absolute',
-                top: appTheme.ui.spacing / 2.5,
-                right: appTheme.ui.spacing / 2.5,
-                backgroundColor: appTheme.colors.error,
-                width: appTheme.ui.spacing * 1.5,
-                height: appTheme.ui.spacing * 1.5,
-                borderRadius: appTheme.ui.spacing * 0.75,
-                borderWidth: appTheme.ui.borderWidth * 2,
-                borderColor: appTheme.colors.background,
-                zIndex: 2,
-              }}
-            />
-          )}
+          {hasNewMessages && <View style={styles.newMessageBadge} />}
         </View>
       </View>
     </View>
   );
 };
+
+const style = (appTheme: any) => ({
+  container: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    paddingHorizontal: appTheme.ui.spacing * 2,
+    paddingTop: appTheme.ui.spacing * 2,
+    paddingBottom: appTheme.ui.spacing * 2,
+  },
+  headerTitle: {
+    fontSize: appTheme.ui.fontSize * 2,
+    fontWeight: '700' as const,
+    color: appTheme.colors.onSurface,
+  },
+  rightRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    // gap: appTheme.ui.spacing * 1.5, // gap is not supported in React Native
+  },
+  chatWrapper: {
+    position: 'relative' as const,
+  },
+  chatButton: {
+    backgroundColor: appTheme.colors.surfaceVariant,
+    borderRadius: 100,
+    padding: appTheme.ui.spacing,
+  },
+  newMessageBadge: {
+    position: 'absolute' as const,
+    top: appTheme.ui.spacing / 2.5,
+    right: appTheme.ui.spacing / 2.5,
+    backgroundColor: appTheme.colors.error,
+    width: appTheme.ui.spacing * 1.5,
+    height: appTheme.ui.spacing * 1.5,
+    borderRadius: appTheme.ui.spacing * 0.75,
+    borderWidth: appTheme.ui.borderWidth * 2,
+    borderColor: appTheme.colors.background,
+    zIndex: 2,
+  },
+});
 
 export default HomeHeader;

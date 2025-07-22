@@ -34,109 +34,32 @@ const percentOptions: Option[] = [
 
 const ExpandableFilter = () => {
   const {theme: appTheme} = useAppTheme();
+  const styles = style(appTheme);
   const [isExpanded, setIsExpanded] = useState(false);
   const {period, percent} = useAppSelector(state => state.watchlist);
 
   return (
-    <View
-      style={[
-        {
-          paddingHorizontal: appTheme.ui.spacing * 2,
-          paddingBottom: appTheme.ui.spacing,
-          backgroundColor: appTheme.colors.surface,
-        },
-      ]}>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingVertical: appTheme.ui.spacing,
-        }}>
-        <View style={{gap: appTheme.ui.spacing}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: appTheme.ui.spacing,
-              backgroundColor: appTheme.colors.surface,
-              paddingHorizontal: appTheme.ui.spacing * 1.5,
-              paddingVertical: appTheme.ui.spacing,
-              borderRadius: appTheme.ui.spacing,
-            }}>
-            <Text
-              style={{
-                color: appTheme.colors.onSurfaceVariant,
-                fontSize: appTheme.ui.spacing * 1.8,
-                fontWeight: '500',
-                textTransform: 'uppercase',
-                letterSpacing: 0.5,
-              }}>
-              {t('period')}:
-            </Text>
-            <Text
-              style={{
-                color: appTheme.colors.onSurface,
-                fontSize: appTheme.ui.spacing * 2,
-                fontWeight: '700',
-              }}>
-              {period}
-            </Text>
+    <View style={styles.container}>
+      <View style={styles.headerRow}>
+        <View style={styles.periodPercentCol}>
+          <View style={styles.periodRow}>
+            <Text style={styles.periodLabel}>{t('period')}:</Text>
+            <Text style={styles.periodValue}>{period}</Text>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: appTheme.ui.spacing,
-              paddingHorizontal: appTheme.ui.spacing * 1.5,
-            }}>
-            <Text
-              style={{
-                color: appTheme.colors.onSurfaceVariant,
-                fontSize: appTheme.ui.spacing * 1.8,
-                fontWeight: '500',
-                textTransform: 'uppercase',
-                letterSpacing: 0.5,
-              }}>
-              {t('percent')}:
-            </Text>
-            <Text
-              style={{
-                color: appTheme.colors.onSurface,
-                fontSize: appTheme.ui.spacing * 2,
-                fontWeight: '700',
-              }}>
-              {percent}%
-            </Text>
+          <View style={styles.percentRow}>
+            <Text style={styles.percentLabel}>{t('percent')}:</Text>
+            <Text style={styles.percentValue}>{percent}%</Text>
           </View>
         </View>
         <Button onPress={() => setIsExpanded(!isExpanded)} variant="outlined">
-          <Text
-            style={{
-              fontSize: appTheme.ui.spacing * 2,
-              fontWeight: '700',
-              color: appTheme.colors.primary,
-            }}>
-            Change
-          </Text>
+          <Text style={styles.changeButtonText}>Change</Text>
         </Button>
       </View>
       {isExpanded && (
-        <View style={{paddingTop: appTheme.ui.spacing}}>
-          <View style={{gap: appTheme.ui.spacing}}>
-            <Text
-              style={{
-                color: appTheme.colors.onSurface,
-                fontWeight: '600',
-              }}>
-              {t('period')}
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                gap: appTheme.ui.spacing,
-              }}>
+        <View style={styles.expandedContainer}>
+          <View style={styles.expandedSection}>
+            <Text style={styles.expandedTitle}>{t('period')}</Text>
+            <View style={styles.optionsRow}>
               {periodOptions.map(option => (
                 <Button
                   key={option.value}
@@ -148,34 +71,17 @@ const ExpandableFilter = () => {
                       period === Number(option.value)
                         ? appTheme.colors.primary
                         : appTheme.colors.surfaceVariant,
+                    marginRight: appTheme.ui.spacing / 2,
+                    marginBottom: appTheme.ui.spacing / 2,
                   }}>
-                  <Text
-                    style={{
-                      color: appTheme.colors.onSurface,
-                      fontSize: appTheme.ui.spacing * 1.6,
-                      fontWeight: '500',
-                    }}>
-                    {option.label}
-                  </Text>
+                  <Text style={styles.optionText}>{option.label}</Text>
                 </Button>
               ))}
             </View>
           </View>
-          <View style={{gap: appTheme.ui.spacing}}>
-            <Text
-              style={{
-                color: appTheme.colors.onSurface,
-                fontSize: appTheme.ui.spacing * 1.8,
-                fontWeight: '600',
-              }}>
-              {t('percent')}
-            </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                gap: appTheme.ui.spacing,
-              }}>
+          <View style={styles.expandedSection}>
+            <Text style={styles.expandedTitle}>{t('percent')}</Text>
+            <View style={styles.optionsRow}>
               {percentOptions.map(option => (
                 <Button
                   key={option.value}
@@ -185,15 +91,10 @@ const ExpandableFilter = () => {
                       percent === Number(option.value)
                         ? appTheme.colors.primary
                         : appTheme.colors.surfaceVariant,
+                    marginRight: appTheme.ui.spacing / 2,
+                    marginBottom: appTheme.ui.spacing / 2,
                   }}>
-                  <Text
-                    style={{
-                      color: appTheme.colors.onSurface,
-                      fontSize: appTheme.ui.spacing * 1.6,
-                      fontWeight: '500',
-                    }}>
-                    {option.label}
-                  </Text>
+                  <Text style={styles.optionText}>{option.label}</Text>
                 </Button>
               ))}
             </View>
@@ -203,5 +104,89 @@ const ExpandableFilter = () => {
     </View>
   );
 };
+
+const style = (appTheme: any) => ({
+  container: {
+    paddingHorizontal: appTheme.ui.spacing * 2,
+    paddingBottom: appTheme.ui.spacing,
+    backgroundColor: appTheme.colors.surface,
+  },
+  headerRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    paddingVertical: appTheme.ui.spacing,
+  },
+  periodPercentCol: {
+    // gap: appTheme.ui.spacing, // not supported
+  },
+  periodRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    backgroundColor: appTheme.colors.surface,
+    paddingHorizontal: appTheme.ui.spacing * 1.5,
+    paddingVertical: appTheme.ui.spacing,
+    borderRadius: appTheme.ui.spacing,
+    marginBottom: appTheme.ui.spacing / 2,
+  },
+  periodLabel: {
+    color: appTheme.colors.onSurfaceVariant,
+    fontSize: appTheme.ui.spacing * 1.8,
+    fontWeight: '500' as const,
+    textTransform: 'uppercase' as const,
+    letterSpacing: 0.5,
+    marginRight: appTheme.ui.spacing / 2,
+  },
+  periodValue: {
+    color: appTheme.colors.onSurface,
+    fontSize: appTheme.ui.spacing * 2,
+    fontWeight: '700' as const,
+  },
+  percentRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    paddingHorizontal: appTheme.ui.spacing * 1.5,
+    marginBottom: appTheme.ui.spacing / 2,
+  },
+  percentLabel: {
+    color: appTheme.colors.onSurfaceVariant,
+    fontSize: appTheme.ui.spacing * 1.8,
+    fontWeight: '500' as const,
+    textTransform: 'uppercase' as const,
+    letterSpacing: 0.5,
+    marginRight: appTheme.ui.spacing / 2,
+  },
+  percentValue: {
+    color: appTheme.colors.onSurface,
+    fontSize: appTheme.ui.spacing * 2,
+    fontWeight: '700' as const,
+  },
+  changeButtonText: {
+    fontSize: appTheme.ui.spacing * 2,
+    fontWeight: '700' as const,
+    color: appTheme.colors.primary,
+  },
+  expandedContainer: {
+    paddingTop: appTheme.ui.spacing,
+  },
+  expandedSection: {
+    marginBottom: appTheme.ui.spacing,
+  },
+  expandedTitle: {
+    color: appTheme.colors.onSurface,
+    fontWeight: '600' as const,
+    fontSize: appTheme.ui.spacing * 1.8,
+    marginBottom: appTheme.ui.spacing / 2,
+  },
+  optionsRow: {
+    flexDirection: 'row' as const,
+    flexWrap: 'wrap' as const,
+  },
+  optionText: {
+    color: appTheme.colors.onSurface,
+    fontSize: appTheme.ui.spacing * 1.6,
+    fontWeight: '500' as const,
+  },
+});
 
 export default ExpandableFilter;

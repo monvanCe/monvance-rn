@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Image} from 'react-native';
+import {View, Image, Dimensions} from 'react-native';
 
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import {useTheme} from '../../context/ThemeContext';
@@ -37,133 +37,57 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   const isLastInGroup = !nextMessage || nextMessage.userId !== message.userId;
   const userColor = getUserColor(message.userId);
 
-  const styles = StyleSheet.create({
-    messageWrapper: {
-      marginBottom: appTheme.ui.spacing / 4,
-      maxWidth: '75%',
-    },
-    lastInGroup: {
-      marginBottom: appTheme.ui.spacing,
-    },
-    messageRow: {
-      flexDirection: 'row',
-      alignItems: 'flex-end',
-    },
-    messageContent: {
-      maxWidth: '85%',
-    },
-    avatar: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      borderWidth: appTheme.ui.borderWidth,
-      borderColor: colors.outline,
-      marginHorizontal: appTheme.ui.spacing / 2,
-    },
-    messageBubble: {
-      padding: appTheme.ui.spacing * 1.5,
-      borderRadius: appTheme.ui.radius,
-      backgroundColor: isContained
-        ? isCurrentUser
-          ? colors.primary
-          : colors.surface
-        : isOutlined
-        ? 'transparent'
-        : colors.surface,
-      borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
-      borderColor: isOutlined ? colors.outline : 'transparent',
-    },
-    messageText: {
-      color: colors.onSurface,
-      fontSize: 14,
-    },
-    username: {
-      fontSize: 12,
-      marginBottom: appTheme.ui.spacing / 4,
-      paddingHorizontal: appTheme.ui.spacing / 2,
-    },
-  });
+  const windowWidth = Dimensions.get('window').width;
+  const styles = style(
+    appTheme,
+    colors,
+    isCurrentUser,
+    isContained,
+    isOutlined,
+    windowWidth,
+  );
 
   return (
     <View
       style={[
         styles.messageWrapper,
         isLastInGroup && styles.lastInGroup,
-        {
-          alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
-        },
+        {alignSelf: isCurrentUser ? 'flex-end' : 'flex-start'},
       ]}>
       <View
         style={[
           styles.messageRow,
-          {
-            flexDirection: isCurrentUser ? 'row-reverse' : 'row',
-          },
+          isCurrentUser ? styles.rowReverse : styles.row,
         ]}>
         {isLastInGroup ? (
           <Image source={{uri: message.avatar}} style={styles.avatar} />
         ) : (
-          <View
-            style={{
-              width: 32 + appTheme.ui.spacing,
-            }}
-          />
+          <View style={styles.avatarPlaceholder} />
         )}
         <View style={styles.messageContent}>
           {isFirstInGroup && !isCurrentUser && (
-            <Text
-              style={[
-                styles.username,
-                {
-                  color: colors.primary,
-                  textAlign: 'left',
-                  marginLeft: appTheme.ui.spacing / 2,
-                  marginRight: 0,
-                },
-              ]}>
+            <Text style={[styles.username, {color: colors.primary}]}>
               {message.username}
             </Text>
           )}
-          {isFirstInGroup && isCurrentUser ? (
-            <View
-              style={{
-                height: styles.username.fontSize + styles.username.marginBottom,
-              }}
-            />
-          ) : null}
-          <View
-            style={[
-              styles.messageBubble,
-              {
-                backgroundColor: isCurrentUser
-                  ? colors.primary
-                  : colors.surface,
-                borderRadius: 20,
-                marginBottom: 2,
-                minWidth: 80,
-                maxWidth: '100%',
-              },
-            ]}>
+          {/* {isFirstInGroup && isCurrentUser ? (
+            <View style={styles.usernameSpacer} />
+          ) : null} */}
+          <View style={styles.messageBubble}>
             <Text
               style={[
                 styles.messageText,
-                {
-                  color: isCurrentUser ? colors.background : colors.onSurface,
-                },
+                isCurrentUser && styles.messageTextCurrentUser,
               ]}>
               {message.message}
             </Text>
             <Text
-              style={{
-                color: isCurrentUser
-                  ? colors.background
-                  : colors.onSurfaceVariant,
-                fontSize: 13,
-                marginTop: 8,
-                marginLeft: isCurrentUser ? 0 : 2,
-                marginRight: isCurrentUser ? 2 : 0,
-                textAlign: 'left',
-              }}>
+              style={[
+                styles.messageTime,
+                isCurrentUser
+                  ? styles.messageTimeCurrentUser
+                  : styles.messageTimeOther,
+              ]}>
               {(message as any).createdAt || '10:00'}
             </Text>
           </View>
@@ -172,3 +96,87 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
     </View>
   );
 };
+
+const style = (
+  appTheme: any,
+  colors: any,
+  isCurrentUser: boolean,
+  isContained: boolean,
+  isOutlined: boolean,
+  windowWidth: number,
+) => ({
+  messageWrapper: {
+    marginBottom: appTheme.ui.spacing / 4,
+    maxWidth: windowWidth * 0.75,
+  },
+  lastInGroup: {
+    marginBottom: appTheme.ui.spacing,
+  },
+  messageRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'flex-end' as const,
+  },
+  row: {
+    flexDirection: 'row' as const,
+  },
+  rowReverse: {
+    flexDirection: 'row-reverse' as const,
+  },
+  messageContent: {
+    maxWidth: windowWidth * 0.85,
+  },
+  avatar: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: appTheme.ui.borderWidth,
+    borderColor: colors.outline,
+    marginHorizontal: appTheme.ui.spacing / 2,
+  },
+  avatarPlaceholder: {
+    width: 32 + appTheme.ui.spacing,
+  },
+  messageBubble: {
+    padding: appTheme.ui.spacing * 1.5,
+    borderRadius: 20,
+    backgroundColor: isCurrentUser ? colors.primary : colors.surface,
+    borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
+    borderColor: isOutlined ? colors.outline : 'transparent',
+    marginBottom: 2,
+    minWidth: 80,
+    maxWidth: windowWidth * 0.85,
+  },
+  messageText: {
+    color: colors.onSurface,
+    fontSize: 14,
+  },
+  messageTextCurrentUser: {
+    color: colors.background,
+  },
+  username: {
+    fontSize: 12,
+    marginBottom: appTheme.ui.spacing / 4,
+    paddingHorizontal: appTheme.ui.spacing / 2,
+    textAlign: 'left' as const,
+    marginLeft: appTheme.ui.spacing / 2,
+    marginRight: 0,
+  },
+  usernameSpacer: {
+    height: 12 + appTheme.ui.spacing / 4,
+  },
+  messageTime: {
+    fontSize: 13,
+    marginTop: 8,
+    textAlign: 'left' as const,
+  },
+  messageTimeCurrentUser: {
+    color: colors.background,
+    marginLeft: 0,
+    marginRight: 2,
+  },
+  messageTimeOther: {
+    color: colors.onSurfaceVariant,
+    marginLeft: 2,
+    marginRight: 0,
+  },
+});

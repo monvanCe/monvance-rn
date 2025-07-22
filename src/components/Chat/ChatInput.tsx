@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import {View, TextInput, TouchableOpacity} from 'react-native';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../context/ThemeContext';
@@ -22,36 +22,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
 
-  const styles = StyleSheet.create({
-    inputContainer: {
-      flexDirection: 'row',
-      padding: appTheme.ui.spacing,
-      backgroundColor: colors.surface,
-      borderTopWidth: appTheme.ui.borderWidth,
-      borderTopColor: colors.outline,
-      height: 60,
-    },
-    input: {
-      flex: 1,
-      backgroundColor: colors.background,
-      borderRadius: 999,
-      paddingHorizontal: appTheme.ui.spacing,
-      paddingVertical: appTheme.ui.spacing / 2,
-      marginRight: appTheme.ui.spacing,
-      color: colors.onSurface,
-      height: 36,
-    },
-    sendButton: {
-      backgroundColor: colors.background,
-      width: 36,
-      height: 36,
-      borderRadius: 18,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: appTheme.ui.borderWidth,
-      borderColor: colors.outline,
-    },
-  });
+  const styles = style(appTheme, colors);
 
   return (
     <View style={styles.inputContainer}>
@@ -69,3 +40,34 @@ export const ChatInput: React.FC<ChatInputProps> = ({
     </View>
   );
 };
+
+const style = (appTheme: any, colors: any) => ({
+  inputContainer: {
+    flexDirection: 'row' as const,
+    padding: appTheme.ui.spacing,
+    backgroundColor: colors.surface,
+    borderTopWidth: appTheme.ui.borderWidth,
+    borderTopColor: colors.outline,
+    height: 60,
+  },
+  input: {
+    flex: 1,
+    backgroundColor: colors.background,
+    borderRadius: 999,
+    paddingHorizontal: appTheme.ui.spacing,
+    paddingVertical: appTheme.ui.spacing / 2,
+    marginRight: appTheme.ui.spacing,
+    color: colors.onSurface,
+    height: 36,
+  },
+  sendButton: {
+    backgroundColor: colors.background,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    borderWidth: appTheme.ui.borderWidth,
+    borderColor: colors.outline,
+  },
+});

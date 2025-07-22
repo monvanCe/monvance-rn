@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Menu, Divider} from 'react-native-paper';
 
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import {useTheme} from '../../context/ThemeContext';
-import {Text} from './Text';
 import {Button} from './Button';
 
 interface DropdownItem {

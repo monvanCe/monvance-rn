@@ -34,17 +34,21 @@ export const useWatchlist = () => {
     const handlePercentChange = (percent: string) => {
       internalService.updateWatchlistPercent(percent);
     };
+    const handleWatchAllChange = (watchAll: boolean) => {
+      internalService.updateWatchlistWatchAll(watchAll);
+    };
 
     eventBus.on('loginSuccess', handleLogin);
     eventBus.on('coinSwitched', handleCoinSwitch);
     eventBus.on('periodChanged', handlePeriodChange);
     eventBus.on('percentChanged', handlePercentChange);
-
+    eventBus.on('watchAllChanged', handleWatchAllChange);
     return () => {
       eventBus.off('loginSuccess', handleLogin);
       eventBus.off('coinSwitched', handleCoinSwitch);
       eventBus.off('periodChanged', handlePeriodChange);
       eventBus.off('percentChanged', handlePercentChange);
+      eventBus.off('watchAllChanged', handleWatchAllChange);
     };
   }, [switchCoin]);
 
