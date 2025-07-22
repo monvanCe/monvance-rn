@@ -19,8 +19,7 @@ const darkTheme = {
     secondary: '#23262F', // secondary color for background
     background: '#181A20', // background color for the app
     surface: '#23262F', // surface color for cards and other elements
-    surfaceVariant: '#23262F', // surface variant color for cards and other elements
-    surfaceDisabled: '#23262F', // surface disabled color for cards and other elements
+    surfaceVariant: '#2f3340', // surface variant color for cards and other elements
     onSurface: '#FFFFFF', // on surface color for text and icons
     onSurfaceVariant: '#A3A3A3', // on surface variant color for text and icons
     onSurfaceDisabled: '#666666', // on surface disabled color for text and icons
@@ -41,8 +40,7 @@ const lightTheme = {
     secondary: '#F8FAFC', // secondary color for background - light gray
     background: '#FFFFFF', // background color for the app
     surface: '#F1F5F9', // surface color for cards and other elements - light gray
-    surfaceVariant: '#E2E8F0', // surface variant color for cards and other elements - slightly darker gray
-    surfaceDisabled: '#F1F5F9', // surface disabled color for cards and other elements
+    surfaceVariant: '#ccd2d9', // surface variant color for cards and other elements - slightly darker gray
     onSurface: '#1E293B', // on surface color for text and icons - dark slate
     onSurfaceVariant: '#64748B', // on surface variant color for text and icons - medium gray
     onSurfaceDisabled: '#94A3B8', // on surface disabled color for text and icons - light gray

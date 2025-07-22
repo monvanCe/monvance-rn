@@ -36,21 +36,42 @@ const ExpandableFilter = () => {
   const {theme: appTheme} = useAppTheme();
   const styles = style(appTheme);
   const [isExpanded, setIsExpanded] = useState(false);
-  const {period, percent} = useAppSelector(state => state.watchlist);
+  const {period, percent, loading} = useAppSelector(state => state.watchlist);
 
   return (
     <View style={styles.container}>
       <View style={styles.headerRow}>
-        <View style={styles.periodPercentCol}>
-          <View style={styles.periodRow}>
-            <Text style={styles.periodLabel}>{t('period')}:</Text>
-            <Text style={styles.periodValue}>{period}</Text>
+        {loading ? (
+          <View style={{flexDirection: 'column', gap: appTheme.ui.spacing}}>
+            <View
+              style={{
+                backgroundColor: appTheme.colors.surfaceVariant,
+                width: 100,
+                height: 30,
+                borderRadius: appTheme.ui.radius,
+              }}
+            />
+            <View
+              style={{
+                backgroundColor: appTheme.colors.surfaceVariant,
+                width: 100,
+                height: 30,
+                borderRadius: appTheme.ui.radius,
+              }}
+            />
           </View>
-          <View style={styles.percentRow}>
-            <Text style={styles.percentLabel}>{t('percent')}:</Text>
-            <Text style={styles.percentValue}>{percent}%</Text>
+        ) : (
+          <View style={styles.periodPercentCol}>
+            <View style={styles.periodRow}>
+              <Text style={styles.periodLabel}>{t('period')}:</Text>
+              <Text style={styles.periodValue}>{period}</Text>
+            </View>
+            <View style={styles.percentRow}>
+              <Text style={styles.percentLabel}>{t('percent')}:</Text>
+              <Text style={styles.percentValue}>{percent}%</Text>
+            </View>
           </View>
-        </View>
+        )}
         <Button onPress={() => setIsExpanded(!isExpanded)} variant="outlined">
           <Text style={styles.changeButtonText}>Change</Text>
         </Button>
@@ -108,7 +129,6 @@ const ExpandableFilter = () => {
 const style = (appTheme: any) => ({
   container: {
     paddingHorizontal: appTheme.ui.spacing * 2,
-    paddingBottom: appTheme.ui.spacing,
     backgroundColor: appTheme.colors.surface,
   },
   headerRow: {
