@@ -86,13 +86,14 @@ interface BinanceTickerPrice {
 }
 
 interface INotification {
-  id: string;
+  _id: string;
   title: string;
   body: string;
   timestamp: string;
   isRead: boolean;
   type: 'info' | 'warning' | 'success' | 'error';
   slug: string;
+  data: any;
 }
 
 interface INotificationState {
@@ -120,4 +121,22 @@ interface IUnreadCountResponse {
     event: number;
   };
   message: string;
+}
+
+interface IWatchlistResponse {
+  data: {
+    watchAll: boolean;
+    coins: string[];
+    period: number;
+    percent: number;
+  };
+  message: string;
+}
+
+interface IWatchlistState {
+  watchAll: boolean;
+  coins: string[];
+  period: number;
+  percent: number;
+  loading?: boolean;
 }

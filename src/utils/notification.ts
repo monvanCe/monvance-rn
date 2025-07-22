@@ -77,7 +77,6 @@ export const getStoredNotificationToken = async (): Promise<string | null> => {
 
 export const setupNotificationListeners = () => {
   onMessage(messaging, async remoteMessage => {
-    console.log('onmessage');
     eventBus.emit('notification', {
       title: remoteMessage.notification?.title || '',
       body: remoteMessage.notification?.body || '',

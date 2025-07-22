@@ -14,6 +14,9 @@ import {useNotification} from './src/hooks/useNotification';
 import useLocalization from './src/hooks/useLocalization';
 import {useHomeService} from './src/hooks/useHomeService';
 import {useNotificationService} from './src/hooks/useNotificationService';
+import {useWatchlist} from './src/hooks/useWatchlist';
+import Toast from 'react-native-toast-message';
+import {useToast} from './src/hooks/useToast';
 
 const AppContent = () => {
   useAuth();
@@ -22,28 +25,31 @@ const AppContent = () => {
   useLocalization();
   useHomeService();
   useNotificationService();
+  useWatchlist();
+  useToast();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);
 
   return (
-    <PaperProvider>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <StackNavigator />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    </PaperProvider>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StackNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 };
 
 const App = () => {
   return (
-    <Provider store={store}>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
-    </Provider>
+    <PaperProvider>
+      <Provider store={store}>
+        <ThemeProvider>
+          <AppContent />
+          <Toast />
+        </ThemeProvider>
+      </Provider>
+    </PaperProvider>
   );
 };
 

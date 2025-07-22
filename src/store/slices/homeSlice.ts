@@ -7,7 +7,6 @@ interface ProcessedPrice {
   change: string;
   changePercent: string;
   isFavorite: boolean;
-  switchValue: boolean;
 }
 
 interface IHomeState {

@@ -119,10 +119,6 @@ export const useChatService = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(connectionStatus);
-  }, [connectionStatus]);
-
   return {
     getChatToken,
     connect,

@@ -2,7 +2,7 @@ import {AxiosInstance} from 'axios';
 
 export const loggerInterceptor = (instance: AxiosInstance) => {
   instance.interceptors.request.use(config => {
-    console.log('Request:', config.method, config.url);
+    console.log('Request:', config.method, config.url, config.data);
     return config;
   });
 

@@ -1,6 +1,10 @@
 import React from 'react';
 import {View, StyleSheet, TouchableOpacity, Animated} from 'react-native';
-import {PanGestureHandler, State} from 'react-native-gesture-handler';
+import {
+  GestureHandlerRootView,
+  PanGestureHandler,
+  State,
+} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Text} from './ui/Text';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
@@ -80,7 +84,7 @@ const NotificationItem = ({
   };
 
   return (
-    <View style={styles.notificationContainer}>
+    <GestureHandlerRootView style={styles.notificationContainer}>
       <View style={styles.swipeActions}>
         <View
           style={[
@@ -148,7 +152,7 @@ const NotificationItem = ({
                   styles.notificationMessage,
                   {color: appTheme.colors.onSurfaceVariant},
                 ]}>
-                {item.message}
+                {item.body}
               </Text>
               <Text
                 style={[
@@ -169,7 +173,7 @@ const NotificationItem = ({
           </View>
         </Animated.View>
       </PanGestureHandler>
-    </View>
+    </GestureHandlerRootView>
   );
 };
 

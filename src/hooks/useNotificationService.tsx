@@ -4,7 +4,6 @@ import {internalService} from '../service/internalServices';
 import {eventBus} from '../middleware/eventMiddleware';
 import {setLoading} from '../store/slices/notificationSlice';
 import {useAppDispatch} from '../store/store';
-import {waitForEvent} from '../utils/waitForEvent';
 
 export const useNotificationService = () => {
   const dispatch = useAppDispatch();
@@ -13,8 +12,7 @@ export const useNotificationService = () => {
   );
 
   useEffect(() => {
-    eventBus.on('appStarted', async () => {
-      await waitForEvent('loginSuccess');
+    eventBus.on('loginSuccess', async () => {
       fetchNotifications();
       fetchUnreadCount();
     });

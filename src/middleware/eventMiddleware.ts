@@ -1,4 +1,5 @@
 type eventType = {
+  toast: {message: string; type: 'success' | 'error' | 'info' | 'warning'};
   appStarted: null;
   chatScreenOpened: null;
   loginSuccess: {user: IUser};
@@ -18,6 +19,9 @@ type eventType = {
   markAllAsReadSuccess: null;
   deleteNotificationSuccess: {slug: string};
   deleteAllNotificationsSuccess: null;
+  getWatchlistSuccess: IWatchlistResponse;
+  coinSwitched: string;
+  updateWatchlistCoinsSuccess: IWatchlistResponse;
 };
 
 class EventManager<Events extends Record<string, any>> {

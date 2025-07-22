@@ -42,6 +42,27 @@ export const internalService = {
     return user;
   },
 
+  getWatchlist: async (): Promise<IWatchlistResponse> => {
+    const response = await api.get<IWatchlistResponse>(
+      INTERNAL_ENDPOINTS.WATCHLIST,
+      'internal',
+    );
+    eventBus.emit('getWatchlistSuccess', response);
+    return response;
+  },
+
+  updateWatchlistCoins: async (
+    coins: string[],
+  ): Promise<IWatchlistResponse> => {
+    const response = await api.put<IWatchlistResponse>(
+      `${INTERNAL_ENDPOINTS.WATCHLIST}`,
+      'internal',
+      {coins},
+    );
+    eventBus.emit('updateWatchlistCoinsSuccess', response);
+    return response;
+  },
+
   getNotifications: async (): Promise<INotificationResponse> => {
     const response = await api.get<INotificationResponse>(
       INTERNAL_ENDPOINTS.GET_NOTIFICATIONS,

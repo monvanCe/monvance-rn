@@ -13,7 +13,10 @@ import {
   markAllAsRead,
   deleteNotification,
   deleteAllNotifications,
+  addNotification,
 } from '../store/slices/notificationSlice';
+import {setWatchlist} from '../store/slices/watchlistSlice';
+import {processTickerPrices} from '../utils/processTickerPrices';
 
 export const useReduxEvents = () => {
   const dispatch = useAppDispatch();
@@ -43,27 +46,36 @@ export const useReduxEvents = () => {
       dispatch(setNotificationId(token));
     });
 
+    eventBus.on('notification', payload => {
+      dispatch(
+        addNotification({
+          _id: '',
+          title: payload.title,
+          body: payload.body,
+          timestamp: '',
+          isRead: false,
+          type: 'info',
+          slug: '',
+          data: null,
+        }),
+      );
+    });
+
     eventBus.on('languageChanged', lang => {
       dispatch(setAppLanguage(lang));
     });
 
     eventBus.on('tickerPricesFetched', (data: BinanceTickerPrice[]) => {
-      const processedData = data.map(item => ({
-        symbol: item.symbol,
-        price: item.price,
-        volume: (Math.random() * 1000).toFixed(2),
-        change: (Math.random() * 100).toFixed(2),
-        changePercent: (Math.random() * 5).toFixed(2),
-        isFavorite: Math.random() > 0.5,
-        switchValue: Math.random() > 0.5,
-      }));
+      const processedData = processTickerPrices(data);
       dispatch(setPrices(processedData));
     });
 
     eventBus.on(
       'getNotificationsSuccess',
       (response: INotificationResponse) => {
-        dispatch(setNotifications(response.data));
+        response.data.forEach(item => {
+          dispatch(addNotification(item));
+        });
         dispatch(setLoading(false));
       },
     );
@@ -91,6 +103,14 @@ export const useReduxEvents = () => {
 
     eventBus.on('deleteAllNotificationsSuccess', () => {
       dispatch(deleteAllNotifications());
+    });
+
+    eventBus.on('getWatchlistSuccess', response => {
+      dispatch(setWatchlist(response.data));
+    });
+
+    eventBus.on('updateWatchlistCoinsSuccess', response => {
+      dispatch(setWatchlist(response.data));
     });
   }, []);
 };

@@ -1,17 +1,20 @@
 import React from 'react';
 import {
   View,
-  StyleSheet,
   ViewStyle,
   FlexAlignType,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-import {useTheme as useAppTheme} from '../context/ThemeContext';
+
 import {Switch} from './ui/Switch';
 import {useTheme} from '../context/ThemeContext';
 import {Text} from './ui/Text';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {t} from '../localization';
+
+import {useAppSelector} from '../store/store';
+import {eventBus} from '../middleware/eventMiddleware';
 
 interface MarketItemProps {
   symbol: string;
@@ -33,17 +36,23 @@ export const MarketItem = ({
   change = '0',
   changePercent = '0',
   variant,
-  switchValue = false,
-  onSwitchChange = () => {},
   isFavorite = false,
   onStarPress = () => {},
 }: MarketItemProps) => {
   const theme = useTheme();
   const colors = theme.theme.colors;
+  const {watchAll, coins, period, percent, loading} = useAppSelector(
+    state => state.watchlist,
+  );
+  const switchValue = watchAll
+    ? !coins.includes(symbol)
+    : coins.includes(symbol);
+
+  const onSwitchChange = (symbol: string) => {
+    eventBus.emit('coinSwitched', symbol);
+  };
 
   const resolvedVariant = variant || theme.theme.ui.defaultVariant;
-  const isContained = resolvedVariant === 'contained';
-  const isOutlined = resolvedVariant === 'outlined';
 
   const containerStyle: ViewStyle = {
     borderRadius: 0,
@@ -131,11 +140,22 @@ export const MarketItem = ({
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Switch
-          value={switchValue}
-          onValueChange={onSwitchChange}
-          variant={resolvedVariant}
-        />
+        {loading ? (
+          <View
+            style={{
+              width: 50,
+              height: 28,
+              backgroundColor: colors.surface,
+              borderRadius: 999,
+            }}
+          />
+        ) : (
+          <Switch
+            value={switchValue}
+            onValueChange={() => onSwitchChange(symbol)}
+            variant={resolvedVariant}
+          />
+        )}
       </View>
     </View>
   );
