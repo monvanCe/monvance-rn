@@ -1,5 +1,6 @@
 import {FlashList} from '@shopify/flash-list';
 import {useRef, useState} from 'react';
+import {useAppSelector} from '../store/store';
 
 const COLORS = [
   '#FF6B6B',
@@ -13,35 +14,11 @@ const COLORS = [
   '#1ABC9C',
 ];
 
-const SAMPLE_MESSAGES: IMessage[] = [
-  {
-    _id: '1',
-    userId: 'user1',
-    username: 'John Doe',
-    message: 'Merhaba! Nasılsın?',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-  },
-  {
-    _id: '2',
-    userId: 'user2',
-    username: 'Jane Smith',
-    message: 'İyiyim, teşekkürler! Sen nasılsın?',
-    avatar: 'https://i.pravatar.cc/150?img=2',
-  },
-  {
-    _id: '3',
-    userId: 'user1',
-    username: 'John Doe',
-    message: 'Ben de iyiyim. Bugün hava çok güzel!',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-  },
-];
-
 export const useChatScreen = () => {
   const scrollViewRef = useRef<FlashList<IMessage>>(null);
   const userColorsRef = useRef<{[key: string]: string}>({});
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<IMessage[]>(SAMPLE_MESSAGES);
+  const messages = useAppSelector(state => state.chat.messages);
 
   const uniqueMessages = messages.reduce((acc: IMessage[], message) => {
     const existing = acc.find(m => m._id === message._id);
@@ -87,14 +64,6 @@ export const useChatScreen = () => {
 
   const handleSend = () => {
     if (message.trim()) {
-      const newMessage: IMessage = {
-        _id: Date.now().toString(),
-        userId: 'user1',
-        username: 'John Doe',
-        message: message.trim(),
-        avatar: 'https://i.pravatar.cc/150?img=1',
-      };
-      setMessages([...messages, newMessage]);
       setMessage('');
       scrollToBottom(false);
     }

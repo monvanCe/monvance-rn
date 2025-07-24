@@ -1,6 +1,10 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {WatchlistPercent, WatchlistPeriod} from '../../const/enums';
 
+interface IWatchlistState extends IWatchlist {
+  loading: boolean;
+}
+
 const initialState: IWatchlistState = {
   watchAll: false,
   coins: [],
@@ -13,7 +17,7 @@ const watchlistSlice = createSlice({
   name: 'watchlist',
   initialState,
   reducers: {
-    setWatchlist: (state, action: PayloadAction<IWatchlistState>) => {
+    setWatchlist: (state, action: PayloadAction<IWatchlist>) => {
       state.watchAll = action.payload.watchAll;
       state.coins = action.payload.coins;
       state.period = action.payload.period;

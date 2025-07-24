@@ -17,6 +17,8 @@ import {useNotificationService} from './src/hooks/useNotificationService';
 import {useWatchlist} from './src/hooks/useWatchlist';
 import Toast from 'react-native-toast-message';
 import {useToast} from './src/hooks/useToast';
+import {useChatService} from './src/hooks/useChatService';
+import {useCentrifuge} from './src/hooks/useCentrifuge';
 
 const AppContent = () => {
   useAuth();
@@ -27,6 +29,8 @@ const AppContent = () => {
   useNotificationService();
   useWatchlist();
   useToast();
+  useChatService();
+  useCentrifuge();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);

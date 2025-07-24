@@ -2,7 +2,11 @@ import {useEffect} from 'react';
 import {eventBus} from '../middleware/eventMiddleware';
 import {useAppDispatch} from '../store/store';
 import {setNotificationId, setUser} from '../store/slices/authSlice';
-import {setHasNewMessages} from '../store/slices/chatSlice';
+import {
+  addMessage,
+  setHasNewMessages,
+  setMessages,
+} from '../store/slices/chatSlice';
 import {setAppLanguage} from '../store/slices/appConfigSlice';
 import {setPrices} from '../store/slices/homeSlice';
 import {
@@ -140,6 +144,17 @@ export const useReduxEvents = () => {
     });
     eventBus.on('percentChanged', percent => {
       dispatch(percentChanged(Number(percent)));
+    });
+
+    //MESSAGES
+    eventBus.on('getMessagesByChatIdSuccess', response => {
+      dispatch(setMessages(response.data));
+    });
+    eventBus.on('sendMessageSuccess', response => {
+      dispatch(addMessage(response.data));
+    });
+    eventBus.on('getMessageFromCentrifuge', (message: IMessage) => {
+      dispatch(addMessage(message));
     });
   }, []);
 };

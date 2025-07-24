@@ -6,9 +6,9 @@ import {ANDROID_VERSION, IOS_VERSION} from '../const/env';
 import {eventBus} from '../middleware/eventMiddleware';
 
 export const internalService = {
-  getChatToken: async (): Promise<{token: string; wsUrl: string}> => {
+  getSocket: async (): Promise<{token: string; wsUrl: string}> => {
     return api.get<{token: string; wsUrl: string}>(
-      INTERNAL_ENDPOINTS.GET_CHAT_TOKEN,
+      INTERNAL_ENDPOINTS.GET_SOCKET,
       'internal',
     );
   },
@@ -151,5 +151,29 @@ export const internalService = {
   deleteAllNotifications: async (): Promise<void> => {
     await api.delete(INTERNAL_ENDPOINTS.DELETE_ALL_NOTIFICATIONS, 'internal');
     eventBus.emit('deleteAllNotificationsSuccess', null);
+  },
+
+  getMessagesByChatId: async (
+    chatId: string = '684f15946720dfaafba07b89',
+  ): Promise<IGetMessagesByChatIdResponse> => {
+    const response = await api.get<IGetMessagesByChatIdResponse>(
+      `${INTERNAL_ENDPOINTS.CHATS}/${chatId}/messages`,
+      'internal',
+    );
+    eventBus.emit('getMessagesByChatIdSuccess', response);
+    return response;
+  },
+
+  sendMessage: async (
+    chatId: string = '684f15946720dfaafba07b89',
+    message: string,
+  ): Promise<ISendMessageResponse> => {
+    const response = await api.post<ISendMessageResponse>(
+      `${INTERNAL_ENDPOINTS.CHAT_MESSAGES}`,
+      'internal',
+      {chatId, message},
+    );
+    eventBus.emit('sendMessageSuccess', response);
+    return response;
   },
 };

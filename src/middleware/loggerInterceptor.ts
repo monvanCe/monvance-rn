@@ -1,4 +1,5 @@
 import {AxiosInstance} from 'axios';
+import {eventBus} from './eventMiddleware';
 
 export const loggerInterceptor = (instance: AxiosInstance) => {
   instance.interceptors.request.use(config => {
@@ -13,6 +14,7 @@ export const loggerInterceptor = (instance: AxiosInstance) => {
 
   instance.interceptors.response.use(undefined, error => {
     console.log('Error:', error.response.data);
+    eventBus.emit('error', error.response.data);
     return Promise.reject(error);
   });
 };

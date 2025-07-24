@@ -19,3 +19,6 @@ export enum WatchlistPercent {
   PERCENT_50 = 50,
   PERCENT_100 = 100,
 }
+
+export const USERS_CHANNEL_PREFIX = 'users#';
+export const SIGNAL_CHANNEL = 'signal';

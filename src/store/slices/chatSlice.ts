@@ -15,8 +15,11 @@ const chatSlice = createSlice({
     setHasNewMessages: (state, action: PayloadAction<boolean>) => {
       state.hasNewMessages = action.payload;
     },
+    addMessage: (state, action: PayloadAction<IMessage>) => {
+      state.messages.push(action.payload);
+    },
   },
 });
 
-export const {setMessages, setHasNewMessages} = chatSlice.actions;
+export const {setMessages, setHasNewMessages, addMessage} = chatSlice.actions;
 export default chatSlice;

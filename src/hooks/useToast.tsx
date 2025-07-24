@@ -10,5 +10,12 @@ export const useToast = () => {
         type: 'info',
       });
     });
+
+    eventBus.on('error', payload => {
+      Toast.show({
+        text1: payload,
+        type: 'error',
+      });
+    });
   }, []);
 };

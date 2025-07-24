@@ -1,5 +1,5 @@
 export const INTERNAL_ENDPOINTS = {
-  GET_CHAT_TOKEN: '/users/ws-token',
+  GET_SOCKET: '/users/ws-token',
   LOGIN: '/auth/login',
   UPDATE_USER: '/users/',
   WATCHLIST: '/watchlist',
@@ -10,4 +10,6 @@ export const INTERNAL_ENDPOINTS = {
   MARK_ALL_AS_READ: '/notifications/read-all',
   DELETE_NOTIFICATION: '/notifications',
   DELETE_ALL_NOTIFICATIONS: '/notifications',
+  CHATS: '/chats',
+  CHAT_MESSAGES: '/messages',
 };

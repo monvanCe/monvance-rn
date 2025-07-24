@@ -55,10 +55,15 @@ interface IUserUpdate {
 
 interface IMessage {
   _id: string;
-  userId: string;
-  username: string;
+  chatId: string;
+  userId: {
+    _id: string;
+    username: string;
+    avatar: string;
+  };
   message: string;
-  avatar: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface IChatState {
@@ -103,14 +108,16 @@ interface INotificationState {
   loading: boolean;
 }
 
+interface IPagination {
+  page: number;
+  totalPages: number;
+  total: number;
+  limit: number;
+}
+
 interface INotificationResponse {
   data: INotification[];
-  pagination: {
-    page: number;
-    totalPages: number;
-    total: number;
-    limit: number;
-  };
+  pagination: IPagination;
   message: string;
 }
 
@@ -125,21 +132,26 @@ interface IUnreadCountResponse {
 }
 
 interface IWatchlistResponse {
-  data: {
-    watchAll: boolean;
-    coins: string[];
-    period: number;
-    percent: number;
-  };
+  data: IWatchlist;
   message: string;
 }
 
-interface IWatchlistState {
+interface IGetMessagesByChatIdResponse {
+  data: IMessage[];
+  message: string;
+  pagination: IPagination;
+}
+
+interface ISendMessageResponse {
+  data: IMessage;
+  message: string;
+}
+
+interface IWatchlist {
   watchAll: boolean;
   coins: string[];
   period: number;
   percent: number;
-  loading?: boolean;
 }
 
 interface IFavoritesState {

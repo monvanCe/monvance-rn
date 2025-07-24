@@ -30,6 +30,10 @@ type eventType = {
   updateWatchlistWatchAllSuccess: IWatchlistResponse;
   addFavorite: string;
   removeFavorite: string;
+  centrifugeSent: {channel: string; message: any};
+  getMessagesByChatIdSuccess: IGetMessagesByChatIdResponse;
+  sendMessageSuccess: ISendMessageResponse;
+  getMessageFromCentrifuge: IMessage;
 };
 
 class EventManager<Events extends Record<string, any>> {

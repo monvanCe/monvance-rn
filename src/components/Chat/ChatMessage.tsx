@@ -4,6 +4,8 @@ import {View, Image, Dimensions} from 'react-native';
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
 import {useTheme} from '../../context/ThemeContext';
 import {Text} from '../ui/Text';
+import {useAppSelector} from '../../store/store';
+import {timeParserHour} from '../../utils/timeUtils';
 
 interface ChatMessageProps {
   message: IMessage;
@@ -23,19 +25,19 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   const theme = useTheme();
   const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
+  const user = useAppSelector(state => state.auth);
 
   const resolvedVariant = variant || theme.theme.ui.defaultVariant;
   const isContained = resolvedVariant === 'contained';
   const isOutlined = resolvedVariant === 'outlined';
 
-  const isCurrentUser = message.userId === 'user1';
+  const isCurrentUser = message.userId._id === user._id;
   const previousMessage = index > 0 ? messages[index - 1] : null;
   const nextMessage = index < messages.length - 1 ? messages[index + 1] : null;
 
   const isFirstInGroup =
     !previousMessage || previousMessage.userId !== message.userId;
   const isLastInGroup = !nextMessage || nextMessage.userId !== message.userId;
-  const userColor = getUserColor(message.userId);
 
   const windowWidth = Dimensions.get('window').width;
   const styles = style(
@@ -60,14 +62,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           isCurrentUser ? styles.rowReverse : styles.row,
         ]}>
         {isLastInGroup ? (
-          <Image source={{uri: message.avatar}} style={styles.avatar} />
+          <Image source={{uri: message.userId.avatar}} style={styles.avatar} />
         ) : (
           <View style={styles.avatarPlaceholder} />
         )}
         <View style={styles.messageContent}>
           {isFirstInGroup && !isCurrentUser && (
             <Text style={[styles.username, {color: colors.primary}]}>
-              {message.username}
+              {message.userId.username}
             </Text>
           )}
           {/* {isFirstInGroup && isCurrentUser ? (
@@ -88,7 +90,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   ? styles.messageTimeCurrentUser
                   : styles.messageTimeOther,
               ]}>
-              {(message as any).createdAt || '10:00'}
+              {message.createdAt ? timeParserHour(message.createdAt) : '10:00'}
             </Text>
           </View>
         </View>
