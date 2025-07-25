@@ -1,6 +1,8 @@
 import {FlashList} from '@shopify/flash-list';
 import {useRef, useState} from 'react';
-import {useAppSelector} from '../store/store';
+import {useAppDispatch, useAppSelector} from '../store/store';
+import {addMessage} from '../store/slices/chatSlice';
+import {internalService} from '../service/internalServices';
 
 const COLORS = [
   '#FF6B6B',
@@ -19,6 +21,8 @@ export const useChatScreen = () => {
   const userColorsRef = useRef<{[key: string]: string}>({});
   const [message, setMessage] = useState('');
   const messages = useAppSelector(state => state.chat.messages);
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(state => state.auth);
 
   const uniqueMessages = messages.reduce((acc: IMessage[], message) => {
     const existing = acc.find(m => m._id === message._id);
@@ -62,10 +66,28 @@ export const useChatScreen = () => {
     }
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (message.trim()) {
+      const localId = `${Date.now()}_${Math.random()}`;
+      const now = new Date().toISOString();
+      const optimisticMessage: IMessage = {
+        _id: localId,
+        chatId: '684f15946720dfaafba07b89',
+        userId: {
+          _id: user._id || '',
+          username: user.username || '',
+          avatar: user.avatar || '',
+        },
+        message,
+        createdAt: now,
+        updatedAt: now,
+        localId,
+        status: 'pending',
+      };
+      dispatch(addMessage(optimisticMessage));
       setMessage('');
       scrollToBottom(false);
+      internalService.sendMessage('684f15946720dfaafba07b89', message, localId);
     }
   };
 

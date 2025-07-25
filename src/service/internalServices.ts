@@ -167,13 +167,17 @@ export const internalService = {
   sendMessage: async (
     chatId: string = '684f15946720dfaafba07b89',
     message: string,
+    localId?: string,
   ): Promise<ISendMessageResponse> => {
     const response = await api.post<ISendMessageResponse>(
       `${INTERNAL_ENDPOINTS.CHAT_MESSAGES}`,
       'internal',
       {chatId, message},
     );
-    eventBus.emit('sendMessageSuccess', response);
+    eventBus.emit(
+      'sendMessageSuccess',
+      localId ? {...response, localId} : response,
+    );
     return response;
   },
 };

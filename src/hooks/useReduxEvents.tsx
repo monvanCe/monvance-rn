@@ -6,6 +6,7 @@ import {
   addMessage,
   setHasNewMessages,
   setMessages,
+  updateMessageByLocalId,
 } from '../store/slices/chatSlice';
 import {setAppLanguage} from '../store/slices/appConfigSlice';
 import {setPrices} from '../store/slices/homeSlice';
@@ -151,7 +152,16 @@ export const useReduxEvents = () => {
       dispatch(setMessages(response.data));
     });
     eventBus.on('sendMessageSuccess', response => {
-      dispatch(addMessage(response.data));
+      if (response && response.localId) {
+        dispatch(
+          updateMessageByLocalId({
+            localId: response.localId,
+            data: {...response.data, status: 'sent', localId: undefined},
+          }),
+        );
+      } else {
+        dispatch(addMessage(response.data));
+      }
     });
     eventBus.on('getMessageFromCentrifuge', (message: IMessage) => {
       dispatch(addMessage(message));

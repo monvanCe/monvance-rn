@@ -64,6 +64,8 @@ interface IMessage {
   message: string;
   createdAt: string;
   updatedAt: string;
+  localId?: string;
+  status?: 'pending' | 'sent' | 'failed';
 }
 
 interface IChatState {
@@ -145,6 +147,7 @@ interface IGetMessagesByChatIdResponse {
 interface ISendMessageResponse {
   data: IMessage;
   message: string;
+  localId?: string;
 }
 
 interface IWatchlist {

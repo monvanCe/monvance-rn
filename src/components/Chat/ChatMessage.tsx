@@ -6,6 +6,7 @@ import {useTheme} from '../../context/ThemeContext';
 import {Text} from '../ui/Text';
 import {useAppSelector} from '../../store/store';
 import {timeParserHour} from '../../utils/timeUtils';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface ChatMessageProps {
   message: IMessage;
@@ -83,15 +84,35 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
               ]}>
               {message.message}
             </Text>
-            <Text
-              style={[
-                styles.messageTime,
-                isCurrentUser
-                  ? styles.messageTimeCurrentUser
-                  : styles.messageTimeOther,
-              ]}>
-              {message.createdAt ? timeParserHour(message.createdAt) : '10:00'}
-            </Text>
+            <View style={styles.timeRow}>
+              <Text
+                style={[
+                  styles.messageTime,
+                  isCurrentUser
+                    ? styles.messageTimeCurrentUser
+                    : styles.messageTimeOther,
+                ]}>
+                {message.createdAt
+                  ? timeParserHour(message.createdAt)
+                  : '10:00'}
+              </Text>
+              {isCurrentUser && (
+                <Icon
+                  name={
+                    !message.status
+                      ? 'check'
+                      : message.status === 'pending'
+                      ? 'clock-time-four-outline'
+                      : message.status === 'failed'
+                      ? 'close'
+                      : 'check'
+                  }
+                  size={16}
+                  color={colors.background}
+                  style={styles.statusIcon}
+                />
+              )}
+            </View>
           </View>
         </View>
       </View>
@@ -148,6 +169,19 @@ const style = (
     minWidth: 80,
     maxWidth: windowWidth * 0.85,
   },
+  timeRow: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    marginTop: 4,
+  },
+  messageTime: {
+    fontSize: 13,
+    textAlign: 'left' as const,
+  },
+  statusIcon: {
+    marginLeft: 8,
+  },
   messageText: {
     color: colors.onSurface,
     fontSize: 14,
@@ -166,11 +200,7 @@ const style = (
   usernameSpacer: {
     height: 12 + appTheme.ui.spacing / 4,
   },
-  messageTime: {
-    fontSize: 13,
-    marginTop: 8,
-    textAlign: 'left' as const,
-  },
+
   messageTimeCurrentUser: {
     color: colors.background,
     marginLeft: 0,
