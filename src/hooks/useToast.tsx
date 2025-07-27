@@ -7,6 +7,7 @@ export const useToast = () => {
     eventBus.on('notification', payload => {
       Toast.show({
         text1: payload.title,
+        text2: payload.body,
         type: 'info',
       });
     });
