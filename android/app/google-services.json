@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1008369970183:android:c0e9ad90aaa719ea4a0ea2",
+        "mobilesdk_app_id": "1:1008369970183:android:a5961a9848889f634a0ea2",
         "android_client_info": {
-          "package_name": "com.cekolabs.monvance"
+          "package_name": "com.cekolabs.vens"
         }
       },
       "oauth_client": [],

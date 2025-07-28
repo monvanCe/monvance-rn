@@ -3,7 +3,7 @@ import {AxiosRequestConfig, AxiosResponse} from 'axios';
 
 const baseUrl = (requestType: 'internal' | 'external') => {
   if (requestType === 'internal') {
-    return 'https://monvance-new-192419154766.us-central1.run.app';
+    return 'https://vens.cekolabs.com';
   }
   return 'https://api.binance.com/api/v3';
 };
