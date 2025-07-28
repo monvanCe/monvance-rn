@@ -1,4 +1,4 @@
-package com.cekolabs.monvance
+package com.cekolabs.vens
 
 import android.app.Application
 import com.facebook.react.PackageList

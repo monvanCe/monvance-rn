@@ -81,9 +81,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.cekolabs.monvance"
+    namespace "com.cekolabs.vens"
     defaultConfig {
-        applicationId "com.cekolabs.monvance"
+        applicationId "com.cekolabs.vens"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
