@@ -47,34 +47,46 @@ export const useNotificationService = () => {
   };
 
   const markAsRead = async (slug: string) => {
+    dispatch(setLoading(true));
     try {
       await internalService.markAsRead(slug);
+      dispatch(setLoading(false));
     } catch (error) {
       console.error('Error marking as read:', error);
+      dispatch(setLoading(false));
     }
   };
 
   const markAllAsRead = async () => {
+    dispatch(setLoading(true));
     try {
       await internalService.markAllAsRead();
+      dispatch(setLoading(false));
     } catch (error) {
       console.error('Error marking all as read:', error);
+      dispatch(setLoading(false));
     }
   };
 
   const deleteNotification = async (slug: string) => {
+    dispatch(setLoading(true));
     try {
       await internalService.deleteNotification(slug);
+      dispatch(setLoading(false));
     } catch (error) {
       console.error('Error deleting notification:', error);
+      dispatch(setLoading(false));
     }
   };
 
   const deleteAllNotifications = async () => {
+    dispatch(setLoading(true));
     try {
       await internalService.deleteAllNotifications();
+      dispatch(setLoading(false));
     } catch (error) {
       console.error('Error deleting all notifications:', error);
+      dispatch(setLoading(false));
     }
   };
 

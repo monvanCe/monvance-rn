@@ -8,6 +8,7 @@ import {t} from '../localization';
 import {useNotificationService} from '../hooks/useNotificationService';
 import NotificationItem from '../components/NotificationItem';
 import {FlashList} from '@shopify/flash-list';
+import {Spinner} from '../components/ui/Spinner';
 
 const NotificationScreen = () => {
   const {theme: appTheme} = useAppTheme();
@@ -48,21 +49,24 @@ const NotificationScreen = () => {
               style={[styles.headerTitle, {color: appTheme.colors.onSurface}]}>
               {t('notifications')}
             </Text>
-            {unreadCount > 0 && (
-              <View
-                style={[
-                  styles.unreadBadge,
-                  {backgroundColor: appTheme.colors.primary},
-                ]}>
-                <Text
+            <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+              {loading && <Spinner />}
+              {unreadCount > 0 && (
+                <View
                   style={[
-                    styles.unreadText,
-                    {color: appTheme.colors.onSurface},
+                    styles.unreadBadge,
+                    {backgroundColor: appTheme.colors.primary},
                   ]}>
-                  {unreadCount}
-                </Text>
-              </View>
-            )}
+                  <Text
+                    style={[
+                      styles.unreadText,
+                      {color: appTheme.colors.onSurface},
+                    ]}>
+                    {unreadCount}
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
         </View>
 
