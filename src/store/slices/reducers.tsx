@@ -6,6 +6,7 @@ import homeSlice from './homeSlice';
 import notificationSlice from './notificationSlice';
 import watchlistSlice from './watchlistSlice';
 import favoritesSlice from './favoritesSlice';
+import signalsSlice from './signalsSlice';
 
 const rootReducer = combineReducers({
   appConfig: appConfigSlice.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   notification: notificationSlice.reducer,
   watchlist: watchlistSlice.reducer,
   favorites: favoritesSlice.reducer,
+  signals: signalsSlice,
 });
 
 export default rootReducer;

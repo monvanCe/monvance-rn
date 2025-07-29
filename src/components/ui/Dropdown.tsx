@@ -39,8 +39,8 @@ export const Dropdown = ({
   const {theme: appTheme} = useAppTheme();
   const selectedItem = items.find(item => item.value === selectedValue);
 
-  const resolvedVariant = variant || theme.theme.ui.defaultVariant;
-  const isContained = resolvedVariant === 'contained';
+  const resolvedVariant = 'outlined';
+  const isContained = false;
   const isOutlined = resolvedVariant === 'outlined';
 
   const buttonStyle = {

@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import WatchListScreen from '../screens/WatchListScreen';
+import SignalsScreen from '../screens/SignalsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -81,7 +82,7 @@ const TabNavigation = ({
             />
           ),
         }}>
-        {() => <></>}
+        {() => <SignalsScreen />}
       </Tab.Screen>
       <Tab.Screen
         name="Profile"

@@ -12,4 +12,6 @@ export const INTERNAL_ENDPOINTS = {
   DELETE_ALL_NOTIFICATIONS: '/notifications',
   CHATS: '/chats',
   CHAT_MESSAGES: '/messages',
+  GET_ALL_SIGNALS: '/signals/all-coins',
+  GET_WATCHLIST_SIGNALS: '/signals/my-coins',
 };

@@ -160,3 +160,44 @@ interface IWatchlist {
 interface IFavoritesState {
   favorites: string[];
 }
+
+interface ISignal {
+  _id: string;
+  coin: string;
+  period: number;
+  percent: number;
+  changePercent: number;
+  isIncrease: boolean;
+  currentPrice: number;
+  previousPrice: number;
+  periodStartTime: number;
+  isActive: boolean;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface ISignalsResponse {
+  success: boolean;
+  data: ISignal[];
+  count: number;
+  period: number;
+  percent: number;
+  skip: number;
+  limit: number;
+}
+
+interface ISignalsState {
+  allSignals: ISignal[];
+  watchlistSignals: ISignal[];
+  loading: boolean;
+  allSignalsLoading: boolean;
+  watchlistSignalsLoading: boolean;
+  hasMoreAll: boolean;
+  hasMoreWatchlist: boolean;
+  currentTab: 'all' | 'watchlist';
+  filters: {
+    period: number;
+    percent: number;
+  };
+}
