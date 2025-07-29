@@ -113,6 +113,7 @@ const NotificationScreen = () => {
             data={notifications}
             renderItem={({item}) => (
               <NotificationItem
+                key={item._id}
                 item={item}
                 onMarkAsRead={markAsRead}
                 onDelete={deleteNotification}

@@ -4,13 +4,13 @@ import {eventBus} from '../middleware/eventMiddleware';
 
 export const useToast = () => {
   useEffect(() => {
-    eventBus.on('notification', payload => {
-      Toast.show({
-        text1: payload.title,
-        text2: payload.body,
-        type: 'info',
-      });
-    });
+    // eventBus.on('notification', payload => {
+    //   Toast.show({
+    //     text1: payload.title,
+    //     text2: payload.body,
+    //     type: 'info',
+    //   });
+    // });
 
     eventBus.on('error', payload => {
       Toast.show({

@@ -70,20 +70,6 @@ export const useReduxEvents = () => {
     });
 
     //NOTIFICATIONS
-    eventBus.on('notification', payload => {
-      dispatch(
-        addNotification({
-          _id: '',
-          title: payload.title,
-          body: payload.body,
-          timestamp: '',
-          isRead: false,
-          type: 'info',
-          slug: '',
-          data: null,
-        }),
-      );
-    });
     eventBus.on(
       'getNotificationsSuccess',
       (response: INotificationResponse) => {
