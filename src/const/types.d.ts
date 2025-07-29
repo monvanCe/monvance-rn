@@ -100,7 +100,6 @@ interface INotification {
   timestamp: string;
   isRead: boolean;
   type: 'info' | 'warning' | 'success' | 'error';
-  slug: string;
   data: any;
 }
 

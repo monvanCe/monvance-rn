@@ -266,7 +266,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) => ({
     borderBottomColor: 'rgba(0,0,0,0.1)',
   },
   listContainer: {
-    paddingBottom: 100, // Account for tab bar
+    paddingBottom: 100,
   },
   loadingContainer: {
     padding: theme.ui.spacing * 2,

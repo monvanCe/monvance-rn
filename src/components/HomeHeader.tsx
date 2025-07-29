@@ -58,7 +58,6 @@ const style = (appTheme: any) => ({
   rightRow: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    // gap: appTheme.ui.spacing * 1.5, // gap is not supported in React Native
   },
   chatWrapper: {
     position: 'relative' as const,

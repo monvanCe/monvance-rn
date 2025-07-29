@@ -152,5 +152,19 @@ export const useReduxEvents = () => {
     eventBus.on('getMessageFromCentrifuge', (message: IMessage) => {
       dispatch(addMessage(message));
     });
+
+    //SIGNAL
+    eventBus.on('signalReceived', ({title, body}) => {
+      const notification: INotification = {
+        _id: Math.random().toString(36).substr(2, 9),
+        timestamp: Date.now().toString(),
+        isRead: false,
+        type: 'info',
+        data: null,
+        title,
+        body,
+      };
+      dispatch(addNotification(notification));
+    });
   }, []);
 };

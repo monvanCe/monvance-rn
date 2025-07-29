@@ -9,7 +9,7 @@ export const useNotification = () => {
     });
 
     eventBus.on('notification', async ({title, body, data}) => {
-      console.log(title, body, data);
+      // console.log(title, body, data);
     });
   }, []);
 

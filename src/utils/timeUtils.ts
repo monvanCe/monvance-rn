@@ -1,4 +1,3 @@
-// ISO tarih stringini 24 saatlik formatta (örn. 13:32) döndüren yardımcı fonksiyon
 export function timeParserHour(dateString: string): string {
   if (!dateString) return '';
   const date = new Date(dateString);

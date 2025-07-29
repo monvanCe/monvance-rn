@@ -34,6 +34,7 @@ type eventType = {
   getMessagesByChatIdSuccess: IGetMessagesByChatIdResponse;
   sendMessageSuccess: ISendMessageResponse;
   getMessageFromCentrifuge: IMessage;
+  signalReceived: {title: string; body: string};
 };
 
 class EventManager<Events extends Record<string, any>> {

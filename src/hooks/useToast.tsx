@@ -18,5 +18,13 @@ export const useToast = () => {
         type: 'error',
       });
     });
+
+    eventBus.on('signalReceived', ({title, body}) => {
+      Toast.show({
+        text1: title,
+        text2: body,
+        type: 'info',
+      });
+    });
   }, []);
 };

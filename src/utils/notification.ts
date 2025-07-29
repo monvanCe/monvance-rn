@@ -46,7 +46,6 @@ export const checkNotificationPermission = async (): Promise<boolean> => {
 
 export const getNotificationToken = async (): Promise<string | null> => {
   try {
-    // Ensure device is registered for remote messages (required for iOS)
     if (!(await isDeviceRegisteredForRemoteMessages(messaging))) {
       await registerDeviceForRemoteMessages(messaging);
     }

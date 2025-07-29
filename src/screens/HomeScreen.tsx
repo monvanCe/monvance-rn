@@ -40,7 +40,6 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
     setFilteredPrices(filtered);
   }, [searchQuery, prices]);
 
-  // Favorilere göre sıralama fonksiyonu
   const sortByFavorites = () => {
     setFilteredPrices(prev => {
       if (!favoriteSymbols.length) return prev;

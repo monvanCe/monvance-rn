@@ -137,9 +137,7 @@ const style = (appTheme: any) => ({
     justifyContent: 'space-between' as const,
     paddingVertical: appTheme.ui.spacing,
   },
-  periodPercentCol: {
-    // gap: appTheme.ui.spacing, // not supported
-  },
+  periodPercentCol: {},
   periodRow: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,

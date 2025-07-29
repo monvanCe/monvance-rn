@@ -49,7 +49,6 @@ export const Dropdown = ({
     backgroundColor: isContained ? colors.surface : 'transparent',
   };
 
-  // Sadece buton ve açılır menü render edilecek
   return (
     <Menu
       visible={menuVisible}
