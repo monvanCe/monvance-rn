@@ -25,5 +25,13 @@
   "watchlist": "İzleme Listem",
   "watch_all": "Tümünü İzle",
   "no_coins_active": "Hiçbir coin aktif değil.",
-  "signals": "Sinyaller"
+  "signals": "Sinyaller",
+  "username_setup_title": "Kullanıcı Adınızı Belirleyin",
+  "username_setup_description": "Sohbet özelliğini kullanmak için bir kullanıcı adı belirlemeniz gerekiyor",
+  "username_placeholder": "Kullanıcı adı girin...",
+  "username_available": "Kullanıcı adı kullanılabilir",
+  "username_not_available": "Kullanıcı adı kullanılamaz",
+  "username_checking": "Kullanıcı adı kontrol ediliyor...",
+  "cancel": "İptal",
+  "ok": "Tamam"
 }

@@ -4,6 +4,7 @@ import {useChatScreen} from '../hooks/useChatScreen';
 import {ChatHeader} from '../components/Chat/ChatHeader';
 import {ChatMessagesList} from '../components/Chat/ChatMessagesList';
 import {ChatInput} from '../components/Chat/ChatInput';
+import {UsernameSetupModal} from '../components/UsernameSetupModal';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {useTheme} from '../context/ThemeContext';
 
@@ -22,6 +23,9 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
     getUserColor,
     scrollToBottom,
     handleSend,
+    showUsernameModal,
+    handleUsernameSetupSuccess,
+    handleUsernameSetupClose,
   } = useChatScreen();
 
   const styles = StyleSheet.create({
@@ -46,6 +50,11 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
         setMessage={setMessage}
         handleSend={handleSend}
         scrollToBottom={scrollToBottom}
+      />
+      <UsernameSetupModal
+        visible={showUsernameModal}
+        onClose={handleUsernameSetupClose}
+        onSuccess={handleUsernameSetupSuccess}
       />
     </GestureHandlerRootView>
   );

@@ -20,6 +20,7 @@ export const useChatScreen = () => {
   const scrollViewRef = useRef<FlashList<IMessage>>(null);
   const userColorsRef = useRef<{[key: string]: string}>({});
   const [message, setMessage] = useState('');
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
   const messages = useAppSelector(state => state.chat.messages);
   const dispatch = useAppDispatch();
   const user = useAppSelector(state => state.auth);
@@ -67,6 +68,11 @@ export const useChatScreen = () => {
   };
 
   const handleSend = async () => {
+    if (!user.username) {
+      setShowUsernameModal(true);
+      return;
+    }
+
     if (message.trim()) {
       const localId = `${Date.now()}_${Math.random()}`;
       const now = new Date().toISOString();
@@ -91,6 +97,14 @@ export const useChatScreen = () => {
     }
   };
 
+  const handleUsernameSetupSuccess = () => {
+    setShowUsernameModal(false);
+  };
+
+  const handleUsernameSetupClose = () => {
+    setShowUsernameModal(false);
+  };
+
   return {
     scrollViewRef,
     message,
@@ -99,5 +113,8 @@ export const useChatScreen = () => {
     getUserColor,
     scrollToBottom,
     handleSend,
+    showUsernameModal,
+    handleUsernameSetupSuccess,
+    handleUsernameSetupClose,
   };
 };

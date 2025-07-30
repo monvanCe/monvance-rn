@@ -25,6 +25,27 @@ interface IUser {
   token: string;
 }
 
+interface IUserUpdate {
+  limits: {
+    credits: number;
+  };
+  isAdsFree: boolean;
+  _id: string;
+  bio: string;
+  deviceId: string;
+  platform: 'ANDROID' | 'IOS' | 'WEB' | string;
+  isPremium: boolean;
+  isOnline: boolean;
+  notificationId: string;
+  avatar: string | null;
+  isAdmin: boolean;
+  version: number;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  username: string;
+}
+
 interface ITheme {
   radius: number;
   borderWidth: number;
@@ -34,23 +55,9 @@ interface ITheme {
   fontSize: number;
 }
 
-interface IUserUpdate {
-  _id: string;
-  bio?: string;
-  avatar?: any;
-  isPremium?: boolean;
-  isOnline?: boolean;
-  notificationId?: string;
-  isPremium?: boolean;
-  isAdmin?: boolean;
-  version?: number;
-  limits?: {
-    credits: number;
-  };
-  createdAt?: string;
-  updatedAt?: string;
-  deviceId?: string;
-  platform?: string;
+interface IUserUpdateResponse {
+  data: IUserUpdate;
+  message: string;
 }
 
 interface IMessage {

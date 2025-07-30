@@ -25,5 +25,13 @@
   "watchlist": "Watchlist",
   "watch_all": "Watch All",
   "no_coins_active": "No coins active",
-  "signals": "Signals"
+  "signals": "Signals",
+  "username_setup_title": "Set Your Username",
+  "username_setup_description": "You need to set a username to use the chat feature",
+  "username_placeholder": "Enter username...",
+  "username_available": "Username is available",
+  "username_not_available": "Username is not available",
+  "username_checking": "Checking username...",
+  "cancel": "Cancel",
+  "ok": "OK"
 }

@@ -33,13 +33,25 @@ export const internalService = {
     avatar?: string;
     language?: string;
   }): Promise<IUserUpdate> => {
-    const user = await api.put<IUserUpdate>(
+    const response = await api.put<IUserUpdateResponse>(
       INTERNAL_ENDPOINTS.UPDATE_USER,
       'internal',
       data,
     );
-    eventBus.emit('updateUserSuccess', {user});
-    return user;
+    eventBus.emit('updateUserSuccess', {user: response.data});
+    return response.data;
+  },
+
+  checkUsername: async (username: string): Promise<boolean> => {
+    const response = await api.get<boolean>(
+      `${INTERNAL_ENDPOINTS.CHECK_USERNAME}/${username}`,
+      'internal',
+    );
+    eventBus.emit('checkUsernameSuccess', {
+      username,
+      available: response,
+    });
+    return response;
   },
 
   getWatchlist: async (): Promise<IWatchlistResponse> => {

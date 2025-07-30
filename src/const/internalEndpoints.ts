@@ -2,6 +2,7 @@ export const INTERNAL_ENDPOINTS = {
   GET_SOCKET: '/users/ws-token',
   LOGIN: '/auth/login',
   UPDATE_USER: '/users/',
+  CHECK_USERNAME: '/users/check-username',
   WATCHLIST: '/watchlist',
   GET_NOTIFICATIONS: '/notifications',
   GET_SIGNALS: '/notifications/signals',

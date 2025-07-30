@@ -10,6 +10,7 @@ type eventType = {
   notificationIdCreated: string;
   notificationIdInitialized: string;
   updateUserSuccess: {user: IUserUpdate};
+  checkUsernameSuccess: {username: string; available: boolean};
   languageChanged: string;
   tickerPricesFetched: BinanceTickerPrice[];
   getNotificationsSuccess: INotificationResponse;

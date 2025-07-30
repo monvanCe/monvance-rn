@@ -41,6 +41,9 @@ export const useReduxEvents = () => {
     eventBus.on('logoutSuccess', () => {
       dispatch(setUser(null));
     });
+    eventBus.on('updateUserSuccess', ({user}) => {
+      dispatch(setUser(user));
+    });
 
     //CHAT
     eventBus.on('chatScreenOpened', () => {
