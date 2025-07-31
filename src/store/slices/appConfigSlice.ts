@@ -9,7 +9,7 @@ interface IAppConfig {
 
 const initialState: IAppConfig = {
   appLanguage: 'en',
-  appTheme: 'light',
+  appTheme: 'dark',
   externalUrl: 'https://www.binance.com/en/price/bitcoin',
   internalUrl: 'https://monvance-apiv2-192419154766.europe-west1.run.app',
 };

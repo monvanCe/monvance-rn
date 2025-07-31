@@ -1,6 +1,6 @@
 import {useEffect, useCallback} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../store/store';
+import {useDispatch} from 'react-redux';
+import {useAppSelector} from '../store/store';
 import {signalsService} from '../service/signalsService';
 import {
   setAllSignals,
@@ -27,7 +27,7 @@ export const useSignalsService = () => {
     hasMoreWatchlist,
     currentTab,
     filters,
-  } = useSelector((state: RootState) => state.signals);
+  } = useAppSelector(state => state.signals);
 
   const loadAllSignals = useCallback(
     async (isRefresh = false) => {

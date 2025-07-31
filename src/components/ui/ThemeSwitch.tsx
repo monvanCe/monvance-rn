@@ -4,7 +4,9 @@ import {Switch} from './Switch';
 
 const ThemeToggle = () => {
   const {isDarkMode, toggleTheme} = useTheme();
-  return <Switch value={isDarkMode} onValueChange={toggleTheme} />;
+  return (
+    <Switch disabled={true} value={isDarkMode} onValueChange={toggleTheme} />
+  );
 };
 
 export default ThemeToggle;

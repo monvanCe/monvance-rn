@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -16,6 +16,7 @@ import {Dropdown} from '../components/ui/Dropdown';
 import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
 import NotificationIcon from '../components/NotificationIcon';
+import WebView from '../components/ui/WebView';
 
 const AVATAR_SIZE = 64;
 const PLACEHOLDER =
@@ -31,6 +32,10 @@ const ProfileScreen = () => {
   const avatar = user.avatar || PLACEHOLDER;
   const username = user.username || 'User';
 
+  const [webViewVisible, setWebViewVisible] = useState(false);
+  const [webViewUri, setWebViewUri] = useState('');
+  const [webViewTitle, setWebViewTitle] = useState('');
+
   const handleLanguageChange = (lang: string) => {
     eventBus.emit('languageChanged', lang);
   };
@@ -39,9 +44,31 @@ const ProfileScreen = () => {
     Linking.openURL('mailto:support@klyra.app?subject=Feedback');
   };
 
-  const handleClearCache = () => {
-    Alert.alert(t('clear_cache'), t('clear_cache_desc'));
+  const handlePrivacyPolicy = () => {
+    setWebViewUri('https://vens.cekolabs.com/policy');
+    setWebViewTitle(t('privacy_policy'));
+    setWebViewVisible(true);
   };
+
+  const handleTermsOfUse = () => {
+    setWebViewUri('https://vens.cekolabs.com/terms');
+    setWebViewTitle(t('terms_of_use'));
+    setWebViewVisible(true);
+  };
+
+  const handleCloseWebView = () => {
+    setWebViewVisible(false);
+  };
+
+  if (webViewVisible) {
+    return (
+      <WebView
+        uri={webViewUri}
+        title={webViewTitle}
+        onClose={handleCloseWebView}
+      />
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -173,24 +200,29 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={handleClearCache}
-            style={styles.cardRowButton}>
+            onPress={handlePrivacyPolicy}
+            style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
             <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-              {t('clear_cache')}
+              {t('privacy_policy')}
             </Text>
             <Icon
-              name="help-circle-outline"
+              name="shield-account-outline"
               size={22}
               color={theme.colors.primary}
             />
           </TouchableOpacity>
-          <Text
-            style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginTop: 2},
-            ]}>
-            {t('clear_cache_desc')}
-          </Text>
+          <TouchableOpacity
+            onPress={handleTermsOfUse}
+            style={styles.cardRowButton}>
+            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+              {t('terms_of_use')}
+            </Text>
+            <Icon
+              name="file-document-outline"
+              size={22}
+              color={theme.colors.primary}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
