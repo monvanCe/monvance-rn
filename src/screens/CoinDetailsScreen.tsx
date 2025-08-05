@@ -1,12 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
@@ -14,7 +7,7 @@ import {useAppSelector} from '../store/store';
 import {eventBus} from '../middleware/eventMiddleware';
 import {WebView} from 'react-native-webview';
 import SignalItem from '../components/SignalItem';
-import {t} from '../localization';
+
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 const {width} = Dimensions.get('window');
@@ -128,7 +121,6 @@ const CoinDetailsScreen: React.FC = () => {
           "timezone": "Etc/UTC",
           "backgroundColor": "${theme.colors.background}",
           "gridColor": "rgba(242, 242, 242, 0.06)",
-          "watchlist": [],
           "withdateranges": false,
           "range": "YTD",
           "compareSymbols": [],
