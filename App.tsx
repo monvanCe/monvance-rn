@@ -20,6 +20,7 @@ import Toast from 'react-native-toast-message';
 import {useToast} from './src/hooks/useToast';
 import {useChatService} from './src/hooks/useChatService';
 import {useCentrifuge} from './src/hooks/useCentrifuge';
+import {useCoinDetailsService} from './src/hooks/useCoinDetailsService';
 
 const AppContent = () => {
   useAuth();
@@ -33,6 +34,7 @@ const AppContent = () => {
   useToast();
   useChatService();
   useCentrifuge();
+  useCoinDetailsService();
   useEffect(() => {
     eventBus.emit('appStarted', null);
   }, []);

@@ -207,3 +207,10 @@ interface ISignalsState {
     percent: number;
   };
 }
+
+interface ICoinDetailsState {
+  coinSignals: ISignal[];
+  loading: boolean;
+  hasMore: boolean;
+  coin: string;
+}

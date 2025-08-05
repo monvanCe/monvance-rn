@@ -59,6 +59,14 @@ type eventType = {
     skip?: number;
     isRefresh?: boolean;
   };
+  // Coin Details events
+  loadCoinSignals: {
+    coin: string;
+    limit: number;
+    skip: number;
+    isRefresh: boolean;
+  };
+  clearCoinSignals: null;
 };
 
 class EventManager<Events extends Record<string, any>> {

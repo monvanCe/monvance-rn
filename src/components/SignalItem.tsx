@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
+import {useNavigation} from '@react-navigation/native';
 
 interface SignalItemProps {
   signal: ISignal;
@@ -9,6 +10,7 @@ interface SignalItemProps {
 
 const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
   const {theme} = useTheme();
+  const navigation = useNavigation();
 
   const formatPrice = (price: number) => {
     return price.toFixed(2);
@@ -27,14 +29,20 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
   };
 
   return (
-    <View
+    <TouchableOpacity
       style={[
         styles.container,
         {
           backgroundColor: theme.colors.surface,
           borderColor: theme.colors.outline,
         },
-      ]}>
+      ]}
+      onPress={() =>
+        navigation.navigate(
+          'CoinDetails' as never,
+          {coin: signal.coin} as never,
+        )
+      }>
       <View style={styles.header}>
         <Text style={[styles.coinName, {color: theme.colors.onSurface}]}>
           {signal.coin}
@@ -86,7 +94,7 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
