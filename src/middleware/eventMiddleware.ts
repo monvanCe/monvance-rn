@@ -36,6 +36,29 @@ type eventType = {
   sendMessageSuccess: ISendMessageResponse;
   getMessageFromCentrifuge: IMessage;
   signalReceived: {title: string; body: string};
+  // Signals events
+  getAllSignalsSuccess: ISignalsResponse;
+  getWatchlistSignalsSuccess: ISignalsResponse;
+  addAllSignalsSuccess: ISignalsResponse;
+  addWatchlistSignalsSuccess: ISignalsResponse;
+  setCurrentTab: 'all' | 'watchlist';
+  updateSignalsFilters: {period?: number; percent?: number};
+  setAllSignalsLoading: boolean;
+  setWatchlistSignalsLoading: boolean;
+  loadAllSignals: {
+    period?: number;
+    percent?: number;
+    limit?: number;
+    skip?: number;
+    isRefresh?: boolean;
+  };
+  loadWatchlistSignals: {
+    period?: number;
+    percent?: number;
+    limit?: number;
+    skip?: number;
+    isRefresh?: boolean;
+  };
 };
 
 class EventManager<Events extends Record<string, any>> {

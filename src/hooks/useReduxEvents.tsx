@@ -27,6 +27,19 @@ import {
   setWatchlist,
   watchAllChanged,
 } from '../store/slices/watchlistSlice';
+import {
+  setAllSignals,
+  addAllSignals,
+  setWatchlistSignals,
+  addWatchlistSignals,
+  setAllSignalsLoading,
+  setWatchlistSignalsLoading,
+  setHasMoreAll,
+  setHasMoreWatchlist,
+  setCurrentTab,
+  setFilters,
+  clearSignals,
+} from '../store/slices/signalsSlice';
 import {processTickerPrices} from '../utils/processTickerPrices';
 import {addFavorite, removeFavorite} from '../store/slices/favoritesSlice';
 
@@ -134,6 +147,45 @@ export const useReduxEvents = () => {
     });
     eventBus.on('percentChanged', percent => {
       dispatch(percentChanged(Number(percent)));
+    });
+
+    //SIGNALS
+    eventBus.on('getAllSignalsSuccess', (response: ISignalsResponse) => {
+      dispatch(setAllSignals(response.data));
+      dispatch(setAllSignalsLoading(false));
+      dispatch(setHasMoreAll(response.count === response.limit));
+    });
+    eventBus.on('getWatchlistSignalsSuccess', (response: ISignalsResponse) => {
+      dispatch(setWatchlistSignals(response.data));
+      dispatch(setWatchlistSignalsLoading(false));
+      dispatch(setHasMoreWatchlist(response.count === response.limit));
+    });
+    eventBus.on('addAllSignalsSuccess', (response: ISignalsResponse) => {
+      dispatch(addAllSignals(response.data));
+      dispatch(setAllSignalsLoading(false));
+      dispatch(setHasMoreAll(response.count === response.limit));
+    });
+    eventBus.on('addWatchlistSignalsSuccess', (response: ISignalsResponse) => {
+      dispatch(addWatchlistSignals(response.data));
+      dispatch(setWatchlistSignalsLoading(false));
+      dispatch(setHasMoreWatchlist(response.count === response.limit));
+    });
+    eventBus.on('setCurrentTab', (tab: 'all' | 'watchlist') => {
+      dispatch(setCurrentTab(tab));
+      dispatch(clearSignals());
+    });
+    eventBus.on(
+      'updateSignalsFilters',
+      (filters: {period?: number; percent?: number}) => {
+        dispatch(setFilters(filters));
+        dispatch(clearSignals());
+      },
+    );
+    eventBus.on('setAllSignalsLoading', (loading: boolean) => {
+      dispatch(setAllSignalsLoading(loading));
+    });
+    eventBus.on('setWatchlistSignalsLoading', (loading: boolean) => {
+      dispatch(setWatchlistSignalsLoading(loading));
     });
 
     //MESSAGES

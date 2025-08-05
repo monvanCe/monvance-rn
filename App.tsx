@@ -15,6 +15,7 @@ import useLocalization from './src/hooks/useLocalization';
 import {useHomeService} from './src/hooks/useHomeService';
 import {useNotificationService} from './src/hooks/useNotificationService';
 import {useWatchlist} from './src/hooks/useWatchlist';
+import {useSignalsService} from './src/hooks/useSignalsService';
 import Toast from 'react-native-toast-message';
 import {useToast} from './src/hooks/useToast';
 import {useChatService} from './src/hooks/useChatService';
@@ -28,6 +29,7 @@ const AppContent = () => {
   useHomeService();
   useNotificationService();
   useWatchlist();
+  useSignalsService();
   useToast();
   useChatService();
   useCentrifuge();

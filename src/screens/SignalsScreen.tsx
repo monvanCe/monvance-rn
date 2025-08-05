@@ -9,7 +9,8 @@ import {
 import {FlashList} from '@shopify/flash-list';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
-import {useSignalsService} from '../hooks/useSignalsService';
+import {useAppSelector} from '../store/store';
+import {eventBus} from '../middleware/eventMiddleware';
 import SelectableButton from '../components/ui/SelectableButton';
 import {Dropdown} from '../components/ui/Dropdown';
 import SignalItem from '../components/SignalItem';
@@ -27,11 +28,7 @@ const SignalsScreen: React.FC = () => {
     hasMoreWatchlist,
     currentTab,
     filters,
-    loadSignals,
-    loadMore,
-    switchTab,
-    updateFilters,
-  } = useSignalsService();
+  } = useAppSelector(state => state.signals);
 
   const [selectedPeriod, setSelectedPeriod] = useState(filters.period);
   const [selectedPercent, setSelectedPercent] = useState(filters.percent);
@@ -64,16 +61,109 @@ const SignalsScreen: React.FC = () => {
   ];
 
   const handleFilterApply = () => {
-    updateFilters({period: selectedPeriod, percent: selectedPercent});
+    eventBus.emit('updateSignalsFilters', {
+      period: selectedPeriod,
+      percent: selectedPercent,
+    });
+    eventBus.emit('setAllSignalsLoading', true);
+    eventBus.emit('setWatchlistSignalsLoading', true);
+
+    if (currentTab === 'all') {
+      eventBus.emit('loadAllSignals', {
+        period: selectedPeriod,
+        percent: selectedPercent,
+        limit: 50,
+        skip: 0,
+        isRefresh: true,
+      });
+    } else {
+      eventBus.emit('loadWatchlistSignals', {
+        period: selectedPeriod,
+        percent: selectedPercent,
+        limit: 50,
+        skip: 0,
+        isRefresh: true,
+      });
+    }
   };
 
   const handleFilterClear = () => {
     setSelectedPeriod(WatchlistPeriod.MINUTE_5);
     setSelectedPercent(WatchlistPercent.PERCENT_3);
-    updateFilters({
+    eventBus.emit('updateSignalsFilters', {
       period: WatchlistPeriod.MINUTE_5,
       percent: WatchlistPercent.PERCENT_3,
     });
+    eventBus.emit('setAllSignalsLoading', true);
+    eventBus.emit('setWatchlistSignalsLoading', true);
+
+    if (currentTab === 'all') {
+      eventBus.emit('loadAllSignals', {
+        period: WatchlistPeriod.MINUTE_5,
+        percent: WatchlistPercent.PERCENT_3,
+        limit: 50,
+        skip: 0,
+        isRefresh: true,
+      });
+    } else {
+      eventBus.emit('loadWatchlistSignals', {
+        period: WatchlistPeriod.MINUTE_5,
+        percent: WatchlistPercent.PERCENT_3,
+        limit: 50,
+        skip: 0,
+        isRefresh: true,
+      });
+    }
+  };
+
+  const handleTabSwitch = (tab: 'all' | 'watchlist') => {
+    eventBus.emit('setCurrentTab', tab);
+    eventBus.emit('setAllSignalsLoading', true);
+    eventBus.emit('setWatchlistSignalsLoading', true);
+
+    if (tab === 'all') {
+      eventBus.emit('loadAllSignals', {
+        period: filters.period,
+        percent: filters.percent,
+        limit: 50,
+        skip: 0,
+        isRefresh: true,
+      });
+    } else {
+      eventBus.emit('loadWatchlistSignals', {
+        period: filters.period,
+        percent: filters.percent,
+        limit: 50,
+        skip: 0,
+        isRefresh: true,
+      });
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (currentTab === 'all' && hasMoreAll && !allSignalsLoading) {
+      eventBus.emit('setAllSignalsLoading', true);
+      eventBus.emit('loadAllSignals', {
+        period: filters.period,
+        percent: filters.percent,
+        limit: 50,
+        skip: allSignals.length,
+        isRefresh: false,
+      });
+    } else if (
+      currentTab === 'watchlist' &&
+      hasMoreWatchlist &&
+      !watchlistSignalsLoading
+    ) {
+      eventBus.emit('setWatchlistSignalsLoading', true);
+      eventBus.emit('loadWatchlistSignals', {
+        period: filters.period,
+        percent: filters.percent,
+        limit: 50,
+        skip: watchlistSignals.length,
+        isRefresh: false,
+      });
+    }
   };
 
   const renderSignalItem = ({item}: {item: ISignal}) => (
@@ -187,12 +277,12 @@ const SignalsScreen: React.FC = () => {
         <SelectableButton
           title="All"
           isSelected={currentTab === 'all'}
-          onPress={() => switchTab('all')}
+          onPress={() => handleTabSwitch('all')}
         />
         <SelectableButton
           title="Watchlist"
           isSelected={currentTab === 'watchlist'}
-          onPress={() => switchTab('watchlist')}
+          onPress={() => handleTabSwitch('watchlist')}
         />
       </View>
 
@@ -202,7 +292,7 @@ const SignalsScreen: React.FC = () => {
         renderItem={renderSignalItem}
         keyExtractor={item => item._id}
         estimatedItemSize={120}
-        onEndReached={loadMore}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         contentContainerStyle={styles.listContainer}

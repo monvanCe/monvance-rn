@@ -1,155 +1,71 @@
-import {useEffect, useCallback} from 'react';
-import {useDispatch} from 'react-redux';
-import {useAppSelector} from '../store/store';
+import {useEffect} from 'react';
 import {signalsService} from '../service/signalsService';
-import {
-  setAllSignals,
-  addAllSignals,
-  setWatchlistSignals,
-  addWatchlistSignals,
-  setAllSignalsLoading,
-  setWatchlistSignalsLoading,
-  setHasMoreAll,
-  setHasMoreWatchlist,
-  setCurrentTab,
-  setFilters,
-  clearSignals,
-} from '../store/slices/signalsSlice';
+import {eventBus} from '../middleware/eventMiddleware';
 
 export const useSignalsService = () => {
-  const dispatch = useDispatch();
-  const {
-    allSignals,
-    watchlistSignals,
-    allSignalsLoading,
-    watchlistSignalsLoading,
-    hasMoreAll,
-    hasMoreWatchlist,
-    currentTab,
-    filters,
-  } = useAppSelector(state => state.signals);
-
-  const loadAllSignals = useCallback(
-    async (isRefresh = false) => {
+  useEffect(() => {
+    const handleAppStarted = async () => {
       try {
-        dispatch(setAllSignalsLoading(true));
-
-        const skip = isRefresh ? 0 : allSignals.length;
         const response = await signalsService.getAllSignals({
-          period: filters.period,
-          percent: filters.percent,
+          period: 5,
+          percent: 3,
           limit: 50,
-          skip,
+          skip: 0,
         });
+        eventBus.emit('getAllSignalsSuccess', response);
+      } catch (error) {
+        console.error('Error loading initial signals:', error);
+      }
+    };
 
-        if (isRefresh) {
-          dispatch(setAllSignals(response.data));
+    const handleLoadAllSignals = async (params: {
+      period?: number;
+      percent?: number;
+      limit?: number;
+      skip?: number;
+      isRefresh?: boolean;
+    }) => {
+      try {
+        const response = await signalsService.getAllSignals(params);
+        if (params.isRefresh) {
+          eventBus.emit('getAllSignalsSuccess', response);
         } else {
-          dispatch(addAllSignals(response.data));
+          eventBus.emit('addAllSignalsSuccess', response);
         }
-
-        dispatch(setHasMoreAll(response.data.length === 50));
       } catch (error) {
         console.error('Error loading all signals:', error);
-      } finally {
-        dispatch(setAllSignalsLoading(false));
       }
-    },
-    [dispatch, allSignals.length, filters],
-  );
+    };
 
-  const loadWatchlistSignals = useCallback(
-    async (isRefresh = false) => {
+    const handleLoadWatchlistSignals = async (params: {
+      period?: number;
+      percent?: number;
+      limit?: number;
+      skip?: number;
+      isRefresh?: boolean;
+    }) => {
       try {
-        dispatch(setWatchlistSignalsLoading(true));
-
-        const skip = isRefresh ? 0 : watchlistSignals.length;
-        const response = await signalsService.getWatchlistSignals({
-          period: filters.period,
-          percent: filters.percent,
-          limit: 50,
-          skip,
-        });
-
-        if (isRefresh) {
-          dispatch(setWatchlistSignals(response.data));
+        const response = await signalsService.getWatchlistSignals(params);
+        if (params.isRefresh) {
+          eventBus.emit('getWatchlistSignalsSuccess', response);
         } else {
-          dispatch(addWatchlistSignals(response.data));
+          eventBus.emit('addWatchlistSignalsSuccess', response);
         }
-
-        dispatch(setHasMoreWatchlist(response.data.length === 50));
       } catch (error) {
         console.error('Error loading watchlist signals:', error);
-      } finally {
-        dispatch(setWatchlistSignalsLoading(false));
       }
-    },
-    [dispatch, watchlistSignals.length, filters],
-  );
+    };
 
-  const loadSignals = useCallback(
-    async (isRefresh = false) => {
-      if (currentTab === 'all') {
-        await loadAllSignals(isRefresh);
-      } else {
-        await loadWatchlistSignals(isRefresh);
-      }
-    },
-    [currentTab, loadAllSignals, loadWatchlistSignals],
-  );
+    // Register event listeners
+    eventBus.on('appStarted', handleAppStarted);
+    eventBus.on('loadAllSignals', handleLoadAllSignals);
+    eventBus.on('loadWatchlistSignals', handleLoadWatchlistSignals);
 
-  const switchTab = useCallback(
-    (tab: 'all' | 'watchlist') => {
-      dispatch(setCurrentTab(tab));
-      dispatch(clearSignals());
-    },
-    [dispatch],
-  );
-
-  const updateFilters = useCallback(
-    (newFilters: {period?: number; percent?: number}) => {
-      dispatch(setFilters(newFilters));
-      dispatch(clearSignals());
-    },
-    [dispatch],
-  );
-
-  const loadMore = useCallback(() => {
-    if (currentTab === 'all' && hasMoreAll && !allSignalsLoading) {
-      loadAllSignals();
-    } else if (
-      currentTab === 'watchlist' &&
-      hasMoreWatchlist &&
-      !watchlistSignalsLoading
-    ) {
-      loadWatchlistSignals();
-    }
-  }, [
-    currentTab,
-    hasMoreAll,
-    hasMoreWatchlist,
-    allSignalsLoading,
-    watchlistSignalsLoading,
-    loadAllSignals,
-    loadWatchlistSignals,
-  ]);
-
-  useEffect(() => {
-    loadSignals(true);
-  }, [currentTab, filters]);
-
-  return {
-    allSignals,
-    watchlistSignals,
-    allSignalsLoading,
-    watchlistSignalsLoading,
-    hasMoreAll,
-    hasMoreWatchlist,
-    currentTab,
-    filters,
-    loadSignals,
-    loadMore,
-    switchTab,
-    updateFilters,
-  };
+    // Cleanup
+    return () => {
+      eventBus.off('appStarted', handleAppStarted);
+      eventBus.off('loadAllSignals', handleLoadAllSignals);
+      eventBus.off('loadWatchlistSignals', handleLoadWatchlistSignals);
+    };
+  }, []);
 };
