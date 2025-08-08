@@ -188,7 +188,7 @@ const SignalsScreen: React.FC = () => {
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
       {/* Header */}
-      <View style={[styles.header, {backgroundColor: theme.colors.surface}]}>
+      <View style={[styles.header, {backgroundColor: theme.colors.background}]}>
         <Text style={[styles.title, {color: theme.colors.onSurface}]}>
           {t('signals')}
         </Text>

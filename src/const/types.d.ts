@@ -214,3 +214,27 @@ interface ICoinDetailsState {
   hasMore: boolean;
   coin: string;
 }
+
+interface ISubscriptionLimits {
+  artwork: number;
+}
+
+interface ISubscription {
+  _id: string;
+  sku: string;
+  platform: 'ANDROID' | 'IOS';
+  discount: number;
+  isActive: boolean;
+  isPromo: boolean;
+  interval: number;
+  intervalDays: number;
+  limits: ISubscriptionLimits;
+  isTrial: boolean;
+  trialDays: number;
+}
+
+interface ISubscriptionState {
+  subscriptions: ISubscription[];
+  loading: boolean;
+  selectedSubscription: ISubscription | null;
+}

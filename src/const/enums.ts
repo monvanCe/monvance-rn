@@ -20,5 +20,16 @@ export enum WatchlistPercent {
   PERCENT_100 = 100,
 }
 
+export enum SubscriptionPlatform {
+  ANDROID = 'ANDROID',
+  IOS = 'IOS',
+}
+
+export enum SubscriptionInterval {
+  WEEKLY = 7,
+  MONTHLY = 30,
+  THREE_MONTHLY = 90,
+}
+
 export const USERS_CHANNEL_PREFIX = 'users#';
 export const SIGNAL_CHANNEL = 'signal';

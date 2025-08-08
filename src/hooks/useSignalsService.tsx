@@ -4,7 +4,7 @@ import {eventBus} from '../middleware/eventMiddleware';
 
 export const useSignalsService = () => {
   useEffect(() => {
-    const handleAppStarted = async () => {
+    const handleLoginSuccess = async () => {
       try {
         const response = await signalsService.getAllSignals({
           period: 5,
@@ -57,13 +57,13 @@ export const useSignalsService = () => {
     };
 
     // Register event listeners
-    eventBus.on('appStarted', handleAppStarted);
+    eventBus.on('loginSuccess', handleLoginSuccess);
     eventBus.on('loadAllSignals', handleLoadAllSignals);
     eventBus.on('loadWatchlistSignals', handleLoadWatchlistSignals);
 
     // Cleanup
     return () => {
-      eventBus.off('appStarted', handleAppStarted);
+      eventBus.off('loginSuccess', handleLoginSuccess);
       eventBus.off('loadAllSignals', handleLoadAllSignals);
       eventBus.off('loadWatchlistSignals', handleLoadWatchlistSignals);
     };

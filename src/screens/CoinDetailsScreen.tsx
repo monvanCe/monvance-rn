@@ -217,7 +217,6 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) => ({
     flex: 1,
   },
   listContainer: {
-    paddingBottom: 100,
     paddingTop: theme.ui.spacing,
   },
   loadingContainer: {

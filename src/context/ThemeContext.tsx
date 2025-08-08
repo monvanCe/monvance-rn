@@ -17,9 +17,9 @@ const darkTheme = {
   colors: {
     primary: '#16C784', // primary color for buttons and links
     secondary: '#23262F', // secondary color for background
-    background: '#181A20', // background color for the app
-    surface: '#23262F', // surface color for cards and other elements
-    surfaceVariant: '#2f3340', // surface variant color for cards and other elements
+    background: '#0A0A0A', // background color for the app
+    surface: '#181A20', // surface color for cards and other elements
+    surfaceVariant: '#23262F', // surface variant color for cards and other elements
     onSurface: '#FFFFFF', // on surface color for text and icons
     onSurfaceVariant: '#A3A3A3', // on surface variant color for text and icons
     onSurfaceDisabled: '#666666', // on surface disabled color for text and icons

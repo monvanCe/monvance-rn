@@ -17,6 +17,7 @@ import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
 import NotificationIcon from '../components/NotificationIcon';
 import WebView from '../components/ui/WebView';
+import {useNavigation} from '@react-navigation/native';
 
 const AVATAR_SIZE = 64;
 const PLACEHOLDER =
@@ -25,6 +26,7 @@ const PLACEHOLDER =
 const APP_VERSION = '1.0.0';
 
 const ProfileScreen = () => {
+  const navigation = useNavigation();
   const {theme} = useTheme();
   const styles = style(theme);
   const user = useAppSelector(state => state.auth);
@@ -60,6 +62,10 @@ const ProfileScreen = () => {
     setWebViewVisible(false);
   };
 
+  const handleGoPremium = () => {
+    navigation.navigate('Paywall' as never);
+  };
+
   if (webViewVisible) {
     return (
       <WebView
@@ -81,6 +87,37 @@ const ProfileScreen = () => {
         <Text style={styles.username}>{username}</Text>
       </View>
       <View style={styles.cardsWrapper}>
+        {/* Premium Card */}
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              borderRadius: theme.ui.radius,
+            },
+          ]}>
+          <View style={styles.cardRow}>
+            <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
+              <Icon name="crown" size={24} color="#FFD700" />
+              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                {t('premium')}
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={handleGoPremium}
+              style={styles.premiumButton}>
+              <Text style={styles.premiumButtonText}>{t('go_premium')}</Text>
+            </TouchableOpacity>
+          </View>
+          <Text
+            style={[
+              styles.cardSubtitle,
+              {color: theme.colors.onSurfaceVariant, marginTop: 2},
+            ]}>
+            {t('unlock_all_features')}
+          </Text>
+        </View>
+
         <View
           style={[
             styles.card,
@@ -300,6 +337,17 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+    },
+    premiumButton: {
+      backgroundColor: '#FFD700',
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 20,
+    },
+    premiumButtonText: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      color: '#000000',
     },
   });
 

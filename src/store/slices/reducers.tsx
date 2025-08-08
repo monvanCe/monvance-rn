@@ -8,6 +8,7 @@ import watchlistSlice from './watchlistSlice';
 import favoritesSlice from './favoritesSlice';
 import signalsSlice from './signalsSlice';
 import coinDetailsSlice from './coinDetailsSlice';
+import subscriptionSlice from './subscriptionSlice';
 
 const rootReducer = combineReducers({
   appConfig: appConfigSlice.reducer,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   favorites: favoritesSlice.reducer,
   signals: signalsSlice,
   coinDetails: coinDetailsSlice,
+  subscription: subscriptionSlice,
 });
 
 export default rootReducer;
