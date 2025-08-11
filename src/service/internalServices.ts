@@ -17,7 +17,7 @@ export const internalService = {
     const deviceId = await DeviceInfo.getUniqueId();
     const user = await api.post<IUser>(INTERNAL_ENDPOINTS.LOGIN, 'internal', {
       deviceId,
-      platform: Platform.OS === 'ios' ? 'IOS' : 'ANDROIDd',
+      platform: Platform.OS === 'ios' ? 'IOS' : 'ANDROID',
       version: Platform.OS === 'ios' ? IOS_VERSION : ANDROID_VERSION,
     });
     eventBus.emit('loginSuccess', {user});
