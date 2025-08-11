@@ -1,7 +1,11 @@
 import {useEffect} from 'react';
 import {eventBus} from '../middleware/eventMiddleware';
 import {useAppDispatch} from '../store/store';
-import {setNotificationId, setUser} from '../store/slices/authSlice';
+import {
+  setNotificationId,
+  setUser,
+  setUserUpdate,
+} from '../store/slices/authSlice';
 import {
   addMessage,
   setHasNewMessages,
@@ -55,7 +59,8 @@ export const useReduxEvents = () => {
       dispatch(setUser(null));
     });
     eventBus.on('updateUserSuccess', ({user}) => {
-      dispatch(setUser(user));
+      console.log('updateUserSuccess', user);
+      dispatch(setUserUpdate(user));
     });
 
     //CHAT

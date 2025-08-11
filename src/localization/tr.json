@@ -56,5 +56,6 @@
   "then_period": "Sonra {period}",
   "per_week": "haftalık",
   "per_month": "aylık",
-  "per_3_months": "3 aylık"
+  "per_3_months": "3 aylık",
+  "unknown_user": "Bilinmeyen Kullanıcı"
 }

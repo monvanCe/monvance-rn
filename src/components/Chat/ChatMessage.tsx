@@ -7,6 +7,7 @@ import {Text} from '../ui/Text';
 import {useAppSelector} from '../../store/store';
 import {timeParserHour} from '../../utils/timeUtils';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {t} from '../../localization';
 
 interface ChatMessageProps {
   message: IMessage;
@@ -27,12 +28,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
   const user = useAppSelector(state => state.auth);
-
   const resolvedVariant = variant || theme.theme.ui.defaultVariant;
   const isContained = resolvedVariant === 'contained';
   const isOutlined = resolvedVariant === 'outlined';
 
-  const isCurrentUser = message.userId._id === user._id;
+  const isCurrentUser = message.userId?._id === user._id || false;
   const previousMessage = index > 0 ? messages[index - 1] : null;
   const nextMessage = index < messages.length - 1 ? messages[index + 1] : null;
 
@@ -62,7 +62,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           styles.messageRow,
           isCurrentUser ? styles.rowReverse : styles.row,
         ]}>
-        {isLastInGroup ? (
+        {isLastInGroup && message?.userId?.avatar ? (
           <Image source={{uri: message.userId.avatar}} style={styles.avatar} />
         ) : (
           <View style={styles.avatarPlaceholder} />
@@ -70,7 +70,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         <View style={styles.messageContent}>
           {isFirstInGroup && !isCurrentUser && (
             <Text style={[styles.username, {color: colors.primary}]}>
-              {message.userId.username}
+              {message?.userId?.username || t('unknown_user')}
             </Text>
           )}
           {/* {isFirstInGroup && isCurrentUser ? (

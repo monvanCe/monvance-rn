@@ -56,5 +56,6 @@
   "then_period": "Then {period}",
   "per_week": "per week",
   "per_month": "per month",
-  "per_3_months": "per 3 months"
+  "per_3_months": "per 3 months",
+  "unknown_user": "Unknown User"
 }
