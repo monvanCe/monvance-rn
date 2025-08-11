@@ -175,7 +175,6 @@ const CoinDetailsScreen: React.FC = () => {
         onEndReachedThreshold={0.1}
         ListFooterComponent={renderFooter}
         contentContainerStyle={styles.listContainer}
-        style={styles.signalsList}
         showsVerticalScrollIndicator={false}
       />
     </View>
@@ -211,9 +210,6 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) => ({
     height: 220,
   },
   chart: {
-    flex: 1,
-  },
-  signalsList: {
     flex: 1,
   },
   listContainer: {
