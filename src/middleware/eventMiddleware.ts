@@ -67,6 +67,7 @@ type eventType = {
     isRefresh: boolean;
   };
   clearCoinSignals: null;
+  navigateToChat: null;
 };
 
 class EventManager<Events extends Record<string, any>> {

@@ -12,12 +12,10 @@ const Tab = createBottomTabNavigator();
 
 interface TabNavigationProps {
   setScreenName: (screenName: string) => void;
-  onNavigateToChat: () => void;
 }
 
 const TabNavigation = ({
   setScreenName,
-  onNavigateToChat,
 }: TabNavigationProps) => {
   const {theme} = useAppTheme();
 
@@ -54,7 +52,7 @@ const TabNavigation = ({
             />
           ),
         }}>
-        {() => <HomeScreen onNavigateToChat={onNavigateToChat} />}
+        {() => <HomeScreen />}
       </Tab.Screen>
       <Tab.Screen
         name="Watchlist"

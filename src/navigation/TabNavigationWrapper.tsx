@@ -11,7 +11,7 @@ import Animated, {
   withTiming,
   runOnJS,
 } from 'react-native-reanimated';
-import {useNavigation} from '@react-navigation/native';
+import {useCallback} from 'react';
 
 import {useTheme as useAppTheme} from '../context/ThemeContext';
 import TabNavigation from './TabNavigation';
@@ -22,7 +22,6 @@ const {width} = Dimensions.get('window');
 
 const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();
-  const navigation = useNavigation();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [screenName, setScreenName] = useState<string>('Home');
   const translateX = useSharedValue(width);
@@ -38,11 +37,24 @@ const TabNavigationWrapper = () => {
     Keyboard.dismiss();
   };
 
-  const navigateToChat = () => {
+  const navigateToChat = useCallback(() => {
     setIsChatOpen(true);
     translateX.value = withTiming(0, {duration: 300});
     overlayOpacity.value = withTiming(0.5, {duration: 300});
-  };
+  }, [translateX, overlayOpacity]);
+
+  useEffect(() => {
+    // Listen for navigate to chat events from ScreenHeader
+    const handleNavigateToChat = () => {
+      navigateToChat();
+    };
+
+    eventBus.on('navigateToChat', handleNavigateToChat);
+
+    return () => {
+      eventBus.off('navigateToChat', handleNavigateToChat);
+    };
+  }, [navigateToChat]);
 
   const navigateToTab = () => {
     setIsChatOpen(false);
@@ -130,10 +142,9 @@ const TabNavigationWrapper = () => {
               {backgroundColor: appTheme.colors.background},
             ]}>
             <View style={styles.mainContainer}>
-              <TabNavigation
-                setScreenName={setScreenName}
-                onNavigateToChat={navigateToChat}
-              />
+                        <TabNavigation
+            setScreenName={setScreenName}
+          />
             </View>
 
             <Animated.View
@@ -155,7 +166,6 @@ const TabNavigationWrapper = () => {
           <View style={styles.mainContainer}>
             <TabNavigation
               setScreenName={setScreenName}
-              onNavigateToChat={navigateToChat}
             />
           </View>
 

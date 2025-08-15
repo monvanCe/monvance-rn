@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useTheme} from '../../context/ThemeContext';
 import {Text} from './Text';
 import NotificationIcon from '../NotificationIcon';
+import {useAppSelector} from '../../store/store';
+import {eventBus} from '../../middleware/eventMiddleware';
 
 export interface HeaderAction {
   iconName: string;
@@ -18,6 +20,7 @@ interface ScreenHeaderProps {
   showNotification?: boolean;
   actions?: HeaderAction[];
   backgroundColor?: string;
+  showChat?: boolean; // Still allow disabling chat if needed
 }
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
@@ -25,9 +28,20 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   showNotification = true,
   actions = [],
   backgroundColor,
+  showChat = true, // Default to true - show chat everywhere
 }) => {
   const {theme} = useTheme();
   const styles = style(theme);
+  
+  // Get chat state from Redux to check for new messages
+  const chatState = useAppSelector(state => state.chat);
+  const hasNewMessages = chatState?.hasNewMessages || false;
+
+  const onNavigateToChat = () => {
+    // Use the event bus to trigger chat navigation
+    // This will be handled by TabNavigationWrapper
+    eventBus.emit('navigateToChat', null);
+  };
 
   const renderAction = (action: HeaderAction, index: number) => {
     const IconComponent = action.iconLibrary === 'MaterialCommunityIcons' 
@@ -57,7 +71,20 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
       <View style={styles.rightContainer}>
         {actions.map(renderAction)}
         {showNotification && <NotificationIcon />}
-        
+        {showChat && (
+          <View style={styles.chatWrapper}>
+            <TouchableOpacity
+              onPress={onNavigateToChat}
+              style={styles.chatButton}>
+              <Icon
+                name="chat"
+                size={theme.ui.spacing * 3.5}
+                color={theme.colors.primary}
+              />
+            </TouchableOpacity>
+            {hasNewMessages && <View style={styles.newMessageBadge} />}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -75,7 +102,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       backgroundColor: theme.colors.background,
     },
     headerTitle: {
-      fontSize: theme.ui.spacing * 3.5,
+      fontSize: theme.ui.fontSize * 2,
       fontWeight: '700',
       color: theme.colors.onSurface,
     },
@@ -86,6 +113,26 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
     actionButton: {
       padding: theme.ui.spacing * 0.5,
+    },
+    chatWrapper: {
+      position: 'relative',
+    },
+    chatButton: {
+      backgroundColor: theme.colors.surfaceVariant,
+      borderRadius: 100,
+      padding: theme.ui.spacing,
+    },
+    newMessageBadge: {
+      position: 'absolute',
+      top: theme.ui.spacing / 2.5,
+      right: theme.ui.spacing / 2.5,
+      backgroundColor: theme.colors.error,
+      width: theme.ui.spacing * 1.5,
+      height: theme.ui.spacing * 1.5,
+      borderRadius: theme.ui.spacing * 0.75,
+      borderWidth: theme.ui.borderWidth * 2,
+      borderColor: theme.colors.background,
+      zIndex: 2,
     },
   });
 

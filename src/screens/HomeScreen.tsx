@@ -12,19 +12,14 @@ import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {t} from '../localization';
 
 import ExpandableFilter from '../components/ExpandableFilter';
-import HomeHeader from '../components/HomeHeader';
+import ScreenHeader from '../components/ui/ScreenHeader';
 import WatchAll from '../components/WatchAll';
 import FavoriteSortButton from '../components/ui/FavoriteSortButton';
 
-interface HomeScreenProps {
-  onNavigateToChat: () => void;
-}
-
-const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
+const HomeScreen = () => {
   const {theme: appTheme} = useAppTheme();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const hasNewMessages = useAppSelector(state => state.chat.hasNewMessages);
   const {prices, loading} = useAppSelector(state => state.home);
   const favoriteSymbols = useAppSelector(state => state.favorites.favorites);
 
@@ -79,10 +74,8 @@ const HomeScreen = ({onNavigateToChat}: HomeScreenProps) => {
   return (
     <View
       style={[styles.container, {backgroundColor: appTheme.colors.background}]}>
-      <HomeHeader
-        onNavigateToChat={onNavigateToChat}
-        hasNewMessages={hasNewMessages}
-        appTheme={appTheme}
+      <ScreenHeader
+        title={t('markets') || 'Markets'}
       />
 
       <View style={{paddingHorizontal: appTheme.ui.spacing * 2}}>
