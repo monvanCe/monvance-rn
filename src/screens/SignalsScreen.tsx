@@ -2,12 +2,9 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  StyleSheet,
-  ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import {FlashList} from '@shopify/flash-list';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
 import {eventBus} from '../middleware/eventMiddleware';
@@ -16,6 +13,7 @@ import {Dropdown} from '../components/ui/Dropdown';
 import SignalItem from '../components/SignalItem';
 import {t} from '../localization';
 import {WatchlistPeriod, WatchlistPercent} from '../const/enums';
+import ScreenHeader from '../components/ui/ScreenHeader';
 
 const SignalsScreen: React.FC = () => {
   const {theme} = useTheme();
@@ -36,7 +34,6 @@ const SignalsScreen: React.FC = () => {
   const currentSignals = currentTab === 'all' ? allSignals : watchlistSignals;
   const isLoading =
     currentTab === 'all' ? allSignalsLoading : watchlistSignalsLoading;
-  const hasMore = currentTab === 'all' ? hasMoreAll : hasMoreWatchlist;
 
   const periodOptions = [
     {label: '1m', value: WatchlistPeriod.MINUTE_1.toString()},
@@ -182,17 +179,37 @@ const SignalsScreen: React.FC = () => {
     );
   };
 
+  const headerActions = [
+    /*
+    {
+      iconName: 'chart-line',
+      iconLibrary: 'MaterialCommunityIcons' as const,
+      onPress: () => {
+        // Add analytics action here
+        console.log('Analytics pressed');
+      },
+    },
+    {
+      iconName: 'refresh',
+      iconLibrary: 'MaterialCommunityIcons' as const,
+      onPress: () => {
+        // Add refresh action here
+        console.log('Refresh pressed');
+      },
+    },
+    */
+  ];
+
   const styles = style(theme);
 
   return (
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
       {/* Header */}
-      <View style={[styles.header, {backgroundColor: theme.colors.background}]}>
-        <Text style={[styles.title, {color: theme.colors.onSurface}]}>
-          {t('signals')}
-        </Text>
-      </View>
+      <ScreenHeader 
+        title={t('signals')} 
+        actions={headerActions}
+      />
 
       {/* Filters */}
       <View
@@ -304,16 +321,6 @@ const SignalsScreen: React.FC = () => {
 const style = (theme: ReturnType<typeof useTheme>['theme']) => ({
   container: {
     flex: 1,
-  },
-  header: {
-    paddingHorizontal: theme.ui.spacing * 2,
-    paddingVertical: theme.ui.spacing * 2,
-    borderBottomWidth: theme.ui.borderWidth * 2,
-    borderBottomColor: 'rgba(0,0,0,0.1)',
-  },
-  title: {
-    fontSize: theme.ui.fontSize * 1.5,
-    fontWeight: 'bold' as const,
   },
   filtersContainer: {
     padding: theme.ui.spacing * 2,

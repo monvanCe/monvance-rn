@@ -1,6 +1,6 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {StyleSheet} from 'react-native';
+import {Platform, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -33,7 +33,7 @@ const TabNavigation = ({
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          ...styles.tabBar,
+          ...(Platform.OS === 'android' ? styles.tabBarAndorid : styles.tabBarIos),
           backgroundColor: theme.colors.surface,
           borderTopWidth: 0,
           elevation: 0,
@@ -103,7 +103,7 @@ const TabNavigation = ({
 };
 
 const styles = StyleSheet.create({
-  tabBar: {
+  tabBarAndorid: {
     position: 'absolute',
     display: 'flex',
     bottom: 0,
@@ -111,6 +111,17 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     marginHorizontal: 0,
     height: 60,
+    paddingHorizontal: 16,
+  },
+  tabBarIos: {
+    position: 'absolute',
+    display: 'flex',
+    bottom:0,
+    paddingTop: 7,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    marginHorizontal: 0,
+    height: 64,
     paddingHorizontal: 16,
   },
 });

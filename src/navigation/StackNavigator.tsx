@@ -4,6 +4,14 @@ import TabNavigationWrapper from './TabNavigationWrapper';
 import NotificationScreen from '../screens/NotificationScreen';
 import CoinDetailsScreen from '../screens/CoinDetailsScreen';
 import PaywallScreen from '../screens/PaywallScreen';
+import { View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useTheme} from '../context/ThemeContext';
+
+
+
+
+
 
 export type RootStackParamList = {
   Main: undefined;
@@ -16,8 +24,13 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const StackNavigator = () => {
+  const theme = useTheme();
+  const colors = theme.theme.colors;
+
+    const insets = useSafeAreaInsets();
   return (
-    <Stack.Navigator
+<View style={{flex: 1, paddingTop: insets.top, paddingBottom: insets.bottom, backgroundColor: colors.background}}>
+      <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}>
@@ -26,6 +39,7 @@ const StackNavigator = () => {
       <Stack.Screen name="CoinDetails" component={CoinDetailsScreen} />
       <Stack.Screen name="Paywall" component={PaywallScreen} />
     </Stack.Navigator>
+    </View>
   );
 };
 

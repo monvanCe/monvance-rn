@@ -8,7 +8,7 @@ import ExpandableFilter from '../components/ExpandableFilter';
 import {MarketItem} from '../components/MarketItem';
 import {useAppSelector} from '../store/store';
 import {useFocusEffect} from '@react-navigation/native';
-import NotificationIcon from '../components/NotificationIcon';
+import ScreenHeader from '../components/ui/ScreenHeader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const WatchListScreen = () => {
@@ -25,7 +25,7 @@ const WatchListScreen = () => {
           watchAll ? !coins.includes(item.symbol) : coins.includes(item.symbol),
         ),
       );
-    }, []),
+    }, [prices, coins, watchAll]),
   );
 
   const renderItem = ({item}: {item: any}) => (
@@ -38,12 +38,24 @@ const WatchListScreen = () => {
     />
   );
 
+  const headerActions = [
+    /*
+    {
+      iconName: 'filter-list',
+      onPress: () => {
+        // Add filter action here
+        console.log('Filter pressed');
+      },
+    },
+    */
+  ];
+
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>{t('watchlist') || 'Watchlist'}</Text>
-        <NotificationIcon />
-      </View>
+      <ScreenHeader 
+        title={t('watchlist') || 'Watchlist'} 
+        actions={headerActions}
+      />
 
       <ExpandableFilter />
 
@@ -80,18 +92,6 @@ const style = (appTheme: ReturnType<typeof useAppTheme>['theme']) =>
     container: {
       flex: 1,
       backgroundColor: appTheme.colors.background,
-    },
-    headerContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: appTheme.ui.spacing * 3,
-      paddingTop: appTheme.ui.spacing * 3,
-      paddingBottom: appTheme.ui.spacing * 2,
-    },
-    headerTitle: {
-      fontSize: appTheme.ui.spacing * 3.5,
-      fontWeight: '700',
     },
     emptyState: {
       flex: 1,

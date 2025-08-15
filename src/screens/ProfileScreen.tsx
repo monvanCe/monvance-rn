@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   Linking,
-  Alert,
 } from 'react-native';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
@@ -15,7 +14,7 @@ import ThemeToggle from '../components/ui/ThemeSwitch';
 import {Dropdown} from '../components/ui/Dropdown';
 import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
-import NotificationIcon from '../components/NotificationIcon';
+import ScreenHeader from '../components/ui/ScreenHeader';
 import WebView from '../components/ui/WebView';
 import {useNavigation} from '@react-navigation/native';
 
@@ -66,6 +65,27 @@ const ProfileScreen = () => {
     navigation.navigate('Paywall' as never);
   };
 
+  const headerActions = [
+    /*
+    {
+      iconName: 'account-edit',
+      iconLibrary: 'MaterialCommunityIcons' as const,
+      onPress: () => {
+        // Add edit profile action here
+        console.log('Edit profile pressed');
+      },
+    },
+    {
+      iconName: 'cog',
+      iconLibrary: 'MaterialCommunityIcons' as const,
+      onPress: () => {
+        // Add settings action here
+        console.log('Settings pressed');
+      },
+    },
+      */
+  ];
+
   if (webViewVisible) {
     return (
       <WebView
@@ -78,10 +98,10 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>{t('settings')}</Text>
-        <NotificationIcon />
-      </View>
+      <ScreenHeader 
+        title={t('settings')} 
+        actions={headerActions}
+      />
       <View style={styles.avatarContainer}>
         <Image source={{uri: avatar}} style={styles.avatar} />
         <Text style={styles.username}>{username}</Text>
@@ -117,7 +137,7 @@ const ProfileScreen = () => {
             {t('unlock_all_features')}
           </Text>
         </View>
-
+{/*
         <View
           style={[
             styles.card,
@@ -126,6 +146,7 @@ const ProfileScreen = () => {
               borderRadius: theme.ui.radius,
             },
           ]}>
+            
           <View style={styles.cardRow}>
             <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
               <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
@@ -134,6 +155,7 @@ const ProfileScreen = () => {
             </View>
             <ThemeToggle />
           </View>
+
           <Text
             style={[
               styles.cardSubtitle,
@@ -142,6 +164,8 @@ const ProfileScreen = () => {
             {t('switch_to_light')}
           </Text>
         </View>
+                  */}
+
         <View
           style={[
             styles.card,
@@ -181,34 +205,7 @@ const ProfileScreen = () => {
             {t('choose_language')}
           </Text>
         </View>
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.ui.radius,
-            },
-          ]}>
-          <Text
-            style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginBottom: 2},
-            ]}>
-            {t('about')}
-          </Text>
-          <View style={styles.cardRow}>
-            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-              {t('version')}
-            </Text>
-            <Text
-              style={[
-                styles.cardVersion,
-                {color: theme.colors.onSurfaceVariant},
-              ]}>
-              {APP_VERSION}
-            </Text>
-          </View>
-        </View>
+      
         <View
           style={[
             styles.card,
@@ -261,6 +258,34 @@ const ProfileScreen = () => {
             />
           </TouchableOpacity>
         </View>
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              borderRadius: theme.ui.radius,
+            },
+          ]}>
+          <Text
+            style={[
+              styles.cardSubtitle,
+              {color: theme.colors.onSurfaceVariant, marginBottom: 2},
+            ]}>
+            {t('about')}
+          </Text>
+          <View style={styles.cardRow}>
+            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+              {t('version')}
+            </Text>
+            <Text
+              style={[
+                styles.cardVersion,
+                {color: theme.colors.onSurfaceVariant},
+              ]}>
+              {APP_VERSION}
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -271,19 +296,6 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
-    },
-    headerContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: theme.ui.spacing * 2,
-      paddingTop: theme.ui.spacing * 2,
-      paddingBottom: theme.ui.spacing * 2,
-    },
-    headerTitle: {
-      fontSize: theme.ui.fontSize * 2,
-      fontWeight: '700',
-      color: theme.colors.onSurface,
     },
     avatarContainer: {
       alignItems: 'center',
