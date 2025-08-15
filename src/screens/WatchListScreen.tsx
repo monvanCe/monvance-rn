@@ -8,7 +8,7 @@ import ExpandableFilter from '../components/ExpandableFilter';
 import {MarketItem} from '../components/MarketItem';
 import {useAppSelector} from '../store/store';
 import {useFocusEffect} from '@react-navigation/native';
-import ScreenHeader from '../components/ui/ScreenHeader';
+import ScreenHeader, {HeaderAction} from '../components/ui/ScreenHeader';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const WatchListScreen = () => {
@@ -38,7 +38,7 @@ const WatchListScreen = () => {
     />
   );
 
-  const headerActions = [
+  const headerActions: HeaderAction[] = [
     /*
     {
       iconName: 'filter-list',

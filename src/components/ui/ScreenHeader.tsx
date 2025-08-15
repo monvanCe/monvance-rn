@@ -57,6 +57,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
       <View style={styles.rightContainer}>
         {actions.map(renderAction)}
         {showNotification && <NotificationIcon />}
+        
       </View>
     </View>
   );

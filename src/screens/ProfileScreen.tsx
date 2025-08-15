@@ -5,16 +5,17 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  ScrollView,
 } from 'react-native';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from '../components/ui/Text';
-import ThemeToggle from '../components/ui/ThemeSwitch';
+
 import {Dropdown} from '../components/ui/Dropdown';
 import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
-import ScreenHeader from '../components/ui/ScreenHeader';
+import ScreenHeader, {HeaderAction} from '../components/ui/ScreenHeader';
 import WebView from '../components/ui/WebView';
 import {useNavigation} from '@react-navigation/native';
 
@@ -65,7 +66,7 @@ const ProfileScreen = () => {
     navigation.navigate('Paywall' as never);
   };
 
-  const headerActions = [
+  const headerActions: HeaderAction[] = [
     /*
     {
       iconName: 'account-edit',
@@ -102,11 +103,16 @@ const ProfileScreen = () => {
         title={t('settings')} 
         actions={headerActions}
       />
-      <View style={styles.avatarContainer}>
-        <Image source={{uri: avatar}} style={styles.avatar} />
-        <Text style={styles.username}>{username}</Text>
-      </View>
-      <View style={styles.cardsWrapper}>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.avatarContainer}>
+          <Image source={{uri: avatar}} style={styles.avatar} />
+          <Text style={styles.username}>{username}</Text>
+        </View>
+        <View style={styles.cardsWrapper}>
         {/* Premium Card */}
         <View
           style={[
@@ -287,6 +293,7 @@ const ProfileScreen = () => {
           </View>
         </View>
       </View>
+      </ScrollView>
     </View>
   );
 };
@@ -296,6 +303,12 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
+    },
+    scrollView: {
+      flex: 1,
+    },
+    scrollContent: {
+      paddingBottom: theme.ui.spacing * 4,
     },
     avatarContainer: {
       alignItems: 'center',
