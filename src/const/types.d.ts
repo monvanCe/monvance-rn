@@ -237,4 +237,5 @@ interface ISubscriptionState {
   subscriptions: ISubscription[];
   loading: boolean;
   selectedSubscription: ISubscription | null;
+  premiumAdvantages: string[];
 }

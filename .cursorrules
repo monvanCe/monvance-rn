@@ -1,12 +1,12 @@
 # creating-ui
 ---
-description: When creating a UI, creating the components in components/ui is your priority. You should also create your own components. Depending on the situation, they can be in the components/ui folder or the components folder.
+description: When creating a UI, creating the components in components/ui is your priority. You should also create your own components. Depending on the situation, they can be in the components/ui folder or the components folder. (in /components)
 globs:
 alwaysApply: true
 ---
 # event
 ---
-description: Triggering will be done through events. All triggering should be done through the event system.
+description: All functions work by listening for events. Example events: appStarted(null), screenOpened(screenName: string), loginSucces(user: IUser), logout(null), coinSwitched(data: ICoin), fetchSuccess(TFetchSucces). Example flow: The coin page opens and the page opened triggers --> The service listening for the page opening runs --> If the response is successful, fetchCoinSuccess triggers --> useReduxEvent (this is a hook) takes the payload from fetchCoinSuccess and writes it to Redux. It is responsible for all operations to be written to Redux. (in /hooks)
 globs:
 alwaysApply: true
 ---
@@ -24,38 +24,43 @@ alwaysApply: true
 ---
 # enums
 ---
-description: Keys must never be hardcoded as strings. They should be added to @enums.ts and used from there.
+description: Keys must never be hardcoded as strings. They should be added to @enums.ts and used from there. (in /consts)
 globs:
 alwaysApply: true
 ---
 # service
 ---
-description: No service may use its own axios.get directly. All endpoints must be defined in @internalEndpoints.ts or @externalEndpoints.ts, and then used via @internalServices.ts or @externalServices.ts.
+description: No service may use its own axios.get directly. All endpoints must be defined in @internalEndpoints.ts or @externalEndpoints.ts, and then used via @internalServices.ts or @externalServices.ts. (in /service)
 globs:
 alwaysApply: true
 ---
 # localization
 ---
-description: All application texts will be localized using JSON files inside the localization directory, with translations written per language. These will be managed through @index.ts.
+description: All application texts will be localized using JSON files inside the localization directory, with translations written per language. These will be managed through @index.ts. (in /localization)
 globs:
 alwaysApply: true
 ---
 # theme
 ---
-description: All theme colors, variations, and sizing will be managed from @ThemeContext.tsx. These values will remain static, except for light and dark mode toggling.
+description: All theme colors, variations, and sizing will be managed from @ThemeContext.tsx. These values will remain static, except for light and dark mode toggling. (in /theme)
 globs:
 alwaysApply: true
 ---
 # components
 ---
-description: The components/ui folder will only contain simple UI elements. More complex components will be placed in the main components folder. If a specific area contains multiple related components, they will be grouped in a dedicated subfolder.
+description: The components/ui folder will only contain simple UI elements. More complex components will be placed in the main components folder. If a specific area contains multiple related components, they will be grouped in a dedicated subfolder. (in /components)
 globs:
 alwaysApply: true
 ---
 # types
 ---
-description: All interfaces will be placed inside @types.d.ts. Since this file is global, there's no need to import or export them.
+description: All interfaces will be placed inside @types.d.ts. Since this file is global, there's no need to import or export them. All interface named like IUser, IProduct, IOrder, etc. IUser: {username: string, age: number}, TFetchSuccess: {type: 'fetchCoinSuccess', payload: ICoinReponse} | {type: 'fetchSignalsSuccess', payload: ISignalResponse} (in /consts)
 globs:
 alwaysApply: true
 ---
-
+# folder-structure
+---
+description: The folder structure will be as follows: src/components/ui/ and src/components/ and src/utils/ and src/service/ and src/store/ src/hooks and src/store/ and src/screens/ and src/navigation and src/assets/ and src/middleware/ and src/localization and src/theme/ and src/const and src/store/slices 
+globs:
+alwaysApply: true
+---

@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   View,
   Text,
@@ -11,69 +11,117 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {getSubscriptions} from 'react-native-iap';
 
 const PaywallScreen = () => {
   const [activePlan, setActivePlan] = useState('essential');
-  const [expandedPlans, setExpandedPlans] = useState<{[key: string]: boolean}>(
-    {},
-  );
   const scrollY = useRef(new Animated.Value(0)).current;
 
-  const plans = [
+  useEffect(() => {
+    const fetchSubs = async () => {
+      try {
+        const subs = await getSubscriptions({
+          skus: ['vens_weekly'],
+        });
+        console.log('subs', subs);
+      } catch (error) {
+        console.log('error', error);
+      }
+    };
+    fetchSubs();
+  }, []);
+
+  // Mock data
+  const mockSubscriptions = [
     {
-      id: 'essential',
-      name: 'ESSENTIAL',
-      price: '₺916,67',
-      yearlyPrice: '₺10.999,99/yıl',
-      description:
-        'Daha fazla grafik, aralık ve gösterge ile dikkat dağıtmayan işlem ve yatırım',
-      savings: 'Yılda ₺2.319,89 tasarruf edin*',
+      _id: 'weekly',
+      sku: 'vens_weekly',
+      platform: 'ANDROID',
+      discount: 0,
+      isActive: true,
+      isPromo: false,
+      interval: 1,
+      intervalDays: 7,
+      limits: {artwork: 0},
+      isTrial: false,
+      trialDays: 0,
     },
     {
-      id: 'pro',
-      name: 'PRO',
-      price: '₺1.333,33',
-      yearlyPrice: '₺15.999,99/yıl',
-      description:
-        'Gelişmiş analitik araçlar ve özel sinyaller ile profesyonel trading deneyimi',
-      savings: 'Yılda ₺4.499,89 tasarruf edin*',
+      _id: 'monthly',
+      sku: 'vens_monthly',
+      platform: 'ANDROID',
+      discount: 35,
+      isActive: true,
+      isPromo: false,
+      interval: 1,
+      intervalDays: 30,
+      limits: {artwork: 0},
+      isTrial: false,
+      trialDays: 0,
     },
     {
-      id: 'premium',
-      name: 'PREMIUM',
-      price: '₺2.083,33',
-      yearlyPrice: '₺24.999,99/yıl',
-      description:
-        'En gelişmiş özellikler, özel danışmanlık ve VIP destek ile eksklüzif deneyim',
-      savings: 'Yılda ₺7.999,89 tasarruf edin*',
+      _id: '3monthly',
+      sku: 'vens_3_monthly',
+      platform: 'ANDROID',
+      discount: 50,
+      isActive: true,
+      isPromo: false,
+      interval: 3,
+      intervalDays: 30,
+      limits: {artwork: 0},
+      isTrial: false,
+      trialDays: 0,
     },
+  ];
+
+  const mockPremiumAdvantages = [
+    'Fast Notifications',
+    'Precise Signals',
+    'Ad-Free Experience',
+    'Priority Chat and Support Access',
   ];
 
   const handlePlanPress = (planId: string) => {
     setActivePlan(planId);
   };
 
-  const togglePlanExpansion = (planId: string) => {
-    setExpandedPlans(prev => ({
-      ...prev,
-      [planId]: !prev[planId],
-    }));
-  };
-
   const handleUpgrade = () => {
     console.log('Upgrading to plan:', activePlan);
-    // Add your upgrade logic here
+    // Mock upgrade logic
   };
 
-  const renderPlanCard = (plan: any) => {
-    const isActive = plan.id === activePlan;
-    const isExpanded = expandedPlans[plan.id];
+  const handleRestorePurchases = () => {
+    console.log('Restoring purchases...');
+    // Mock restore logic
+  };
+
+  const renderPlanCard = (subscription: any) => {
+    const isActive = subscription._id === activePlan;
+
+    // Generate plan name based on interval
+    const getPlanName = (subscription: any) => {
+      if (subscription.interval === 1 && subscription.intervalDays === 7)
+        return 'WEEKLY';
+      if (subscription.interval === 1 && subscription.intervalDays === 30)
+        return 'MONTHLY';
+      if (subscription.interval === 3 && subscription.intervalDays === 30)
+        return '3 MONTHLY';
+      return 'PLAN';
+    };
+
+    // Generate price display
+    const getPriceDisplay = (subscription: any) => {
+      if (subscription.discount > 0) {
+        return `${subscription.discount}% İndirim`;
+      }
+      return 'Normal Fiyat';
+    };
 
     return (
       <TouchableOpacity
-        key={plan.id}
+        key={subscription._id}
         style={styles.pricingCard}
-        onPress={() => handlePlanPress(plan.id)}>
+        onPress={() => handlePlanPress(subscription._id)}>
         <LinearGradient
           colors={
             isActive
@@ -96,47 +144,39 @@ const PaywallScreen = () => {
               )}
             </View>
 
-            <View style={styles.savingsNotification}>
-              <Text style={styles.savingsNotificationText}>{plan.savings}</Text>
-            </View>
+            {subscription.discount > 0 && (
+              <View style={styles.savingsNotification}>
+                <Text style={styles.savingsNotificationText}>
+                  {subscription.discount}% İndirim
+                </Text>
+              </View>
+            )}
 
             <View style={styles.planHeader}>
               <View style={styles.planBadge}>
-                <Text style={styles.planBadgeText}>{plan.name}</Text>
+                <Text style={styles.planBadgeText}>
+                  {getPlanName(subscription)}
+                </Text>
               </View>
               <View style={styles.priceContainer}>
                 <Text style={styles.price}>
-                  {plan.price}
-                  <Text style={styles.periodInline}>/ay</Text>
+                  {getPriceDisplay(subscription)}
                 </Text>
-                <Text style={styles.yearlyPrice}>{plan.yearlyPrice}</Text>
+                <Text style={styles.yearlyPrice}>
+                  {subscription.interval}{' '}
+                  {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
+                </Text>
               </View>
             </View>
 
-            <Text style={styles.planDescription}>{plan.description}</Text>
-
-            <TouchableOpacity
-              style={styles.advantagesButton}
-              onPress={() => togglePlanExpansion(plan.id)}>
-              <Text style={styles.advantagesText}>Avantajları görün</Text>
-              <Icon
-                name={isExpanded ? 'expand-less' : 'expand-more'}
-                size={20}
-                color="#fff"
-              />
-            </TouchableOpacity>
-
-            {isExpanded && (
-              <View style={styles.advantagesList}>
-                <Text style={styles.advantagesTitle}>Avantajlar:</Text>
-                <Text style={styles.advantagesItem}>
-                  • Gelişmiş grafik araçları
-                </Text>
-                <Text style={styles.advantagesItem}>• Özel sinyaller</Text>
-                <Text style={styles.advantagesItem}>• 7/24 destek</Text>
-                <Text style={styles.advantagesItem}>• Reklamsız deneyim</Text>
-              </View>
-            )}
+            <Text style={styles.planDescription}>
+              {subscription.interval === 1 && subscription.intervalDays === 7
+                ? 'Haftalık plan ile esnek abonelik'
+                : subscription.interval === 1 &&
+                  subscription.intervalDays === 30
+                ? 'Aylık plan ile uygun fiyat'
+                : '3 aylık plan ile en iyi değer'}
+            </Text>
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -213,12 +253,32 @@ const PaywallScreen = () => {
           </View>
         </View>
 
+        {/* Premium Advantages Section */}
+        {mockPremiumAdvantages.length > 0 && (
+          <View style={styles.advantagesSection}>
+            <Text style={styles.advantagesSectionTitle}>
+              Premium Avantajlar
+            </Text>
+            <View style={styles.advantagesList}>
+              {mockPremiumAdvantages.map((advantage, index) => (
+                <View key={index} style={styles.advantageItem}>
+                  <Text style={styles.advantageText}>• {advantage}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
         {/* Pricing Cards */}
-        <View style={styles.pricingContainer}>{plans.map(renderPlanCard)}</View>
+        <View style={styles.pricingContainer}>
+          {mockSubscriptions.map(renderPlanCard)}
+        </View>
 
         {/* Restore Purchases Button */}
         <View style={styles.restoreContainer}>
-          <TouchableOpacity style={styles.restoreButton}>
+          <TouchableOpacity
+            style={styles.restoreButton}
+            onPress={handleRestorePurchases}>
             <Text style={styles.restoreButtonText}>
               Satın alınanları geri yükle
             </Text>
@@ -435,11 +495,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 4,
   },
-  periodInline: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '300',
-  },
   yearlyPrice: {
     color: '#999',
     fontSize: 16,
@@ -450,34 +505,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginBottom: 16,
-  },
-  advantagesButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  advantagesText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  advantagesList: {
-    marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#333',
-  },
-  advantagesTitle: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  advantagesItem: {
-    color: '#ccc',
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 4,
   },
   bottomSpacer: {
     height: 100,
@@ -522,6 +549,33 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
+  },
+  advantagesSection: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 20,
+    marginHorizontal: 20,
+    marginTop: 20,
+  },
+  advantagesSectionTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'left',
+    marginBottom: 15,
+  },
+  advantagesList: {
+    // No specific styles for the list container
+  },
+  advantageItem: {
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333',
+  },
+  advantageText: {
+    color: '#fff',
+    fontSize: 16,
+    textAlign: 'left',
   },
 });
 

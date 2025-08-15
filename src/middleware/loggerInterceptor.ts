@@ -13,8 +13,8 @@ export const loggerInterceptor = (instance: AxiosInstance) => {
   });
 
   instance.interceptors.response.use(undefined, error => {
-    console.log('Error:', error.response.data.message);
-    eventBus.emit('error', error.response.data.message);
+    console.log('Error:', error.response.data.message || error.response.data);
+    eventBus.emit('error', error.response.data.message || error.response.data);
     return Promise.reject(error);
   });
 };
