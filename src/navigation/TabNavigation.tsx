@@ -10,24 +10,12 @@ import SignalsScreen from '../screens/SignalsScreen';
 
 const Tab = createBottomTabNavigator();
 
-interface TabNavigationProps {
-  setScreenName: (screenName: string) => void;
-}
-
-const TabNavigation = ({
-  setScreenName,
-}: TabNavigationProps) => {
+const TabNavigation = () => {
   const {theme} = useAppTheme();
 
   return (
     <Tab.Navigator
-      screenListeners={{
-        state: e => {
-          const index = e.data.state.index;
-          const tabName = e.data.state.routeNames[index];
-          setScreenName(tabName);
-        },
-      }}
+     
       screenOptions={{
         headerShown: false,
         tabBarStyle: {

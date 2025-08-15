@@ -23,7 +23,6 @@ const {width} = Dimensions.get('window');
 const TabNavigationWrapper = () => {
   const {theme: appTheme} = useAppTheme();
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [screenName, setScreenName] = useState<string>('Home');
   const translateX = useSharedValue(width);
   const overlayOpacity = useSharedValue(0);
 
@@ -134,7 +133,7 @@ const TabNavigationWrapper = () => {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-      {screenName === 'Home' ? (
+
         <GestureDetector gesture={panGesture}>
           <View
             style={[
@@ -143,7 +142,7 @@ const TabNavigationWrapper = () => {
             ]}>
             <View style={styles.mainContainer}>
                         <TabNavigation
-            setScreenName={setScreenName}
+
           />
             </View>
 
@@ -157,28 +156,7 @@ const TabNavigationWrapper = () => {
             </Animated.View>
           </View>
         </GestureDetector>
-      ) : (
-        <View
-          style={[
-            styles.container,
-            {backgroundColor: appTheme.colors.background},
-          ]}>
-          <View style={styles.mainContainer}>
-            <TabNavigation
-              setScreenName={setScreenName}
-            />
-          </View>
-
-          <Animated.View
-            style={[styles.darkOverlay, overlayAnimatedStyle]}
-            pointerEvents="none"
-          />
-
-          <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
-            <ChatScreen onNavigateToTab={navigateToTab} />
-          </Animated.View>
-        </View>
-      )}
+      
     </GestureHandlerRootView>
   );
 };
