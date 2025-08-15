@@ -8,17 +8,12 @@ require Pod::Executable.execute_command('node', ['-p',
 # Specify the Xcode project
 project 'vens.xcodeproj'
 
-# Enable modular headers for Swift pod integration
-use_modular_headers!
-
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
 linkage = ENV['USE_FRAMEWORKS']
-if linkage != nil
-  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
-  use_frameworks! :linkage => linkage.to_sym
-end
+Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+use_frameworks! :linkage => :static
 
 target 'vens' do
   config = use_native_modules!
@@ -28,6 +23,14 @@ target 'vens' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  # Fix for Firebase Swift pods
+  pod 'GoogleUtilities', :modular_headers => true
+  pod 'FirebaseCore', :modular_headers => true
+  pod 'FirebaseCoreExtension', :modular_headers => true
+  pod 'FirebaseFirestoreInternal', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
+  pod 'RNIap', :path => '../node_modules/react-native-iap'
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
