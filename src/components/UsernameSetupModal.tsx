@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {View, Modal, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Modal, StyleSheet} from 'react-native';
 import {useTheme} from '../context/ThemeContext';
 import {Text} from './ui/Text';
 import {Button} from './ui/Button';
@@ -46,7 +46,7 @@ export const UsernameSetupModal: React.FC<UsernameSetupModalProps> = ({
     return () => {
       eventBus.off('checkUsernameSuccess', handleCheckUsernameSuccess);
     };
-  }, [username, t]);
+  }, [username]);
 
   const handleUsernameChange = (text: string) => {
     setUsername(text);
