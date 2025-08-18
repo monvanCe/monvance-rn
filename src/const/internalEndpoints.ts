@@ -16,4 +16,6 @@ export const INTERNAL_ENDPOINTS = {
   GET_ALL_SIGNALS: '/signals/all-coins',
   GET_WATCHLIST_SIGNALS: '/signals/my-coins',
   GET_COIN_SIGNALS: '/signals/coin',
+  GET_PAYWALL: '/payment/paywall',
+  POST_PAYMENT: '/payment',
 };

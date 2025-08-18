@@ -68,6 +68,12 @@ type eventType = {
   };
   clearCoinSignals: null;
   navigateToChat: null;
+  // Paywall events
+  getPaywallSuccess: IPaywallResponse;
+  paymentSuccess: IUser;
+  paymentStarted: {subscription: ISubscription};
+  paymentFailed: {error: string};
+  subscriptionSelected: ISubscription;
 };
 
 class EventManager<Events extends Record<string, any>> {

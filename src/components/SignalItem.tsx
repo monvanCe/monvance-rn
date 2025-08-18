@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
 import {useNavigation} from '@react-navigation/native';
+import {useAppSelector} from '../store/store';
 
 interface SignalItemProps {
   signal: ISignal;
@@ -11,6 +12,7 @@ interface SignalItemProps {
 const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
   const {theme} = useTheme();
   const navigation = useNavigation();
+  const appLang = useAppSelector(state => state.appConfig.appLanguage);
 
   const formatPrice = (price: number) => {
     return price.toFixed(2);
@@ -22,7 +24,10 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
 
   const formatTime = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('tr-TR', {
+    return date.toLocaleTimeString(appLang, {
+      month: 'short',
+      day: '2-digit',
+      hour12: true,
       hour: '2-digit',
       minute: '2-digit',
     });

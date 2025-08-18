@@ -239,3 +239,21 @@ interface ISubscriptionState {
   selectedSubscription: ISubscription | null;
   premiumAdvantages: string[];
 }
+
+interface IPaywallResponse {
+  package: ISubscription[];
+  promoPackage: ISubscription | null;
+  premiumAdvantages: string[];
+}
+
+interface IAndroidPaymentRequest {
+  packageName: string;
+  productId: string;
+  purchaseToken: string;
+}
+
+interface IIOSPaymentRequest {
+  receiptData: string;
+}
+
+type TPaymentRequest = IAndroidPaymentRequest | IIOSPaymentRequest;

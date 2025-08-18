@@ -11,95 +11,48 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {getSubscriptions} from 'react-native-iap';
+import {usePaywall} from '../hooks/usePaywall';
 
 const PaywallScreen = () => {
-  const [activePlan, setActivePlan] = useState('essential');
+  const [activePlan, setActivePlan] = useState<string | null>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
 
+  const {
+    subscriptions,
+    premiumAdvantages,
+    loading,
+    isPriceLoading,
+    selectedSubscription,
+    handlePlanSelection,
+    handlePurchase,
+    handleRestorePurchases,
+  } = usePaywall();
+
   useEffect(() => {
-    const fetchSubs = async () => {
-      try {
-        const subs = await getSubscriptions({
-          skus: ['vens_weekly'],
-        });
-        console.log('subs', subs);
-      } catch (error) {
-        console.log('error', error);
-      }
-    };
-    fetchSubs();
-  }, []);
-
-  // Mock data
-  const mockSubscriptions = [
-    {
-      _id: 'weekly',
-      sku: 'vens_weekly',
-      platform: 'ANDROID',
-      discount: 0,
-      isActive: true,
-      isPromo: false,
-      interval: 1,
-      intervalDays: 7,
-      limits: {artwork: 0},
-      isTrial: false,
-      trialDays: 0,
-    },
-    {
-      _id: 'monthly',
-      sku: 'vens_monthly',
-      platform: 'ANDROID',
-      discount: 35,
-      isActive: true,
-      isPromo: false,
-      interval: 1,
-      intervalDays: 30,
-      limits: {artwork: 0},
-      isTrial: false,
-      trialDays: 0,
-    },
-    {
-      _id: '3monthly',
-      sku: 'vens_3_monthly',
-      platform: 'ANDROID',
-      discount: 50,
-      isActive: true,
-      isPromo: false,
-      interval: 3,
-      intervalDays: 30,
-      limits: {artwork: 0},
-      isTrial: false,
-      trialDays: 0,
-    },
-  ];
-
-  const mockPremiumAdvantages = [
-    'Fast Notifications',
-    'Precise Signals',
-    'Ad-Free Experience',
-    'Priority Chat and Support Access',
-  ];
+    if (selectedSubscription) {
+      setActivePlan(selectedSubscription._id);
+    }
+  }, [selectedSubscription]);
 
   const handlePlanPress = (planId: string) => {
     setActivePlan(planId);
+    const subscription = subscriptions.find(sub => sub._id === planId);
+    if (subscription) {
+      handlePlanSelection(subscription);
+    }
   };
 
-  const handleUpgrade = () => {
-    console.log('Upgrading to plan:', activePlan);
-    // Mock upgrade logic
+  const handleUpgrade = async () => {
+    if (selectedSubscription) {
+      await handlePurchase(selectedSubscription);
+    }
   };
 
-  const handleRestorePurchases = () => {
-    console.log('Restoring purchases...');
-    // Mock restore logic
-  };
-
-  const renderPlanCard = (subscription: any) => {
+  const renderPlanCard = (subscription: ISubscription) => {
     const isActive = subscription._id === activePlan;
 
     // Generate plan name based on interval
-    const getPlanName = (subscription: any) => {
+    const getPlanName = (subscription: ISubscription) => {
       if (subscription.interval === 1 && subscription.intervalDays === 7)
         return 'WEEKLY';
       if (subscription.interval === 1 && subscription.intervalDays === 30)
@@ -109,12 +62,68 @@ const PaywallScreen = () => {
       return 'PLAN';
     };
 
-    // Generate price display
+    // Generate price display with original and discounted prices
     const getPriceDisplay = (subscription: any) => {
-      if (subscription.discount > 0) {
-        return `${subscription.discount}% İndirim`;
+      // Check if we have price data
+      const hasPriceData =
+        subscription.discountedPrice && subscription.currency;
+      const hasDiscount = subscription.discount > 0;
+
+      if (hasPriceData && hasDiscount && subscription.originalPrice) {
+        // Show original price crossed out and discounted price
+        return (
+          <View style={styles.priceContainer}>
+            <Text style={styles.originalPrice}>
+              {subscription.currency}
+              {subscription.originalPrice.toFixed(2)}
+            </Text>
+            <Text style={styles.discountedPrice}>
+              {subscription.currency}
+              {subscription.discountedPrice.toFixed(2)}
+            </Text>
+            <Text style={styles.yearlyPrice}>
+              {subscription.interval}{' '}
+              {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
+            </Text>
+          </View>
+        );
+      } else if (hasPriceData) {
+        // Show only the current price
+        return (
+          <View style={styles.priceContainer}>
+            <Text style={styles.price}>
+              {subscription.currency}
+              {subscription.discountedPrice.toFixed(2)}
+            </Text>
+            <Text style={styles.yearlyPrice}>
+              {subscription.interval}{' '}
+              {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
+            </Text>
+          </View>
+        );
+      } else if (hasDiscount) {
+        // Show discount percentage when price is not available
+        return (
+          <View style={styles.priceContainer}>
+            <Text style={styles.price}>{subscription.discount}% İndirim</Text>
+            <Text style={styles.yearlyPrice}>
+              {subscription.interval}{' '}
+              {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
+            </Text>
+          </View>
+        );
       }
-      return 'Normal Fiyat';
+
+      // Fallback: show interval only
+      return (
+        <View style={styles.priceContainer}>
+          <Text style={styles.price}>Fiyat bilgisi yok</Text>
+          <Text style={styles.yearlyPrice}>
+            {subscription.interval}{' '}
+            {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
+          </Text>
+        </View>
+      );
     };
 
     return (
@@ -158,15 +167,15 @@ const PaywallScreen = () => {
                   {getPlanName(subscription)}
                 </Text>
               </View>
-              <View style={styles.priceContainer}>
-                <Text style={styles.price}>
-                  {getPriceDisplay(subscription)}
-                </Text>
-                <Text style={styles.yearlyPrice}>
-                  {subscription.interval}{' '}
-                  {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
-                </Text>
-              </View>
+              {isPriceLoading ? (
+                <View style={styles.priceLoadingIndicator}>
+                  <Text style={styles.priceLoadingText}>
+                    Fiyat yükleniyor...
+                  </Text>
+                </View>
+              ) : (
+                getPriceDisplay(subscription)
+              )}
             </View>
 
             <Text style={styles.planDescription}>
@@ -254,13 +263,13 @@ const PaywallScreen = () => {
         </View>
 
         {/* Premium Advantages Section */}
-        {mockPremiumAdvantages.length > 0 && (
+        {premiumAdvantages.length > 0 && (
           <View style={styles.advantagesSection}>
             <Text style={styles.advantagesSectionTitle}>
               Premium Avantajlar
             </Text>
             <View style={styles.advantagesList}>
-              {mockPremiumAdvantages.map((advantage, index) => (
+              {premiumAdvantages.map((advantage, index) => (
                 <View key={index} style={styles.advantageItem}>
                   <Text style={styles.advantageText}>• {advantage}</Text>
                 </View>
@@ -271,7 +280,17 @@ const PaywallScreen = () => {
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>
-          {mockSubscriptions.map(renderPlanCard)}
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <Text style={styles.loadingText}>Paketler yükleniyor...</Text>
+            </View>
+          ) : subscriptions.length > 0 ? (
+            subscriptions.map(renderPlanCard)
+          ) : (
+            <View style={styles.noDataContainer}>
+              <Text style={styles.noDataText}>Paket bulunamadı</Text>
+            </View>
+          )}
         </View>
 
         {/* Restore Purchases Button */}
@@ -291,13 +310,33 @@ const PaywallScreen = () => {
 
       {/* Fixed Upgrade Button */}
       <View style={styles.fixedUpgradeContainer}>
-        <TouchableOpacity style={styles.upgradeButton} onPress={handleUpgrade}>
+        <TouchableOpacity
+          style={[
+            styles.upgradeButton,
+            !selectedSubscription && styles.upgradeButtonDisabled,
+          ]}
+          onPress={handleUpgrade}
+          disabled={!selectedSubscription}>
           <LinearGradient
-            colors={['#E74C3C', '#F39C12', '#E67E22', '#D35400', '#C0392B']}
+            colors={
+              selectedSubscription
+                ? ['#E74C3C', '#F39C12', '#E67E22', '#D35400', '#C0392B']
+                : ['#666', '#555', '#444']
+            }
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             style={styles.upgradeGradient}>
-            <Text style={styles.upgradeButtonText}>Şimdi yükselt</Text>
+            <Text
+              style={[
+                styles.upgradeButtonText,
+                !selectedSubscription && styles.upgradeButtonTextDisabled,
+              ]}>
+              {loading
+                ? 'İşleniyor...'
+                : selectedSubscription
+                ? 'Şimdi yükselt'
+                : 'Paket seçin'}
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -491,9 +530,20 @@ const styles = StyleSheet.create({
   },
   price: {
     color: '#fff',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 4,
+  },
+  originalPrice: {
+    color: '#999',
+    fontSize: 14,
+    textDecorationLine: 'line-through',
+    marginBottom: 2,
+  },
+  discountedPrice: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   yearlyPrice: {
     color: '#999',
@@ -522,6 +572,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: 'hidden',
   },
+  upgradeButtonDisabled: {
+    opacity: 0.5,
+  },
   upgradeGradient: {
     paddingVertical: 16,
     alignItems: 'center',
@@ -530,6 +583,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  upgradeButtonTextDisabled: {
+    color: '#999',
   },
   restoreContainer: {
     paddingHorizontal: 20,
@@ -576,6 +632,40 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     textAlign: 'left',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 50,
+  },
+  loadingText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  noDataContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 50,
+  },
+  noDataText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  priceLoadingIndicator: {
+    backgroundColor: '#333',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignSelf: 'flex-end',
+  },
+  priceLoadingText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
 

@@ -192,4 +192,23 @@ export const internalService = {
     );
     return response;
   },
+
+  getPaywall: async (): Promise<IPaywallResponse> => {
+    const response = await api.get<IPaywallResponse>(
+      INTERNAL_ENDPOINTS.GET_PAYWALL,
+      'internal',
+    );
+    eventBus.emit('getPaywallSuccess', response);
+    return response;
+  },
+
+  postPayment: async (paymentData: TPaymentRequest): Promise<IUser> => {
+    const response = await api.post<IUser>(
+      INTERNAL_ENDPOINTS.POST_PAYMENT,
+      'internal',
+      paymentData,
+    );
+    eventBus.emit('paymentSuccess', response);
+    return response;
+  },
 };

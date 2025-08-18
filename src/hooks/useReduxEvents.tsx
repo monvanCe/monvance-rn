@@ -44,6 +44,11 @@ import {
   setFilters,
   clearSignals,
 } from '../store/slices/signalsSlice';
+import {
+  setPaywallData,
+  setLoading as setSubscriptionLoading,
+  setSelectedSubscription,
+} from '../store/slices/subscriptionSlice';
 import {processTickerPrices} from '../utils/processTickerPrices';
 import {addFavorite, removeFavorite} from '../store/slices/favoritesSlice';
 
@@ -225,6 +230,28 @@ export const useReduxEvents = () => {
         body,
       };
       dispatch(addNotification(notification));
+    });
+
+    //PAYWALL
+    eventBus.on('getPaywallSuccess', (response: IPaywallResponse) => {
+      dispatch(setPaywallData(response));
+      dispatch(setSubscriptionLoading(false));
+    });
+
+    eventBus.on('paymentSuccess', (user: IUser) => {
+      dispatch(setUser(user));
+    });
+
+    eventBus.on('paymentStarted', () => {
+      dispatch(setSubscriptionLoading(true));
+    });
+
+    eventBus.on('paymentFailed', () => {
+      dispatch(setSubscriptionLoading(false));
+    });
+
+    eventBus.on('subscriptionSelected', (subscription: ISubscription) => {
+      dispatch(setSelectedSubscription(subscription));
     });
   }, []);
 };

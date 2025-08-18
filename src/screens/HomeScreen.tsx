@@ -74,9 +74,7 @@ const HomeScreen = () => {
   return (
     <View
       style={[styles.container, {backgroundColor: appTheme.colors.background}]}>
-      <ScreenHeader
-        title={t('markets') || 'Markets'}
-      />
+      <ScreenHeader title={t('markets') || 'Markets'} />
 
       <View style={{paddingHorizontal: appTheme.ui.spacing * 2}}>
         <TextInput
