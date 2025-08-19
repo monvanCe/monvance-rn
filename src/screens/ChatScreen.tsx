@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, KeyboardAvoidingView, Platform} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {useChatScreen} from '../hooks/useChatScreen';
 import {ChatHeader} from '../components/Chat/ChatHeader';
 import {ChatMessagesList} from '../components/Chat/ChatMessagesList';
@@ -7,6 +7,7 @@ import {ChatInput} from '../components/Chat/ChatInput';
 import {UsernameSetupModal} from '../components/UsernameSetupModal';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {useTheme} from '../context/ThemeContext';
+import KeyboardAvoidingView from '../components/ui/KeyboarAvoidinView';
 
 interface ChatScreenProps {
   onNavigateToTab: () => void;
@@ -37,11 +38,7 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <KeyboardAvoidingView 
-        style={styles.container}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
-      >
+      <KeyboardAvoidingView style={{flex: 1}}>
         <ChatHeader onNavigateToTab={onNavigateToTab} />
         <ChatMessagesList
           scrollViewRef={scrollViewRef}
