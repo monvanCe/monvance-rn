@@ -3,12 +3,28 @@ import {useAppSelector} from '../store/store';
 import {internalService} from '../service/internalServices';
 import {eventBus} from '../middleware/eventMiddleware';
 import {Platform} from 'react-native';
-import {getSubscriptions, requestPurchase} from 'react-native-iap';
+import {
+  getSubscriptions,
+  initConnection,
+  requestSubscription,
+} from 'react-native-iap';
+import {
+  deriveBasePlanId,
+  fixKnownSkuMismatches,
+  formatNumberWithLocale,
+  normalizeSku,
+  parseFormattedPrice,
+  computeOriginalPrice,
+} from '../utils/paywall';
 
 interface ISubscriptionWithPrice extends ISubscription {
   originalPrice?: number;
   discountedPrice?: number;
   currency?: string;
+  formattedDiscountedPrice?: string;
+  formattedOriginalPrice?: string;
+  offerToken?: string;
+  resolvedProductId?: string;
 }
 
 export const usePaywall = () => {
@@ -45,69 +61,111 @@ export const usePaywall = () => {
     try {
       setIsPriceLoading(true);
       if (Platform.OS === 'android') {
+        // Ensure IAP connection before querying Play Store
+        try {
+          await initConnection();
+        } catch (e) {
+          console.warn('IAP initConnection failed before price fetch', e);
+        }
         const skus = subscriptions.map(sub => sub.sku);
-        console.log('Fetching prices for SKUs:', skus);
-
         const playStoreSubs = await getSubscriptions({
           skus: skus,
         });
 
-        console.log('Play Store subscriptions received:', playStoreSubs);
+        const normalized = normalizeSku;
+        const fixKnownMismatches = fixKnownSkuMismatches;
 
-        const enrichedSubscriptions = subscriptions.map(subscription => {
-          const playStoreSub = playStoreSubs.find(
-            ps => ps.productId === subscription.sku,
-          );
-          console.log(
-            `Processing subscription ${subscription.sku}:`,
-            playStoreSub,
-          );
+        const enrichedSubscriptions: ISubscriptionWithPrice[] =
+          subscriptions.map(subscription => {
+            const expectedBasePlan = deriveBasePlanId(subscription);
 
-          // Try to extract price from various possible properties
-          let priceString = '';
-          if (playStoreSub) {
-            // Check different possible price properties
-            priceString =
-              (playStoreSub as any).price ||
-              (playStoreSub as any).localizedPrice ||
-              (playStoreSub as any).formattedPrice ||
-              '';
-            console.log(`Price string for ${subscription.sku}:`, priceString);
-          }
-
-          if (priceString) {
-            // Extract price and currency from price string (e.g., "₺10.99" -> price: 10.99, currency: "₺")
-            const priceMatch = priceString.match(/[^\d,.]*([\d,]+[.,]\d{2})/);
-            const currencyMatch = priceString.match(/^[^\d]*/);
-
-            const discountedPrice = priceMatch
-              ? parseFloat(priceMatch[1].replace(',', '.'))
-              : 0;
-            const currency = currencyMatch ? currencyMatch[0].trim() : '';
-
-            console.log(
-              `Extracted price: ${discountedPrice}, currency: ${currency}`,
+            // try exact, then known mismatch, then normalized fuzzy match
+            let playStoreSub = playStoreSubs.find(
+              ps => ps.productId === subscription.sku,
             );
-
-            // Calculate original price based on discount percentage
-            let originalPrice = discountedPrice;
-            if (subscription.discount > 0) {
-              originalPrice =
-                discountedPrice / (1 - subscription.discount / 100);
+            if (!playStoreSub) {
+              const alt = fixKnownMismatches(subscription.sku);
+              playStoreSub = playStoreSubs.find(ps => ps.productId === alt);
             }
+            if (!playStoreSub) {
+              const target = normalized(subscription.sku);
+              playStoreSub = playStoreSubs.find(
+                ps => normalized(ps.productId) === target,
+              );
+            }
+
+            if (!playStoreSub) {
+              return subscription;
+            }
+
+            // Select offer: prefer matching basePlanId, else first
+            const offer =
+              (playStoreSub as any).subscriptionOfferDetails?.find(
+                (o: any) => o.basePlanId === expectedBasePlan,
+              ) || (playStoreSub as any).subscriptionOfferDetails?.[0];
+
+            const pricingPhase = offer?.pricingPhases?.pricingPhaseList?.[0];
+            const formattedPrice: string | undefined =
+              pricingPhase?.formattedPrice;
+            const priceMicros: string | undefined =
+              pricingPhase?.priceAmountMicros;
+            const priceCurrencyCode: string | undefined =
+              pricingPhase?.priceCurrencyCode;
+            const offerToken: string | undefined = offer?.offerToken;
+
+            let discountedPrice = 0;
+            let currencySymbol = '';
+            if (formattedPrice) {
+              const parsed = parseFormattedPrice(formattedPrice);
+              currencySymbol = parsed.symbol;
+              discountedPrice = parsed.amount;
+            } else if (priceMicros) {
+              // Fallback compute from micros
+              const micros = Number(priceMicros);
+              discountedPrice = Math.round((micros / 1_000_000) * 100) / 100;
+              currencySymbol = priceCurrencyCode || '';
+            }
+
+            if (!discountedPrice) {
+              return {
+                ...subscription,
+                resolvedProductId: playStoreSub.productId,
+                offerToken,
+              };
+            }
+
+            let originalPrice = computeOriginalPrice(
+              discountedPrice,
+              subscription.discount,
+            );
+            originalPrice = Math.round(originalPrice * 100) / 100;
+
+            // Build formatted strings respecting locale from Play formattedPrice
+            const usesComma = formattedPrice
+              ? formattedPrice.includes(',')
+              : false;
+            const formatNumber = (n: number) =>
+              formatNumberWithLocale(n, usesComma);
+
+            const formattedDiscountedPrice = formattedPrice
+              ? formattedPrice
+              : `${currencySymbol}${formatNumber(discountedPrice)}`;
+            const formattedOriginalPrice = `${currencySymbol}${formatNumber(
+              originalPrice,
+            )}`;
 
             return {
               ...subscription,
               discountedPrice,
-              originalPrice: Math.round(originalPrice * 100) / 100, // Round to 2 decimal places
-              currency,
+              originalPrice,
+              currency: currencySymbol,
+              formattedDiscountedPrice,
+              formattedOriginalPrice,
+              offerToken,
+              resolvedProductId: playStoreSub.productId,
             };
-          }
+          });
 
-          return subscription;
-        });
-
-        console.log('Enriched subscriptions:', enrichedSubscriptions);
         setSubscriptionsWithPrices(enrichedSubscriptions);
       } else {
         // For iOS, we'll use the same logic but with App Store prices
@@ -133,27 +191,70 @@ export const usePaywall = () => {
       eventBus.emit('paymentStarted', {subscription});
 
       if (Platform.OS === 'android') {
-        // For Android, we need to get the subscription details first
-        const subs = await getSubscriptions({
-          skus: [subscription.sku],
+        const enriched = subscriptionsWithPrices.find(
+          s => s._id === subscription._id,
+        );
+        const skuForPurchase = enriched?.resolvedProductId || subscription.sku;
+        const offerToken = enriched?.offerToken;
+
+        await initConnection();
+
+        const res: any = await requestSubscription({
+          sku: skuForPurchase,
+          subscriptionOffers: offerToken
+            ? [{sku: skuForPurchase, offerToken}]
+            : undefined,
         });
 
-        if (subs.length > 0) {
-          const purchase = await requestPurchase({
-            sku: subscription.sku,
-            andDangerouslyFinishTransactionAutomaticallyIOS: false,
-          });
+        const purchases: any[] = Array.isArray(res) ? res : [res];
+        const matched =
+          purchases.find(
+            p =>
+              p?.productId === skuForPurchase ||
+              p?.productIds?.includes?.(skuForPurchase),
+          ) || purchases[0];
 
-          // For now, we'll simulate the payment success
-          // In a real implementation, you'd handle the purchase verification
-          const mockPaymentData: IAndroidPaymentRequest = {
-            packageName: 'com.cekolabs.vens',
-            productId: subscription.sku,
-            purchaseToken: 'mock-purchase-token',
-          };
-
-          await internalService.postPayment(mockPaymentData);
+        if (!matched) {
+          throw new Error('Satın alma bilgisi bulunamadı');
         }
+
+        const safeParse = (txt?: string) => {
+          try {
+            return txt ? JSON.parse(txt) : undefined;
+          } catch {
+            return undefined;
+          }
+        };
+
+        const receipt = safeParse(matched.transactionReceipt);
+        const dataAndroid = safeParse(matched.dataAndroid);
+
+        const packageNameFromReceipt = receipt?.packageName;
+        const packageNameFromData = dataAndroid?.packageName;
+        const packageName =
+          matched.packageNameAndroid ||
+          matched.packageName ||
+          packageNameFromReceipt ||
+          packageNameFromData ||
+          'com.cekolabs.vens';
+
+        const productId = matched.productId || skuForPurchase;
+        const purchaseToken =
+          matched.purchaseToken ||
+          receipt?.purchaseToken ||
+          dataAndroid?.purchaseToken;
+
+        const paymentRequest: IAndroidPaymentRequest = {
+          packageName,
+          productId,
+          purchaseToken,
+        };
+
+        if (!paymentRequest.purchaseToken) {
+          throw new Error('Satın alma başarısız: purchaseToken bulunamadı');
+        }
+
+        await internalService.postPayment(paymentRequest);
       } else {
         // For iOS, we'd handle receipt data
         const mockPaymentData: IIOSPaymentRequest = {

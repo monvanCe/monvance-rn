@@ -12,10 +12,19 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {usePaywall} from '../hooks/usePaywall';
+import {t} from '../localization';
+import useLocalization from '../hooks/useLocalization';
+import {useAppSelector} from '../store/store';
+import {useNavigation} from '@react-navigation/native';
+import PriceTag from '../components/PriceTag';
+import {getPlanBadgeText} from '../utils/paywall';
 
 const PaywallScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
+  useLocalization();
+  const navigation = useNavigation<any>();
+  const user = useAppSelector(state => state.auth);
 
   const {
     subscriptions,
@@ -51,78 +60,70 @@ const PaywallScreen = () => {
   const renderPlanCard = (subscription: ISubscription) => {
     const isActive = subscription._id === activePlan;
 
-    // Generate plan name based on interval
-    const getPlanName = (subscription: ISubscription) => {
-      if (subscription.interval === 1 && subscription.intervalDays === 7)
-        return 'WEEKLY';
-      if (subscription.interval === 1 && subscription.intervalDays === 30)
-        return 'MONTHLY';
-      if (subscription.interval === 3 && subscription.intervalDays === 30)
-        return '3 MONTHLY';
-      return 'PLAN';
-    };
+    const planBadge = getPlanBadgeText(subscription, t);
 
     // Generate price display with original and discounted prices
     const getPriceDisplay = (subscription: any) => {
-      // Check if we have price data
-      const hasPriceData =
-        subscription.discountedPrice && subscription.currency;
+      const hasFormatted = Boolean(subscription.formattedDiscountedPrice);
+      const hasNumeric =
+        typeof subscription.discountedPrice === 'number' &&
+        !Number.isNaN(subscription.discountedPrice);
+      const hasPriceData = hasFormatted || hasNumeric;
       const hasDiscount = subscription.discount > 0;
 
       if (hasPriceData && hasDiscount && subscription.originalPrice) {
-        // Show original price crossed out and discounted price
         return (
-          <View style={styles.priceContainer}>
-            <Text style={styles.originalPrice}>
-              {subscription.currency}
-              {subscription.originalPrice.toFixed(2)}
-            </Text>
-            <Text style={styles.discountedPrice}>
-              {subscription.currency}
-              {subscription.discountedPrice.toFixed(2)}
-            </Text>
-            <Text style={styles.yearlyPrice}>
-              {subscription.interval}{' '}
-              {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
-            </Text>
-          </View>
+          <PriceTag
+            originalPrice={
+              subscription.formattedOriginalPrice ||
+              `${
+                subscription.currency || ''
+              }${subscription.originalPrice.toFixed(2)}`
+            }
+            price={
+              subscription.formattedDiscountedPrice ||
+              `${
+                subscription.currency || ''
+              }${subscription.discountedPrice.toFixed(2)}`
+            }
+            periodText={`${subscription.interval} ${
+              subscription.intervalDays === 30 ? t('per_month') : t('per_week')
+            }`}
+          />
         );
       } else if (hasPriceData) {
-        // Show only the current price
         return (
-          <View style={styles.priceContainer}>
-            <Text style={styles.price}>
-              {subscription.currency}
-              {subscription.discountedPrice.toFixed(2)}
-            </Text>
-            <Text style={styles.yearlyPrice}>
-              {subscription.interval}{' '}
-              {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
-            </Text>
-          </View>
+          <PriceTag
+            price={
+              subscription.formattedDiscountedPrice ||
+              `${
+                subscription.currency || ''
+              }${subscription.discountedPrice.toFixed(2)}`
+            }
+            periodText={`${subscription.interval} ${
+              subscription.intervalDays === 30 ? t('per_month') : t('per_week')
+            }`}
+          />
         );
       } else if (hasDiscount) {
-        // Show discount percentage when price is not available
+        // Only show discount badge elsewhere; here still show duration when price not resolved
         return (
-          <View style={styles.priceContainer}>
-            <Text style={styles.price}>{subscription.discount}% İndirim</Text>
-            <Text style={styles.yearlyPrice}>
-              {subscription.interval}{' '}
-              {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
-            </Text>
-          </View>
+          <PriceTag
+            price={t('price_not_found')}
+            periodText={`${subscription.interval} ${
+              subscription.intervalDays === 30 ? t('per_month') : t('per_week')
+            }`}
+          />
         );
       }
 
-      // Fallback: show interval only
       return (
-        <View style={styles.priceContainer}>
-          <Text style={styles.price}>Fiyat bilgisi yok</Text>
-          <Text style={styles.yearlyPrice}>
-            {subscription.interval}{' '}
-            {subscription.intervalDays === 30 ? 'ay' : 'hafta'}
-          </Text>
-        </View>
+        <PriceTag
+          price={t('no_price_info')}
+          periodText={`${subscription.interval} ${
+            subscription.intervalDays === 30 ? t('per_month') : t('per_week')
+          }`}
+        />
       );
     };
 
@@ -153,24 +154,22 @@ const PaywallScreen = () => {
               )}
             </View>
 
-            {subscription.discount > 0 && (
-              <View style={styles.savingsNotification}>
-                <Text style={styles.savingsNotificationText}>
-                  {subscription.discount}% İndirim
-                </Text>
-              </View>
-            )}
+            <View style={styles.savingsNotification}>
+              <Text style={styles.savingsNotificationText}>
+                {subscription.discount > 0
+                  ? t('save_percent', {percent: subscription.discount})
+                  : t('no_discount')}
+              </Text>
+            </View>
 
             <View style={styles.planHeader}>
               <View style={styles.planBadge}>
-                <Text style={styles.planBadgeText}>
-                  {getPlanName(subscription)}
-                </Text>
+                <Text style={styles.planBadgeText}>{planBadge}</Text>
               </View>
               {isPriceLoading ? (
                 <View style={styles.priceLoadingIndicator}>
                   <Text style={styles.priceLoadingText}>
-                    Fiyat yükleniyor...
+                    {t('price_loading')}
                   </Text>
                 </View>
               ) : (
@@ -180,11 +179,11 @@ const PaywallScreen = () => {
 
             <Text style={styles.planDescription}>
               {subscription.interval === 1 && subscription.intervalDays === 7
-                ? 'Haftalık plan ile esnek abonelik'
+                ? t('weekly_desc')
                 : subscription.interval === 1 &&
                   subscription.intervalDays === 30
-                ? 'Aylık plan ile uygun fiyat'
-                : '3 aylık plan ile en iyi değer'}
+                ? t('monthly_desc')
+                : t('three_monthly_desc')}
             </Text>
           </View>
         </LinearGradient>
@@ -208,14 +207,20 @@ const PaywallScreen = () => {
             }),
           },
         ]}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}>
           <Icon name="chevron-left" size={40} color="#fff" />
-          <Text style={styles.backText}>Geri</Text>
+          <Text style={styles.backText}>{t('back')}</Text>
         </TouchableOpacity>
         <View style={styles.profileContainer}>
-          <Text style={styles.profileText}>monvanCe</Text>
+          <Text style={styles.profileText}>
+            {user?.username || t('unknown_user')}
+          </Text>
           <View style={styles.profileAvatar}>
-            <Text style={styles.profileInitial}>M</Text>
+            <Text style={styles.profileInitial}>
+              {(user?.username || 'U').charAt(0).toUpperCase()}
+            </Text>
           </View>
         </View>
       </Animated.View>
@@ -258,7 +263,7 @@ const PaywallScreen = () => {
               />
               <Text style={styles.appName}>Vens Signal</Text>
             </View>
-            <Text style={styles.heroTitle}>Yükseltilmiş planlar</Text>
+            <Text style={styles.heroTitle}>{t('upgraded_plans')}</Text>
           </View>
         </View>
 
@@ -266,7 +271,7 @@ const PaywallScreen = () => {
         {premiumAdvantages.length > 0 && (
           <View style={styles.advantagesSection}>
             <Text style={styles.advantagesSectionTitle}>
-              Premium Avantajlar
+              {t('premium_benefits')}
             </Text>
             <View style={styles.advantagesList}>
               {premiumAdvantages.map((advantage, index) => (
@@ -282,13 +287,13 @@ const PaywallScreen = () => {
         <View style={styles.pricingContainer}>
           {loading ? (
             <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>Paketler yükleniyor...</Text>
+              <Text style={styles.loadingText}>{t('packages_loading')}</Text>
             </View>
           ) : subscriptions.length > 0 ? (
             subscriptions.map(renderPlanCard)
           ) : (
             <View style={styles.noDataContainer}>
-              <Text style={styles.noDataText}>Paket bulunamadı</Text>
+              <Text style={styles.noDataText}>{t('no_packages')}</Text>
             </View>
           )}
         </View>
@@ -299,7 +304,7 @@ const PaywallScreen = () => {
             style={styles.restoreButton}
             onPress={handleRestorePurchases}>
             <Text style={styles.restoreButtonText}>
-              Satın alınanları geri yükle
+              {t('restore_purchases')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -332,10 +337,10 @@ const PaywallScreen = () => {
                 !selectedSubscription && styles.upgradeButtonTextDisabled,
               ]}>
               {loading
-                ? 'İşleniyor...'
+                ? t('processing')
                 : selectedSubscription
-                ? 'Şimdi yükselt'
-                : 'Paket seçin'}
+                ? t('upgrade_now')
+                : t('select_package')}
             </Text>
           </LinearGradient>
         </TouchableOpacity>
