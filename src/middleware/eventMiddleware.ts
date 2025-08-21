@@ -71,9 +71,8 @@ type eventType = {
   // Paywall events
   getPaywallSuccess: IPaywallResponse;
   paymentSuccess: IUser;
-  paymentStarted: {subscription: ISubscription};
-  paymentFailed: {error: string};
   subscriptionSelected: ISubscription;
+  restorePurchasesSuccess: IUser;
 };
 
 class EventManager<Events extends Record<string, any>> {

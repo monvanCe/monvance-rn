@@ -18,4 +18,5 @@ export const INTERNAL_ENDPOINTS = {
   GET_COIN_SIGNALS: '/signals/coin',
   GET_PAYWALL: '/payment/paywall',
   POST_PAYMENT: '/payment',
+  RESTORE_PURCHASES: '/payment/restore',
 };

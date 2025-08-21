@@ -242,14 +242,6 @@ export const useReduxEvents = () => {
       dispatch(setUser(user));
     });
 
-    eventBus.on('paymentStarted', () => {
-      dispatch(setSubscriptionLoading(true));
-    });
-
-    eventBus.on('paymentFailed', () => {
-      dispatch(setSubscriptionLoading(false));
-    });
-
     eventBus.on('subscriptionSelected', (subscription: ISubscription) => {
       dispatch(setSelectedSubscription(subscription));
     });

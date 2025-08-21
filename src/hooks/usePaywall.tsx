@@ -4,18 +4,12 @@ import {internalService} from '../service/internalServices';
 import {eventBus} from '../middleware/eventMiddleware';
 import {Platform} from 'react-native';
 import {
+  getPurchaseHistory,
   getSubscriptions,
   initConnection,
   requestSubscription,
 } from 'react-native-iap';
-import {
-  deriveBasePlanId,
-  fixKnownSkuMismatches,
-  formatNumberWithLocale,
-  normalizeSku,
-  parseFormattedPrice,
-  computeOriginalPrice,
-} from '../utils/paywall';
+import {computeOriginalPrice} from '../utils/paywall';
 
 interface ISubscriptionWithPrice extends ISubscription {
   originalPrice?: number;
@@ -61,120 +55,59 @@ export const usePaywall = () => {
     try {
       setIsPriceLoading(true);
       if (Platform.OS === 'android') {
-        // Ensure IAP connection before querying Play Store
-        try {
-          await initConnection();
-        } catch (e) {
-          console.warn('IAP initConnection failed before price fetch', e);
-        }
+        await initConnection();
+
         const skus = subscriptions.map(sub => sub.sku);
-        const playStoreSubs = await getSubscriptions({
-          skus: skus,
-        });
+        const playStoreSubs = await getSubscriptions({skus});
 
-        const normalized = normalizeSku;
-        const fixKnownMismatches = fixKnownSkuMismatches;
-
-        const enrichedSubscriptions: ISubscriptionWithPrice[] =
-          subscriptions.map(subscription => {
-            const expectedBasePlan = deriveBasePlanId(subscription);
-
-            // try exact, then known mismatch, then normalized fuzzy match
-            let playStoreSub = playStoreSubs.find(
+        const enriched: ISubscriptionWithPrice[] = subscriptions.map(
+          subscription => {
+            const playStoreSub = playStoreSubs.find(
               ps => ps.productId === subscription.sku,
             );
-            if (!playStoreSub) {
-              const alt = fixKnownMismatches(subscription.sku);
-              playStoreSub = playStoreSubs.find(ps => ps.productId === alt);
-            }
-            if (!playStoreSub) {
-              const target = normalized(subscription.sku);
-              playStoreSub = playStoreSubs.find(
-                ps => normalized(ps.productId) === target,
-              );
-            }
+            if (!playStoreSub) return subscription;
 
-            if (!playStoreSub) {
-              return subscription;
-            }
+            const offer = (playStoreSub as any).subscriptionOfferDetails?.[0];
+            const phase = offer?.pricingPhases?.pricingPhaseList?.[0];
+            if (!phase) return subscription;
 
-            // Select offer: prefer matching basePlanId, else first
-            const offer =
-              (playStoreSub as any).subscriptionOfferDetails?.find(
-                (o: any) => o.basePlanId === expectedBasePlan,
-              ) || (playStoreSub as any).subscriptionOfferDetails?.[0];
+            const priceMicros = Number(phase.priceAmountMicros || 0);
+            const discountedPrice =
+              Math.round((priceMicros / 1_000_000) * 100) / 100;
+            const originalPrice =
+              Math.round(
+                computeOriginalPrice(discountedPrice, subscription.discount) *
+                  100,
+              ) / 100;
 
-            const pricingPhase = offer?.pricingPhases?.pricingPhaseList?.[0];
-            const formattedPrice: string | undefined =
-              pricingPhase?.formattedPrice;
-            const priceMicros: string | undefined =
-              pricingPhase?.priceAmountMicros;
-            const priceCurrencyCode: string | undefined =
-              pricingPhase?.priceCurrencyCode;
+            const currencyCode: string | undefined = phase.priceCurrencyCode;
+            const formattedDiscountedPrice: string | undefined =
+              phase.formattedPrice;
             const offerToken: string | undefined = offer?.offerToken;
 
-            let discountedPrice = 0;
-            let currencySymbol = '';
-            if (formattedPrice) {
-              const parsed = parseFormattedPrice(formattedPrice);
-              currencySymbol = parsed.symbol;
-              discountedPrice = parsed.amount;
-            } else if (priceMicros) {
-              // Fallback compute from micros
-              const micros = Number(priceMicros);
-              discountedPrice = Math.round((micros / 1_000_000) * 100) / 100;
-              currencySymbol = priceCurrencyCode || '';
-            }
-
-            if (!discountedPrice) {
-              return {
-                ...subscription,
-                resolvedProductId: playStoreSub.productId,
-                offerToken,
-              };
-            }
-
-            let originalPrice = computeOriginalPrice(
-              discountedPrice,
-              subscription.discount,
-            );
-            originalPrice = Math.round(originalPrice * 100) / 100;
-
-            // Build formatted strings respecting locale from Play formattedPrice
-            const usesComma = formattedPrice
-              ? formattedPrice.includes(',')
-              : false;
-            const formatNumber = (n: number) =>
-              formatNumberWithLocale(n, usesComma);
-
-            const formattedDiscountedPrice = formattedPrice
-              ? formattedPrice
-              : `${currencySymbol}${formatNumber(discountedPrice)}`;
-            const formattedOriginalPrice = `${currencySymbol}${formatNumber(
-              originalPrice,
-            )}`;
+            const formattedOriginalPrice = `${
+              currencyCode || ''
+            } ${originalPrice.toFixed(2)}`.trim();
 
             return {
               ...subscription,
               discountedPrice,
               originalPrice,
-              currency: currencySymbol,
+              currency: currencyCode,
               formattedDiscountedPrice,
               formattedOriginalPrice,
               offerToken,
               resolvedProductId: playStoreSub.productId,
             };
-          });
+          },
+        );
 
-        setSubscriptionsWithPrices(enrichedSubscriptions);
+        setSubscriptionsWithPrices(enriched);
       } else {
-        // For iOS, we'll use the same logic but with App Store prices
         setSubscriptionsWithPrices(subscriptions);
       }
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      console.error('Error fetching subscription prices:', errorMessage);
+      console.error('Error fetching subscription prices:', error);
       setSubscriptionsWithPrices(subscriptions);
     } finally {
       setIsPriceLoading(false);
@@ -187,62 +120,25 @@ export const usePaywall = () => {
 
   const handlePurchase = async (subscription: ISubscription) => {
     try {
-      setIsLoading(true);
-      eventBus.emit('paymentStarted', {subscription});
-
       if (Platform.OS === 'android') {
-        const enriched = subscriptionsWithPrices.find(
-          s => s._id === subscription._id,
-        );
-        const skuForPurchase = enriched?.resolvedProductId || subscription.sku;
-        const offerToken = enriched?.offerToken;
-
         await initConnection();
 
-        const res: any = await requestSubscription({
-          sku: skuForPurchase,
-          subscriptionOffers: offerToken
-            ? [{sku: skuForPurchase, offerToken}]
-            : undefined,
-        });
-
-        const purchases: any[] = Array.isArray(res) ? res : [res];
-        const matched =
-          purchases.find(
-            p =>
-              p?.productId === skuForPurchase ||
-              p?.productIds?.includes?.(skuForPurchase),
-          ) || purchases[0];
-
-        if (!matched) {
-          throw new Error('Satın alma bilgisi bulunamadı');
+        if (!subscription.offerToken) {
+          throw new Error('Offer token not found');
         }
 
-        const safeParse = (txt?: string) => {
-          try {
-            return txt ? JSON.parse(txt) : undefined;
-          } catch {
-            return undefined;
-          }
-        };
+        const res: any = await requestSubscription({
+          sku: subscription.sku,
+          subscriptionOffers: [
+            {sku: subscription.sku, offerToken: subscription.offerToken},
+          ],
+        });
 
-        const receipt = safeParse(matched.transactionReceipt);
-        const dataAndroid = safeParse(matched.dataAndroid);
+        const receipt = res[0];
 
-        const packageNameFromReceipt = receipt?.packageName;
-        const packageNameFromData = dataAndroid?.packageName;
-        const packageName =
-          matched.packageNameAndroid ||
-          matched.packageName ||
-          packageNameFromReceipt ||
-          packageNameFromData ||
-          'com.cekolabs.vens';
-
-        const productId = matched.productId || skuForPurchase;
-        const purchaseToken =
-          matched.purchaseToken ||
-          receipt?.purchaseToken ||
-          dataAndroid?.purchaseToken;
+        const packageName = receipt.packageNameAndroid;
+        const purchaseToken = receipt.purchaseToken;
+        const productId = receipt.productId;
 
         const paymentRequest: IAndroidPaymentRequest = {
           packageName,
@@ -250,36 +146,23 @@ export const usePaywall = () => {
           purchaseToken,
         };
 
-        if (!paymentRequest.purchaseToken) {
-          throw new Error('Satın alma başarısız: purchaseToken bulunamadı');
-        }
-
         await internalService.postPayment(paymentRequest);
       } else {
-        // For iOS, we'd handle receipt data
-        const mockPaymentData: IIOSPaymentRequest = {
-          receiptData: 'mock-receipt-data',
-        };
-
-        await internalService.postPayment(mockPaymentData);
+        //TODO: iOS için işlem yapılacak
       }
     } catch (error: any) {
-      console.error('Payment error:', error);
-      eventBus.emit('paymentFailed', {error: error.message});
-    } finally {
-      setIsLoading(false);
+      eventBus.emit('error', error.message as string);
     }
   };
 
   const handleRestorePurchases = async () => {
     try {
-      setIsLoading(true);
-      // Implement restore purchases logic here
-      console.log('Restoring purchases...');
-    } catch (error) {
-      console.error('Error restoring purchases:', error);
-    } finally {
-      setIsLoading(false);
+      const purchases = await getPurchaseHistory();
+      const token = purchases[0].purchaseToken;
+      if (!token) throw new Error('Token not found');
+      await internalService.restorePurchases({token});
+    } catch (error: any) {
+      eventBus.emit('error', error.message as string);
     }
   };
 

@@ -231,6 +231,7 @@ interface ISubscription {
   limits: ISubscriptionLimits;
   isTrial: boolean;
   trialDays: number;
+  offerToken?: string;
 }
 
 interface ISubscriptionState {

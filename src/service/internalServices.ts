@@ -211,4 +211,14 @@ export const internalService = {
     eventBus.emit('paymentSuccess', response);
     return response;
   },
+
+  restorePurchases: async ({token}: {token: string}): Promise<IUser> => {
+    const response = await api.post<IUser>(
+      INTERNAL_ENDPOINTS.RESTORE_PURCHASES,
+      'internal',
+      {token},
+    );
+    eventBus.emit('restorePurchasesSuccess', response);
+    return response;
+  },
 };
