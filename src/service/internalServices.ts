@@ -212,11 +212,19 @@ export const internalService = {
     return response;
   },
 
-  restorePurchases: async ({token}: {token: string}): Promise<IUser> => {
+  restorePurchases: async ({
+    packageName,
+    productId,
+    purchaseToken,
+  }: {
+    packageName: string;
+    productId: string;
+    purchaseToken: string;
+  }): Promise<IUser> => {
     const response = await api.post<IUser>(
       INTERNAL_ENDPOINTS.RESTORE_PURCHASES,
       'internal',
-      {token},
+      {packageName, productId, purchaseToken},
     );
     eventBus.emit('restorePurchasesSuccess', response);
     return response;

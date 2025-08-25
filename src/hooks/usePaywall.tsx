@@ -158,9 +158,17 @@ export const usePaywall = () => {
   const handleRestorePurchases = async () => {
     try {
       const purchases = await getPurchaseHistory();
-      const token = purchases[0].purchaseToken;
-      if (!token) throw new Error('Token not found');
-      await internalService.restorePurchases({token});
+      console.log('purchases', purchases);
+      const purchaseToken = purchases[0].purchaseToken;
+      const packageName = 'com.cekolabs.vens';
+      const productId = purchases[0].productId;
+
+      if (!purchaseToken) throw new Error('Token not found');
+      await internalService.restorePurchases({
+        packageName,
+        productId,
+        purchaseToken,
+      });
     } catch (error: any) {
       eventBus.emit('error', error.message as string);
     }
