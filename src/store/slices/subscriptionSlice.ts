@@ -6,6 +6,9 @@ interface ISubscriptionState {
   selectedSubscription: ISubscription | null;
   premiumAdvantages: string[];
   paywallData: IPaywallResponse | null;
+  promoPackages: ISubscription[];
+  trialTime?: string;
+  hasVisitedPaywall: boolean;
 }
 
 const initialState: ISubscriptionState = {
@@ -14,6 +17,9 @@ const initialState: ISubscriptionState = {
   selectedSubscription: null,
   premiumAdvantages: [],
   paywallData: null,
+  promoPackages: [],
+  trialTime: undefined,
+  hasVisitedPaywall: false,
 };
 
 const subscriptionSlice = createSlice({
@@ -39,12 +45,25 @@ const subscriptionSlice = createSlice({
       state.paywallData = action.payload;
       state.subscriptions = action.payload.package;
       state.premiumAdvantages = action.payload.premiumAdvantages;
+      if ('promoPackage' in action.payload && 'trialTime' in action.payload) {
+        state.promoPackages = action.payload.promoPackage || [];
+        state.trialTime = action.payload.trialTime;
+      } else {
+        state.promoPackages = [];
+        state.trialTime = undefined;
+      }
+    },
+    setHasVisitedPaywall: (state, action: PayloadAction<boolean>) => {
+      state.hasVisitedPaywall = action.payload;
     },
     clearSubscriptionData: state => {
       state.subscriptions = [];
       state.premiumAdvantages = [];
       state.selectedSubscription = null;
       state.paywallData = null;
+      state.promoPackages = [];
+      state.trialTime = undefined;
+      state.hasVisitedPaywall = false;
     },
   },
 });
@@ -55,6 +74,7 @@ export const {
   setSelectedSubscription,
   setLoading,
   setPaywallData,
+  setHasVisitedPaywall,
   clearSubscriptionData,
 } = subscriptionSlice.actions;
 

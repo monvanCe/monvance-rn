@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -20,12 +20,13 @@ import PriceTag from '../components/PriceTag';
 import {getPlanBadgeText} from '../utils/paywall';
 import {eventBus} from '../middleware/eventMiddleware';
 
-const PaywallScreen = () => {
+const PromoScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
   const scrollY = useRef(new Animated.Value(0)).current;
   useLocalization();
   const navigation = useNavigation<any>();
   const user = useAppSelector(state => state.auth);
+  const {trialTime} = useAppSelector(state => state.subscription);
 
   const {
     subscriptions,
@@ -36,7 +37,106 @@ const PaywallScreen = () => {
     handlePlanSelection,
     handlePurchase,
     handleRestorePurchases,
-  } = usePaywall();
+  } = usePaywall({usePromo: true});
+
+  // Countdown for trial time
+  const [remainingText, setRemainingText] = useState('');
+  useEffect(() => {
+    const target = trialTime ? new Date(trialTime).getTime() : Date.now();
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+      const hrs = Math.floor(diff / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      setRemainingText(`${hrs}h ${mins}m ${secs}s`);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [trialTime]);
+
+  // Extra hero sparkles
+  const sparkles = useMemo(
+    () =>
+      [...Array(8)].map(() => ({
+        x: Math.random() * 220 + 40,
+        delay: Math.floor(Math.random() * 800),
+        translateY: new Animated.Value(0),
+        opacity: new Animated.Value(0),
+        scale: new Animated.Value(0.6),
+      })),
+    [],
+  );
+
+  useEffect(() => {
+    const loops = sparkles.map(({translateY, opacity, scale, delay}) =>
+      Animated.loop(
+        Animated.sequence([
+          Animated.delay(delay),
+          Animated.parallel([
+            Animated.timing(translateY, {
+              toValue: -24,
+              duration: 1600,
+              useNativeDriver: true,
+            }),
+            Animated.sequence([
+              Animated.timing(opacity, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+              }),
+              Animated.timing(opacity, {
+                toValue: 0,
+                duration: 1300,
+                useNativeDriver: true,
+              }),
+            ]),
+            Animated.sequence([
+              Animated.timing(scale, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+              }),
+              Animated.timing(scale, {
+                toValue: 0.6,
+                duration: 1300,
+                useNativeDriver: true,
+              }),
+            ]),
+          ]),
+          Animated.timing(translateY, {
+            toValue: 0,
+            duration: 0,
+            useNativeDriver: true,
+          }),
+        ]),
+      ),
+    );
+    loops.forEach(l => l.start());
+    return () => loops.forEach(l => l.stop());
+  }, [sparkles]);
+
+  // Pulsing highlight for selected plan
+  const pulse = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          toValue: 1,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulse, {
+          toValue: 0,
+          duration: 1200,
+          useNativeDriver: true,
+        }),
+      ]),
+    ).start();
+  }, [pulse]);
+  const pulseOpacity = pulse.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.2, 0.6],
+  });
 
   useEffect(() => {
     eventBus.emit('paywallOpened', null);
@@ -68,16 +168,14 @@ const PaywallScreen = () => {
   const handleUpgrade = async () => {
     if (selectedSubscription) {
       await handlePurchase(selectedSubscription);
-      // On success, paymentSuccess will update user; screen will be closed by listener in navigation hook
+      // Close will be handled by event listener
     }
   };
 
   const renderPlanCard = (subscription: ISubscription) => {
     const isActive = subscription._id === activePlan;
-
     const planBadge = getPlanBadgeText(subscription, t);
 
-    // Generate price display with original and discounted prices
     const getPriceDisplay = (subscription: any) => {
       const hasFormatted = Boolean(subscription.formattedDiscountedPrice);
       const hasNumeric =
@@ -120,16 +218,6 @@ const PaywallScreen = () => {
             }`}
           />
         );
-      } else if (hasDiscount) {
-        // Only show discount badge elsewhere; here still show duration when price not resolved
-        return (
-          <PriceTag
-            price={t('price_not_found')}
-            periodText={`${subscription.interval} ${
-              subscription.intervalDays === 30 ? t('per_month') : t('per_week')
-            }`}
-          />
-        );
       }
 
       return (
@@ -147,10 +235,17 @@ const PaywallScreen = () => {
         key={subscription._id}
         style={styles.pricingCard}
         onPress={() => handlePlanPress(subscription._id)}>
+        {/* Pulsing highlight for selected */}
+        {isActive && (
+          <Animated.View
+            pointerEvents="none"
+            style={[styles.pulseOverlay, {opacity: pulseOpacity}]}
+          />
+        )}
         <LinearGradient
           colors={
             isActive
-              ? ['#E74C3C', '#F39C12', '#E67E22', '#D35400', '#C0392B']
+              ? ['#FFF59D', '#FFE082', '#FFCA28', '#FFC107', '#FFB300']
               : ['#999', '#666', '#333', '#111', '#333', '#666', '#999']
           }
           start={{x: 0, y: 0}}
@@ -217,7 +312,7 @@ const PaywallScreen = () => {
           {
             backgroundColor: scrollY.interpolate({
               inputRange: [0, 50],
-              outputRange: ['rgba(0,0,0,0)', 'rgba(0,0,0,0.5)'],
+              outputRange: ['rgba(0,0,0,0)', 'rgba(0,0,0,0.6)'],
               extrapolate: 'clamp',
             }),
           },
@@ -266,6 +361,20 @@ const PaywallScreen = () => {
               },
             ]}
           />
+          {/* Sparkles layer */}
+          <View style={styles.sparklesLayer} pointerEvents="none">
+            {sparkles.map((s, i) => (
+              <Animated.View
+                key={i}
+                style={[
+                  styles.sparkle,
+                  {left: s.x},
+                  {transform: [{translateY: s.translateY}, {scale: s.scale}]},
+                  {opacity: s.opacity},
+                ]}
+              />
+            ))}
+          </View>
         </View>
 
         {/* Hero Section */}
@@ -279,6 +388,15 @@ const PaywallScreen = () => {
               <Text style={styles.appName}>Vens Signal</Text>
             </View>
             <Text style={styles.heroTitle}>{t('upgraded_plans')}</Text>
+            <View style={styles.countdownBadge}>
+              <LinearGradient
+                colors={['#FFEA00', '#FFC400', '#FF9100']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                style={styles.countdownGradient}>
+                <Text style={styles.countdownText}>{remainingText}</Text>
+              </LinearGradient>
+            </View>
           </View>
         </View>
 
@@ -340,7 +458,7 @@ const PaywallScreen = () => {
           <LinearGradient
             colors={
               selectedSubscription
-                ? ['#E74C3C', '#F39C12', '#E67E22', '#D35400', '#C0392B']
+                ? ['#FFF59D', '#FFE082', '#FFCA28', '#FFC107', '#FFB300']
                 : ['#666', '#555', '#444']
             }
             start={{x: 0, y: 0}}
@@ -438,6 +556,20 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  sparklesLayer: {
+    position: 'absolute',
+    bottom: '40%',
+    left: 0,
+    right: 0,
+    height: 80,
+  },
+  sparkle: {
+    position: 'absolute',
+    width: 5,
+    height: 5,
+    borderRadius: 2.5,
+    backgroundColor: '#FFF59D',
+  },
   heroSection: {
     height: 300,
     position: 'relative',
@@ -468,7 +600,22 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 36,
     fontWeight: 'bold',
-    marginBottom: 0,
+    marginBottom: 8,
+  },
+  countdownBadge: {
+    alignSelf: 'flex-start',
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  countdownGradient: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  countdownText: {
+    color: '#000',
+    fontWeight: '800',
+    fontSize: 12,
   },
   pricingContainer: {
     paddingHorizontal: 20,
@@ -486,6 +633,16 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 20,
     position: 'relative',
+  },
+  pulseOverlay: {
+    position: 'absolute',
+    top: -4,
+    left: -4,
+    right: -4,
+    bottom: -4,
+    backgroundColor: 'rgba(255, 234, 0, 0.25)',
+    borderRadius: 22,
+    zIndex: 1,
   },
   checkIcon: {
     position: 'absolute',
@@ -544,32 +701,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-  priceContainer: {
-    alignItems: 'flex-end',
-    flexDirection: 'column',
-  },
-  price: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  originalPrice: {
-    color: '#999',
-    fontSize: 14,
-    textDecorationLine: 'line-through',
-    marginBottom: 2,
-  },
-  discountedPrice: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  yearlyPrice: {
-    color: '#999',
-    fontSize: 16,
-    fontWeight: '400',
-  },
   planDescription: {
     color: '#ccc',
     fontSize: 14,
@@ -600,12 +731,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   upgradeButtonText: {
-    color: '#fff',
+    color: '#000',
     fontSize: 18,
     fontWeight: 'bold',
   },
   upgradeButtonTextDisabled: {
-    color: '#999',
+    color: '#333',
   },
   restoreContainer: {
     paddingHorizontal: 20,
@@ -640,9 +771,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 15,
   },
-  advantagesList: {
-    // No specific styles for the list container
-  },
+  advantagesList: {},
   advantageItem: {
     paddingVertical: 8,
     borderBottomWidth: 1,
@@ -689,4 +818,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaywallScreen;
+export default PromoScreen;

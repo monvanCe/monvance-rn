@@ -21,6 +21,7 @@ interface ScreenHeaderProps {
   actions?: HeaderAction[];
   backgroundColor?: string;
   showChat?: boolean; // Still allow disabling chat if needed
+  rightExtra?: React.ReactNode;
 }
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
@@ -29,10 +30,11 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   actions = [],
   backgroundColor,
   showChat = true, // Default to true - show chat everywhere
+  rightExtra,
 }) => {
   const {theme} = useTheme();
   const styles = style(theme);
-  
+
   // Get chat state from Redux to check for new messages
   const chatState = useAppSelector(state => state.chat);
   const hasNewMessages = chatState?.hasNewMessages || false;
@@ -44,9 +46,10 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   };
 
   const renderAction = (action: HeaderAction, index: number) => {
-    const IconComponent = action.iconLibrary === 'MaterialCommunityIcons' 
-      ? require('react-native-vector-icons/MaterialCommunityIcons').default 
-      : Icon;
+    const IconComponent =
+      action.iconLibrary === 'MaterialCommunityIcons'
+        ? require('react-native-vector-icons/MaterialCommunityIcons').default
+        : Icon;
 
     return (
       <TouchableOpacity
@@ -63,12 +66,10 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   };
 
   return (
-    <View style={[
-      styles.container,
-      backgroundColor && {backgroundColor}
-    ]}>
+    <View style={[styles.container, backgroundColor && {backgroundColor}]}>
       <Text style={styles.headerTitle}>{title}</Text>
       <View style={styles.rightContainer}>
+        {rightExtra}
         {actions.map(renderAction)}
         {showNotification && <NotificationIcon />}
         {showChat && (
@@ -136,4 +137,4 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
   });
 
-export default ScreenHeader; 
+export default ScreenHeader;

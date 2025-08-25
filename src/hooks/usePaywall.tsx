@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {useAppSelector} from '../store/store';
 import {internalService} from '../service/internalServices';
 import {eventBus} from '../middleware/eventMiddleware';
@@ -21,24 +21,35 @@ interface ISubscriptionWithPrice extends ISubscription {
   resolvedProductId?: string;
 }
 
-export const usePaywall = () => {
-  const {subscriptions, premiumAdvantages, loading, selectedSubscription} =
-    useAppSelector(state => state.subscription);
+export const usePaywall = (opts?: {usePromo?: boolean}) => {
+  const {usePromo} = opts || {};
+  const {
+    subscriptions,
+    premiumAdvantages,
+    loading,
+    selectedSubscription,
+    promoPackages,
+  } = useAppSelector(state => state.subscription);
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptionsWithPrices, setSubscriptionsWithPrices] = useState<
     ISubscriptionWithPrice[]
   >([]);
   const [isPriceLoading, setIsPriceLoading] = useState(false);
 
+  const sourceSubscriptions = useMemo(
+    () => (usePromo ? promoPackages : subscriptions),
+    [usePromo, promoPackages, subscriptions],
+  );
+
   useEffect(() => {
     fetchPaywallData();
   }, []);
 
   useEffect(() => {
-    if (subscriptions.length > 0) {
+    if (sourceSubscriptions.length > 0) {
       fetchSubscriptionPrices();
     }
-  }, [subscriptions]);
+  }, [sourceSubscriptions]);
 
   const fetchPaywallData = async () => {
     try {
@@ -57,10 +68,10 @@ export const usePaywall = () => {
       if (Platform.OS === 'android') {
         await initConnection();
 
-        const skus = subscriptions.map(sub => sub.sku);
+        const skus = sourceSubscriptions.map(sub => sub.sku);
         const playStoreSubs = await getSubscriptions({skus});
 
-        const enriched: ISubscriptionWithPrice[] = subscriptions.map(
+        const enriched: ISubscriptionWithPrice[] = sourceSubscriptions.map(
           subscription => {
             const playStoreSub = playStoreSubs.find(
               ps => ps.productId === subscription.sku,
@@ -104,11 +115,11 @@ export const usePaywall = () => {
 
         setSubscriptionsWithPrices(enriched);
       } else {
-        setSubscriptionsWithPrices(subscriptions);
+        setSubscriptionsWithPrices(sourceSubscriptions);
       }
     } catch (error: unknown) {
       console.error('Error fetching subscription prices:', error);
-      setSubscriptionsWithPrices(subscriptions);
+      setSubscriptionsWithPrices(sourceSubscriptions);
     } finally {
       setIsPriceLoading(false);
     }

@@ -16,6 +16,7 @@ import {Dropdown} from '../components/ui/Dropdown';
 import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
 import ScreenHeader, {HeaderAction} from '../components/ui/ScreenHeader';
+import PromoButton from '../components/ui/PromoButton';
 import WebView from '../components/ui/WebView';
 import {useNavigation} from '@react-navigation/native';
 
@@ -30,6 +31,9 @@ const ProfileScreen = () => {
   const {theme} = useTheme();
   const styles = style(theme);
   const user = useAppSelector(state => state.auth);
+  const {trialTime, hasVisitedPaywall} = useAppSelector(
+    state => state.subscription,
+  );
   const appLanguage = useAppSelector(state => state.appConfig.appLanguage);
   const avatar = user.avatar || PLACEHOLDER;
   const username = user.username || 'User';
@@ -97,53 +101,62 @@ const ProfileScreen = () => {
     );
   }
 
+  const showPromo =
+    Boolean(trialTime) &&
+    hasVisitedPaywall &&
+    !user?.isPremium &&
+    new Date(trialTime || 0).getTime() > Date.now();
+
   return (
     <View style={styles.container}>
-      <ScreenHeader 
-        title={t('settings')} 
+      <ScreenHeader
+        title={t('settings')}
         actions={headerActions}
+        rightExtra={
+          showPromo ? <PromoButton trialTime={trialTime as string} /> : null
+        }
       />
-      <ScrollView 
+      <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         <View style={styles.avatarContainer}>
           <Image source={{uri: avatar}} style={styles.avatar} />
           <Text style={styles.username}>{username}</Text>
         </View>
         <View style={styles.cardsWrapper}>
-        {/* Premium Card */}
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.ui.radius,
-            },
-          ]}>
-          <View style={styles.cardRow}>
-            <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
-              <Icon name="crown" size={24} color="#FFD700" />
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                {t('premium')}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={handleGoPremium}
-              style={styles.premiumButton}>
-              <Text style={styles.premiumButtonText}>{t('go_premium')}</Text>
-            </TouchableOpacity>
-          </View>
-          <Text
+          {/* Premium Card */}
+          <View
             style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginTop: 2},
+              styles.card,
+              {
+                backgroundColor: theme.colors.surface,
+                borderRadius: theme.ui.radius,
+              },
             ]}>
-            {t('unlock_all_features')}
-          </Text>
-        </View>
-{/*
+            <View style={styles.cardRow}>
+              <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
+                <Icon name="crown" size={24} color="#FFD700" />
+                <Text
+                  style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                  {t('premium')}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={handleGoPremium}
+                style={styles.premiumButton}>
+                <Text style={styles.premiumButtonText}>{t('go_premium')}</Text>
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={[
+                styles.cardSubtitle,
+                {color: theme.colors.onSurfaceVariant, marginTop: 2},
+              ]}>
+              {t('unlock_all_features')}
+            </Text>
+          </View>
+          {/*
         <View
           style={[
             styles.card,
@@ -172,127 +185,128 @@ const ProfileScreen = () => {
         </View>
                   */}
 
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.ui.radius,
-            },
-          ]}>
-          <Text
+          <View
             style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginBottom: 2},
+              styles.card,
+              {
+                backgroundColor: theme.colors.surface,
+                borderRadius: theme.ui.radius,
+              },
             ]}>
-            {t('language')}
-          </Text>
-          <View style={styles.cardRow}>
-            <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                {t(appLanguage === 'tr' ? 'turkish' : 'english')}
-              </Text>
-            </View>
-            <Dropdown
-              selectedValue={appLanguage}
-              onSelect={handleLanguageChange}
-              items={[
-                {label: t('english'), value: 'en'},
-                {label: t('turkish'), value: 'tr'},
-              ]}
-              variant="outlined"
-            />
-          </View>
-          <Text
-            style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginTop: 2},
-            ]}>
-            {t('choose_language')}
-          </Text>
-        </View>
-      
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.ui.radius,
-            },
-          ]}>
-          <Text
-            style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginBottom: 2},
-            ]}>
-            {t('support')}
-          </Text>
-          <TouchableOpacity
-            onPress={handleFeedback}
-            style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
-            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-              {t('feedback')}
-            </Text>
-            <Icon
-              name="help-circle-outline"
-              size={22}
-              color={theme.colors.primary}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handlePrivacyPolicy}
-            style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
-            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-              {t('privacy_policy')}
-            </Text>
-            <Icon
-              name="shield-account-outline"
-              size={22}
-              color={theme.colors.primary}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleTermsOfUse}
-            style={styles.cardRowButton}>
-            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-              {t('terms_of_use')}
-            </Text>
-            <Icon
-              name="file-document-outline"
-              size={22}
-              color={theme.colors.primary}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={[
-            styles.card,
-            {
-              backgroundColor: theme.colors.surface,
-              borderRadius: theme.ui.radius,
-            },
-          ]}>
-          <Text
-            style={[
-              styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginBottom: 2},
-            ]}>
-            {t('about')}
-          </Text>
-          <View style={styles.cardRow}>
-            <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-              {t('version')}
-            </Text>
             <Text
               style={[
-                styles.cardVersion,
-                {color: theme.colors.onSurfaceVariant},
+                styles.cardSubtitle,
+                {color: theme.colors.onSurfaceVariant, marginBottom: 2},
               ]}>
-              {APP_VERSION}
+              {t('language')}
+            </Text>
+            <View style={styles.cardRow}>
+              <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
+                <Text
+                  style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                  {t(appLanguage === 'tr' ? 'turkish' : 'english')}
+                </Text>
+              </View>
+              <Dropdown
+                selectedValue={appLanguage}
+                onSelect={handleLanguageChange}
+                items={[
+                  {label: t('english'), value: 'en'},
+                  {label: t('turkish'), value: 'tr'},
+                ]}
+                variant="outlined"
+              />
+            </View>
+            <Text
+              style={[
+                styles.cardSubtitle,
+                {color: theme.colors.onSurfaceVariant, marginTop: 2},
+              ]}>
+              {t('choose_language')}
             </Text>
           </View>
+
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor: theme.colors.surface,
+                borderRadius: theme.ui.radius,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.cardSubtitle,
+                {color: theme.colors.onSurfaceVariant, marginBottom: 2},
+              ]}>
+              {t('support')}
+            </Text>
+            <TouchableOpacity
+              onPress={handleFeedback}
+              style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
+              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                {t('feedback')}
+              </Text>
+              <Icon
+                name="help-circle-outline"
+                size={22}
+                color={theme.colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handlePrivacyPolicy}
+              style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
+              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                {t('privacy_policy')}
+              </Text>
+              <Icon
+                name="shield-account-outline"
+                size={22}
+                color={theme.colors.primary}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleTermsOfUse}
+              style={styles.cardRowButton}>
+              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                {t('terms_of_use')}
+              </Text>
+              <Icon
+                name="file-document-outline"
+                size={22}
+                color={theme.colors.primary}
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={[
+              styles.card,
+              {
+                backgroundColor: theme.colors.surface,
+                borderRadius: theme.ui.radius,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.cardSubtitle,
+                {color: theme.colors.onSurfaceVariant, marginBottom: 2},
+              ]}>
+              {t('about')}
+            </Text>
+            <View style={styles.cardRow}>
+              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+                {t('version')}
+              </Text>
+              <Text
+                style={[
+                  styles.cardVersion,
+                  {color: theme.colors.onSurfaceVariant},
+                ]}>
+                {APP_VERSION}
+              </Text>
+            </View>
+          </View>
         </View>
-      </View>
       </ScrollView>
     </View>
   );

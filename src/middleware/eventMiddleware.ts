@@ -73,6 +73,7 @@ type eventType = {
   paymentSuccess: IUser;
   subscriptionSelected: ISubscription;
   restorePurchasesSuccess: IUser;
+  paywallOpened: null;
 };
 
 class EventManager<Events extends Record<string, any>> {

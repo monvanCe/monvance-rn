@@ -48,6 +48,7 @@ import {
   setPaywallData,
   setLoading as setSubscriptionLoading,
   setSelectedSubscription,
+  setHasVisitedPaywall,
 } from '../store/slices/subscriptionSlice';
 import {processTickerPrices} from '../utils/processTickerPrices';
 import {addFavorite, removeFavorite} from '../store/slices/favoritesSlice';
@@ -238,7 +239,15 @@ export const useReduxEvents = () => {
       dispatch(setSubscriptionLoading(false));
     });
 
+    eventBus.on('paywallOpened', () => {
+      dispatch(setHasVisitedPaywall(true));
+    });
+
     eventBus.on('paymentSuccess', (user: IUser) => {
+      dispatch(setUser(user));
+    });
+
+    eventBus.on('restorePurchasesSuccess', (user: IUser) => {
       dispatch(setUser(user));
     });
 
