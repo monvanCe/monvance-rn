@@ -119,7 +119,7 @@ const PaywallScreen = () => {
 
       return (
         <PriceTag
-          price={t('no_price_info')}
+          price={t('price_not_found')}
           periodText={`${subscription.interval} ${
             subscription.intervalDays === 30 ? t('per_month') : t('per_week')
           }`}
