@@ -241,11 +241,17 @@ interface ISubscriptionState {
   premiumAdvantages: string[];
 }
 
-interface IPaywallResponse {
-  package: ISubscription[];
-  promoPackage: ISubscription | null;
-  premiumAdvantages: string[];
-}
+type IPaywallResponse =
+  | {
+      package: ISubscription[];
+      premiumAdvantages: string[];
+    }
+  | {
+      package: ISubscription[];
+      premiumAdvantages: string[];
+      promoPackage: ISubscription[];
+      trialTime: string;
+    };
 
 interface IAndroidPaymentRequest {
   packageName: string;

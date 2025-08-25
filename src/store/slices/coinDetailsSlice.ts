@@ -1,5 +1,4 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {eventBus} from '../../middleware/eventMiddleware';
 
 interface ICoinDetailsState {
   coinSignals: ISignal[];

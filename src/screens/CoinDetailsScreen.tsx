@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, TouchableOpacity, Dimensions} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
@@ -9,8 +9,6 @@ import {WebView} from 'react-native-webview';
 import SignalItem from '../components/SignalItem';
 
 import {useNavigation, useRoute} from '@react-navigation/native';
-
-const {width} = Dimensions.get('window');
 
 const CoinDetailsScreen: React.FC = () => {
   const {theme} = useTheme();
@@ -22,7 +20,7 @@ const CoinDetailsScreen: React.FC = () => {
     state => state.coinDetails,
   );
 
-  const [chartSymbol, setChartSymbol] = useState(coin);
+  const [chartSymbol] = useState(coin);
 
   useEffect(() => {
     // Load initial signals for the coin
