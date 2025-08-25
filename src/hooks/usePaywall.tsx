@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from 'react';
 import {useAppSelector} from '../store/store';
 import {internalService} from '../service/internalServices';
 import {eventBus} from '../middleware/eventMiddleware';
-import {Platform} from 'react-native';
+import {AppState, InteractionManager, Platform} from 'react-native';
 import {
   getPurchaseHistory,
   getSubscriptions,
@@ -133,6 +133,27 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
     try {
       if (Platform.OS === 'android') {
         await initConnection();
+        // Ensure we have a current Activity (foreground + interactions flushed)
+        await new Promise<void>(resolve => {
+          if (AppState.currentState === 'active') {
+            InteractionManager.runAfterInteractions(() => {
+              setTimeout(() => resolve(), 50);
+            });
+            return;
+          }
+          let sub: {remove: () => void} | undefined;
+          const onChange = (state: string) => {
+            if (state === 'active') {
+              if (sub) sub.remove();
+              InteractionManager.runAfterInteractions(() => {
+                setTimeout(() => resolve(), 50);
+              });
+            }
+          };
+          sub = AppState.addEventListener('change', onChange) as unknown as {
+            remove: () => void;
+          };
+        });
 
         if (!subscription.offerToken) {
           throw new Error('Offer token not found');
