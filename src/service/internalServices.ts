@@ -166,7 +166,7 @@ export const internalService = {
   },
 
   getMessagesByChatId: async (
-    chatId: string = '684f15946720dfaafba07b89',
+    chatId: string,
   ): Promise<IGetMessagesByChatIdResponse> => {
     const response = await api.get<IGetMessagesByChatIdResponse>(
       `${INTERNAL_ENDPOINTS.CHATS}/${chatId}/messages`,
@@ -177,7 +177,7 @@ export const internalService = {
   },
 
   sendMessage: async (
-    chatId: string = '684f15946720dfaafba07b89',
+    chatId: string,
     message: string,
     localId?: string,
   ): Promise<ISendMessageResponse> => {

@@ -3,6 +3,7 @@ import {useRef, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/store';
 import {addMessage} from '../store/slices/chatSlice';
 import {internalService} from '../service/internalServices';
+import {CHAT_ID} from '../const/env';
 
 const COLORS = [
   '#FF6B6B',
@@ -78,7 +79,7 @@ export const useChatScreen = () => {
       const now = new Date().toISOString();
       const optimisticMessage: IMessage = {
         _id: localId,
-        chatId: '684f15946720dfaafba07b89',
+        chatId: CHAT_ID,
         userId: {
           _id: user._id || '',
           username: user.username || '',
@@ -93,7 +94,7 @@ export const useChatScreen = () => {
       dispatch(addMessage(optimisticMessage));
       setMessage('');
       scrollToBottom(false);
-      internalService.sendMessage('684f15946720dfaafba07b89', message, localId);
+      internalService.sendMessage(CHAT_ID, message, localId);
     }
   };
 
