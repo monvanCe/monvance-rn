@@ -3,15 +3,15 @@ import {
   View,
   StyleSheet,
   Image,
-  TouchableOpacity,
   Linking,
   ScrollView,
 } from 'react-native';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from '../components/ui/Text';
-
+import SettingsSection from '../components/ui/SettingsSection';
+import SettingsItem from '../components/ui/SettingsItem';
+import PremiumButton from '../components/ui/PremiumButton';
 import {Dropdown} from '../components/ui/Dropdown';
 import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
@@ -47,7 +47,9 @@ const ProfileScreen = () => {
   };
 
   const handleFeedback = () => {
-    Linking.openURL('mailto:support@klyra.app?subject=Feedback');
+    const userId = user._id || 'Unknown';
+    const emailBody = encodeURIComponent(`User ID: ${userId}\n\nPlease write your feedback or support request below:\n\n`);
+    Linking.openURL(`mailto:support@cekolabs.com?subject=Support & Feedback&body=${emailBody}`);
   };
 
   const handlePrivacyPolicy = () => {
@@ -126,36 +128,17 @@ const ProfileScreen = () => {
         </View>
         <View style={styles.cardsWrapper}>
           {/* Premium Card */}
-          <View
-            style={[
-              styles.card,
-              {
-                backgroundColor: theme.colors.surface,
-                borderRadius: theme.ui.radius,
-              },
-            ]}>
-            <View style={styles.cardRow}>
-              <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
-                <Icon name="crown" size={24} color="#FFD700" />
-                <Text
-                  style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                  {t('premium')}
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={handleGoPremium}
-                style={styles.premiumButton}>
-                <Text style={styles.premiumButtonText}>{t('go_premium')}</Text>
-              </TouchableOpacity>
-            </View>
-            <Text
-              style={[
-                styles.cardSubtitle,
-                {color: theme.colors.onSurfaceVariant, marginTop: 2},
-              ]}>
-              {t('unlock_all_features')}
-            </Text>
-          </View>
+          <SettingsSection>
+            <SettingsItem
+              title={t('premium')}
+              subtitle={t('unlock_all_features')}
+              leftIcon="crown"
+              leftIconColor="#FFD700"
+              rightElement={
+                <PremiumButton title={t('go_premium')} onPress={handleGoPremium} />
+              }
+            />
+          </SettingsSection>
           {/*
         <View
           style={[
@@ -185,127 +168,53 @@ const ProfileScreen = () => {
         </View>
                   */}
 
-          <View
-            style={[
-              styles.card,
-              {
-                backgroundColor: theme.colors.surface,
-                borderRadius: theme.ui.radius,
-              },
-            ]}>
-            <Text
-              style={[
-                styles.cardSubtitle,
-                {color: theme.colors.onSurfaceVariant, marginBottom: 2},
-              ]}>
-              {t('language')}
-            </Text>
-            <View style={styles.cardRow}>
-              <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
-                <Text
-                  style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                  {t(appLanguage === 'tr' ? 'turkish' : 'english')}
-                </Text>
-              </View>
-              <Dropdown
-                selectedValue={appLanguage}
-                onSelect={handleLanguageChange}
-                items={[
-                  {label: t('english'), value: 'en'},
-                  {label: t('turkish'), value: 'tr'},
-                ]}
-                variant="outlined"
-              />
-            </View>
-            <Text
-              style={[
-                styles.cardSubtitle,
-                {color: theme.colors.onSurfaceVariant, marginTop: 2},
-              ]}>
-              {t('choose_language')}
-            </Text>
-          </View>
+          <SettingsSection title={t('language')}>
+            <SettingsItem
+              title={t(appLanguage === 'tr' ? 'turkish' : 'english')}
+              subtitle={t('choose_language')}
+              rightElement={
+                <Dropdown
+                  selectedValue={appLanguage}
+                  onSelect={handleLanguageChange}
+                  items={[
+                    {label: t('english'), value: 'en'},
+                    {label: t('turkish'), value: 'tr'},
+                  ]}
+                  variant="outlined"
+                />
+              }
+            />
+          </SettingsSection>
 
-          <View
-            style={[
-              styles.card,
-              {
-                backgroundColor: theme.colors.surface,
-                borderRadius: theme.ui.radius,
-              },
-            ]}>
-            <Text
-              style={[
-                styles.cardSubtitle,
-                {color: theme.colors.onSurfaceVariant, marginBottom: 2},
-              ]}>
-              {t('support')}
-            </Text>
-            <TouchableOpacity
+          <SettingsSection title={t('support')}>
+            <SettingsItem
+              title={t('feedback')}
+              rightIcon="help-circle-outline"
               onPress={handleFeedback}
-              style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                {t('feedback')}
-              </Text>
-              <Icon
-                name="help-circle-outline"
-                size={22}
-                color={theme.colors.primary}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
+              showDivider
+            />
+            <SettingsItem
+              title={t('privacy_policy')}
+              rightIcon="shield-account-outline"
               onPress={handlePrivacyPolicy}
-              style={[styles.cardRowButton, {marginBottom: theme.ui.spacing}]}>
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                {t('privacy_policy')}
-              </Text>
-              <Icon
-                name="shield-account-outline"
-                size={22}
-                color={theme.colors.primary}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
+              showDivider
+            />
+            <SettingsItem
+              title={t('terms_of_use')}
+              rightIcon="file-document-outline"
               onPress={handleTermsOfUse}
-              style={styles.cardRowButton}>
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                {t('terms_of_use')}
-              </Text>
-              <Icon
-                name="file-document-outline"
-                size={22}
-                color={theme.colors.primary}
-              />
-            </TouchableOpacity>
-          </View>
-          <View
-            style={[
-              styles.card,
-              {
-                backgroundColor: theme.colors.surface,
-                borderRadius: theme.ui.radius,
-              },
-            ]}>
-            <Text
-              style={[
-                styles.cardSubtitle,
-                {color: theme.colors.onSurfaceVariant, marginBottom: 2},
-              ]}>
-              {t('about')}
-            </Text>
-            <View style={styles.cardRow}>
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
-                {t('version')}
-              </Text>
-              <Text
-                style={[
-                  styles.cardVersion,
-                  {color: theme.colors.onSurfaceVariant},
-                ]}>
-                {APP_VERSION}
-              </Text>
-            </View>
-          </View>
+            />
+          </SettingsSection>
+          <SettingsSection title={t('about')}>
+            <SettingsItem
+              title={t('version')}
+              rightElement={
+                <Text style={{color: theme.colors.onSurfaceVariant}}>
+                  {APP_VERSION}
+                </Text>
+              }
+            />
+          </SettingsSection>
         </View>
       </ScrollView>
     </View>
@@ -345,49 +254,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       gap: theme.ui.spacing * 1.5,
       paddingHorizontal: theme.ui.spacing * 2,
     },
-    card: {
-      padding: 18,
-      marginBottom: 0,
-      marginTop: 0,
-      marginHorizontal: 0,
-      gap: 8,
-    },
-    cardRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    cardRowLeft: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    cardTitle: {
-      fontSize: theme.ui.fontSize * 1.125,
-      fontWeight: '600',
-    },
-    cardSubtitle: {
-      fontSize: theme.ui.fontSize * 0.8125,
-      fontWeight: '600',
-    },
-    cardVersion: {
-      fontSize: theme.ui.fontSize * 1,
-    },
-    cardRowButton: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    },
-    premiumButton: {
-      backgroundColor: '#FFD700',
-      paddingHorizontal: 16,
-      paddingVertical: 8,
-      borderRadius: 20,
-    },
-    premiumButtonText: {
-      fontSize: 14,
-      fontWeight: 'bold',
-      color: '#000000',
-    },
+
   });
 
 export default ProfileScreen;
