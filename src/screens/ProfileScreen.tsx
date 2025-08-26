@@ -4,6 +4,8 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Linking,
+  Alert,
 } from 'react-native';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
@@ -47,6 +49,18 @@ const ProfileScreen = () => {
 
   const handleFeedback = () => {
     navigation.navigate('FeedbackScreen' as never);
+  };
+
+  const handleSupportEmail = () => {
+    const userId = user._id || 'unknown';
+    const emailSubject = encodeURIComponent('Support Request');
+    const emailBody = encodeURIComponent(`User ID: ${userId}\n\nThis ID will help you identify my account. Please don't delete this ID.\n\nSupport Request:\n\n`);
+    const mailtoUrl = `mailto:support@cekolabs.com?subject=${emailSubject}&body=${emailBody}`;
+    
+    Linking.openURL(mailtoUrl).catch((error) => {
+      console.error('Error opening email app:', error);
+      Alert.alert('Error', 'Could not open email app. Please contact support@cekolabs.com manually.');
+    });
   };
 
   const handlePrivacyPolicy = () => {
@@ -188,6 +202,13 @@ const ProfileScreen = () => {
               title={t('feedback')}
               rightIcon="help-circle-outline"
               onPress={handleFeedback}
+              showDivider
+            />
+            <SettingsItem
+              title="Email Support"
+              subtitle="support@cekolabs.com"
+              rightIcon="mail"
+              onPress={handleSupportEmail}
               showDivider
             />
             <SettingsItem
