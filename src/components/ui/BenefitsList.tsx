@@ -8,7 +8,6 @@ interface BenefitsListProps {
   benefits: string[];
   title?: string;
   showIcon?: boolean;
-  compact?: boolean;
   style?: any;
 }
 
@@ -16,11 +15,10 @@ const BenefitsList: React.FC<BenefitsListProps> = ({
   benefits,
   title,
   showIcon = true,
-  compact = false,
   style,
 }) => {
   const {theme} = useTheme();
-  const styles = createStyles(theme, compact);
+  const styles = createStyles(theme);
 
   if (!benefits || benefits.length === 0) {
     return null;
@@ -31,8 +29,8 @@ const BenefitsList: React.FC<BenefitsListProps> = ({
       {title && (
         <View style={styles.header}>
           {showIcon && (
-            <View style={styles.headerIconContainer}>
-              <Icon name="star" size={compact ? 16 : 20} color="#FFD700" />
+            <View style={styles.headerIcon}>
+              <Icon name="star" size={14} color="#16C784" />
             </View>
           )}
           <Text style={styles.title}>{title}</Text>
@@ -41,18 +39,10 @@ const BenefitsList: React.FC<BenefitsListProps> = ({
       <View style={styles.benefitsList}>
         {benefits.map((benefit, index) => (
           <View key={index} style={styles.benefitItem}>
-            <View style={styles.benefitIconWrapper}>
-              <View style={styles.benefitIconContainer}>
-                <Icon 
-                  name="check-circle" 
-                  size={compact ? 14 : 18} 
-                  color="#16C784" 
-                />
-              </View>
+            <View style={styles.checkIcon}>
+              <Icon name="check" size={12} color="#16C784" />
             </View>
-            <View style={styles.benefitContent}>
-              <Text style={styles.benefitText}>{benefit}</Text>
-            </View>
+            <Text style={styles.benefitText}>{benefit}</Text>
           </View>
         ))}
       </View>
@@ -60,70 +50,67 @@ const BenefitsList: React.FC<BenefitsListProps> = ({
   );
 };
 
-const createStyles = (theme: ReturnType<typeof useTheme>['theme'], compact: boolean) =>
+const createStyles = (_theme: ReturnType<typeof useTheme>['theme']) =>
   StyleSheet.create({
     container: {
-      backgroundColor: compact 
-        ? 'rgba(255, 255, 255, 0.03)' 
-        : 'rgba(255, 255, 255, 0.05)',
-      borderRadius: compact ? 12 : 16,
-      padding: compact ? 12 : 16,
+      backgroundColor: 'rgba(0, 0, 0, 0.25)',
+      borderRadius: 14,
+      padding: 12,
+      borderWidth: 1,
+      borderColor: 'rgba(22, 199, 132, 0.2)',
     },
     header: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: compact ? 10 : 16,
+      marginBottom: 8,
+      paddingBottom: 6,
+      borderBottomWidth: 1,
+      borderBottomColor: 'rgba(22, 199, 132, 0.1)',
     },
-    headerIconContainer: {
-      width: compact ? 24 : 32,
-      height: compact ? 24 : 32,
-      borderRadius: compact ? 12 : 16,
-      backgroundColor: 'rgba(255, 215, 0, 0.15)',
+    headerIcon: {
+      width: 20,
+      height: 20,
+      borderRadius: 10,
+      backgroundColor: 'rgba(22, 199, 132, 0.2)',
       justifyContent: 'center',
       alignItems: 'center',
-      marginRight: compact ? 6 : 8,
+      marginRight: 8,
     },
     title: {
       color: '#fff',
-      fontSize: compact ? 16 : 18,
+      fontSize: 16,
       fontWeight: '600',
       textAlign: 'center',
     },
     benefitsList: {
-      gap: compact ? 4 : 8,
+      gap: 6,
     },
     benefitItem: {
       flexDirection: 'row',
       alignItems: 'center',
-      backgroundColor: compact ? 'transparent' : 'rgba(255, 255, 255, 0.06)',
-      borderRadius: compact ? 8 : 12,
-      padding: compact ? 6 : 12,
-      ...(compact ? {} : {
-        borderWidth: 1,
-        borderColor: 'rgba(255, 255, 255, 0.08)',
-      }),
+      paddingVertical: 8,
+      paddingHorizontal: 10,
+      backgroundColor: 'rgba(22, 199, 132, 0.08)',
+      borderRadius: 8,
+      borderLeftWidth: 3,
+      borderLeftColor: '#16C784',
     },
-    benefitIconWrapper: {
-      marginRight: compact ? 8 : 12,
-    },
-    benefitIconContainer: {
-      width: compact ? 20 : 28,
-      height: compact ? 20 : 28,
-      borderRadius: compact ? 10 : 14,
+    checkIcon: {
+      width: 18,
+      height: 18,
+      borderRadius: 9,
       backgroundColor: 'rgba(22, 199, 132, 0.2)',
       justifyContent: 'center',
       alignItems: 'center',
-    },
-    benefitContent: {
-      flex: 1,
-      justifyContent: 'center',
+      marginRight: 10,
     },
     benefitText: {
       color: '#fff',
-      fontSize: compact ? 13 : 14,
-      fontWeight: compact ? '400' : '500',
-      lineHeight: compact ? 16 : 18,
+      fontSize: 14,
+      fontWeight: '500',
+      lineHeight: 18,
+      flex: 1,
     },
   });
 

@@ -20,6 +20,7 @@ import PriceTag from '../components/PriceTag';
 import BenefitsList from '../components/ui/BenefitsList';
 import {getPlanBadgeText} from '../utils/paywall';
 import {eventBus} from '../middleware/eventMiddleware';
+import {getCompactPremiumBenefits} from '../const/defaultBenefits';
 
 const PaywallScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
@@ -287,14 +288,12 @@ const PaywallScreen = () => {
         </View>
 
                 {/* Premium Advantages Section */}
-        {premiumAdvantages.length > 0 && (
-          <BenefitsList
-            benefits={premiumAdvantages}
-            title={t('premium_benefits')}
-            compact={true}
-            style={styles.benefitsContainer}
-          />
-        )}
+        <BenefitsList
+          benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
+          title={t('premium_benefits')}
+          compact={true}
+          style={styles.benefitsContainer}
+        />
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>

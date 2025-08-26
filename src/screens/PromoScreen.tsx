@@ -17,7 +17,9 @@ import useLocalization from '../hooks/useLocalization';
 import {useAppSelector} from '../store/store';
 import {useNavigation} from '@react-navigation/native';
 import PriceTag from '../components/PriceTag';
+import BenefitsList from '../components/ui/BenefitsList';
 import {getPlanBadgeText} from '../utils/paywall';
+import {getCompactPremiumBenefits} from '../const/defaultBenefits';
 import {eventBus} from '../middleware/eventMiddleware';
 
 const PromoScreen = () => {
@@ -401,20 +403,12 @@ const PromoScreen = () => {
         </View>
 
         {/* Premium Advantages Section */}
-        {premiumAdvantages.length > 0 && (
-          <View style={styles.advantagesSection}>
-            <Text style={styles.advantagesSectionTitle}>
-              {t('premium_benefits')}
-            </Text>
-            <View style={styles.advantagesList}>
-              {premiumAdvantages.map((advantage, index) => (
-                <View key={index} style={styles.advantageItem}>
-                  <Text style={styles.advantageText}>• {advantage}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
+        <BenefitsList
+          benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
+          title={t('premium_benefits')}
+          compact={true}
+          style={styles.benefitsContainer}
+        />
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>
@@ -571,7 +565,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF59D',
   },
   heroSection: {
-    height: 300,
+    height: 250,
     position: 'relative',
   },
   heroContent: {
@@ -619,10 +613,10 @@ const styles = StyleSheet.create({
   },
   pricingContainer: {
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   pricingCard: {
-    marginBottom: 12,
+    marginBottom: 8,
   },
   cardGradient: {
     padding: 2,
@@ -631,7 +625,7 @@ const styles = StyleSheet.create({
   cardContent: {
     backgroundColor: '#1a1a1a',
     borderRadius: 18,
-    padding: 20,
+    padding: 10,
     position: 'relative',
   },
   pulseOverlay: {
@@ -757,31 +751,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  advantagesSection: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
-    marginHorizontal: 20,
-    marginTop: 20,
-  },
-  advantagesSectionTitle: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'left',
-    marginBottom: 15,
-  },
-  advantagesList: {},
-  advantageItem: {
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
-  advantageText: {
-    color: '#fff',
-    fontSize: 16,
-    textAlign: 'left',
-  },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -815,6 +785,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     fontWeight: '600',
+  },
+  benefitsContainer: {
+    marginHorizontal: 20,
+    marginTop: 20,
   },
 });
 
