@@ -71,5 +71,20 @@
   "no_packages": "No packages found",
   "processing": "Processing...",
   "upgrade_now": "Upgrade now",
-  "select_package": "Select a package"
+  "select_package": "Select a package",
+  "your_feedback": "Your Feedback",
+  "feedback_description": "We value your feedback! Please share your thoughts, suggestions, or report any issues you've encountered.",
+  "rating": "Rating",
+  "optional": "optional",
+  "message": "Message",
+  "enter_your_feedback": "Please describe your feedback, suggestions, or any issues you've encountered...",
+  "send_feedback": "Send Feedback",
+  "error": "Error",
+  "success": "Success",
+  "please_enter_message": "Please enter a message",
+  "feedback_sent_successfully": "Your feedback has been sent successfully. Thank you!",
+  "failed_to_send_feedback": "Failed to send feedback. Please try again.",
+  "transaction_details": "Transaction Details",
+  "include_transaction_info": "Include recent transaction information",
+  "transaction_info_help": "This helps us better understand and resolve any payment-related issues"
 }

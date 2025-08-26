@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   Image,
-  Linking,
   ScrollView,
 } from 'react-native';
 import {useTheme} from '../context/ThemeContext';
@@ -47,9 +46,7 @@ const ProfileScreen = () => {
   };
 
   const handleFeedback = () => {
-    const userId = user._id || 'Unknown';
-    const emailBody = encodeURIComponent(`User ID: ${userId}\n\nPlease write your feedback or support request below:\n\n`);
-    Linking.openURL(`mailto:support@cekolabs.com?subject=Support & Feedback&body=${emailBody}`);
+    navigation.navigate('FeedbackScreen' as never);
   };
 
   const handlePrivacyPolicy = () => {

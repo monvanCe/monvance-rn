@@ -3,4 +3,5 @@ export const ROUTE_NAMES = {
   CHAT: 'Chat',
   COIN_DETAILS: 'CoinDetails',
   PROMO: 'Promo',
+  FEEDBACK: 'FeedbackScreen',
 } as const;

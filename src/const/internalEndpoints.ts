@@ -19,4 +19,5 @@ export const INTERNAL_ENDPOINTS = {
   GET_PAYWALL: '/payment/paywall',
   POST_PAYMENT: '/payment',
   RESTORE_PURCHASES: '/payment/restore',
+  SEND_FEEDBACK: '/feedback/send-feedback',
 };

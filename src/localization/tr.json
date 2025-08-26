@@ -71,5 +71,20 @@
   "no_packages": "Paket bulunamadı",
   "processing": "İşleniyor...",
   "upgrade_now": "Şimdi yükselt",
-  "select_package": "Paket seçin"
+  "select_package": "Paket seçin",
+  "your_feedback": "Geri Bildiriminiz",
+  "feedback_description": "Geri bildiriminizi değerli buluyoruz! Lütfen düşüncelerinizi, önerilerinizi veya karşılaştığınız sorunları paylaşın.",
+  "rating": "Değerlendirme",
+  "optional": "opsiyonel",
+  "message": "Mesaj",
+  "enter_your_feedback": "Lütfen geri bildiriminizi, önerilerinizi veya karşılaştığınız sorunları açıklayın...",
+  "send_feedback": "Geri Bildirim Gönder",
+  "error": "Hata",
+  "success": "Başarılı",
+  "please_enter_message": "Lütfen bir mesaj girin",
+  "feedback_sent_successfully": "Geri bildiriminiz başarıyla gönderildi. Teşekkür ederiz!",
+  "failed_to_send_feedback": "Geri bildirim gönderilemedi. Lütfen tekrar deneyin.",
+  "transaction_details": "İşlem Detayları",
+  "include_transaction_info": "Son işlem bilgilerini dahil et",
+  "transaction_info_help": "Bu, ödeme ile ilgili sorunları daha iyi anlamamıza ve çözmemize yardımcı olur"
 }

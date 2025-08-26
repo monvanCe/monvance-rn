@@ -5,6 +5,7 @@ import NotificationScreen from '../screens/NotificationScreen';
 import CoinDetailsScreen from '../screens/CoinDetailsScreen';
 import PaywallScreen from '../screens/PaywallScreen';
 import PromoScreen from '../screens/PromoScreen';
+import FeedbackScreen from '../screens/FeedbackScreen';
 import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../context/ThemeContext';
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   CoinDetails: {coin: string};
   Paywall: undefined;
   Promo: undefined;
+  FeedbackScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -42,6 +44,7 @@ const StackNavigator = () => {
         <Stack.Screen name="CoinDetails" component={CoinDetailsScreen} />
         <Stack.Screen name="Paywall" component={PaywallScreen} />
         <Stack.Screen name="Promo" component={PromoScreen} />
+        <Stack.Screen name="FeedbackScreen" component={FeedbackScreen} />
       </Stack.Navigator>
     </View>
   );
