@@ -44,6 +44,7 @@
   "monthly": "Monthly",
   "three_monthly": "3 Months",
   "best_value": "Best Value",
+  "yearly_desc": "Yearly plan with biggest discount",
   "most_popular": "Most Popular",
   "save_percent": "Save %{percent}%",
   "subscribe_now": "Subscribe Now",

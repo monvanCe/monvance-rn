@@ -17,6 +17,7 @@ import useLocalization from '../hooks/useLocalization';
 import {useAppSelector} from '../store/store';
 import {useNavigation} from '@react-navigation/native';
 import PriceTag from '../components/PriceTag';
+import BenefitsList from '../components/ui/BenefitsList';
 import {getPlanBadgeText} from '../utils/paywall';
 import {eventBus} from '../middleware/eventMiddleware';
 
@@ -198,6 +199,9 @@ const PaywallScreen = () => {
                 : subscription.interval === 1 &&
                   subscription.intervalDays === 30
                 ? t('monthly_desc')
+                : subscription.interval === 12 &&
+                  subscription.intervalDays === 30
+                ? t('yearly_desc')
                 : t('three_monthly_desc')}
             </Text>
           </View>
@@ -282,20 +286,14 @@ const PaywallScreen = () => {
           </View>
         </View>
 
-        {/* Premium Advantages Section */}
+                {/* Premium Advantages Section */}
         {premiumAdvantages.length > 0 && (
-          <View style={styles.advantagesSection}>
-            <Text style={styles.advantagesSectionTitle}>
-              {t('premium_benefits')}
-            </Text>
-            <View style={styles.advantagesList}>
-              {premiumAdvantages.map((advantage, index) => (
-                <View key={index} style={styles.advantageItem}>
-                  <Text style={styles.advantageText}>• {advantage}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
+          <BenefitsList
+            benefits={premiumAdvantages}
+            title={t('premium_benefits')}
+            compact={true}
+            style={styles.benefitsContainer}
+          />
         )}
 
         {/* Pricing Cards */}
@@ -439,7 +437,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   heroSection: {
-    height: 300,
+    height: 200,
     position: 'relative',
   },
   heroContent: {
@@ -479,12 +477,12 @@ const styles = StyleSheet.create({
   },
   cardGradient: {
     padding: 2,
-    borderRadius: 20,
+    borderRadius: 16,
   },
   cardContent: {
     backgroundColor: '#1a1a1a',
     borderRadius: 18,
-    padding: 20,
+    padding: 12,
     position: 'relative',
   },
   checkIcon: {
@@ -574,7 +572,7 @@ const styles = StyleSheet.create({
     color: '#ccc',
     fontSize: 14,
     lineHeight: 20,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   bottomSpacer: {
     height: 100,
@@ -626,32 +624,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
   },
-  advantagesSection: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
+  benefitsContainer: {
     marginHorizontal: 20,
-    marginTop: 20,
-  },
-  advantagesSectionTitle: {
-    color: '#fff',
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'left',
-    marginBottom: 15,
-  },
-  advantagesList: {
-    // No specific styles for the list container
-  },
-  advantageItem: {
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#333',
-  },
-  advantageText: {
-    color: '#fff',
-    fontSize: 16,
-    textAlign: 'left',
+    marginTop: 12,
   },
   loadingContainer: {
     flex: 1,
