@@ -157,6 +157,12 @@ const PromoScreen = () => {
   }, [subscriptions, activePlan, handlePlanSelection]);
 
   useEffect(() => {
+    if (subscriptions.length > 0 ) {
+    setActivePlan(subscriptions[0]._id);
+    }
+  }, [subscriptions]);
+
+  useEffect(() => {
     const onPaid = () => {
       navigation.goBack();
     };
@@ -182,6 +188,10 @@ const PromoScreen = () => {
       // Close will be handled by event listener
     }
   };
+
+  useEffect(() => {
+    console.log('selectedSubscription', selectedSubscription);
+  }, [selectedSubscription]);
 
   const renderPlanCard = (subscription: ISubscription) => {
     const isActive = subscription._id === activePlan;
