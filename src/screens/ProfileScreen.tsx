@@ -228,7 +228,7 @@ const ProfileScreen = () => {
               title={t('version')}
               rightElement={
                 <Text style={{color: theme.colors.onSurfaceVariant}}>
-                  {APP_VERSION}
+                  {user.version}
                 </Text>
               }
             />

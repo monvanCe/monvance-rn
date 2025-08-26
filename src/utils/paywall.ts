@@ -1,4 +1,4 @@
-export type BasePlanId = 'weekly' | 'monthly' | '3monthly' | undefined;
+export type BasePlanId = 'weekly' | 'monthly' | '3monthly' | 'yearly' | undefined;
 
 export const normalizeSku = (value: string) =>
   value.replace(/[_\s-]/g, '').toLowerCase();
@@ -10,6 +10,7 @@ export const deriveBasePlanId = (sub: ISubscription): BasePlanId => {
   if (sub.interval === 1 && sub.intervalDays === 7) return 'weekly';
   if (sub.interval === 1 && sub.intervalDays === 30) return 'monthly';
   if (sub.interval === 3 && sub.intervalDays === 30) return '3monthly';
+  if (sub.interval === 12 && sub.intervalDays === 30) return 'yearly';
   return undefined;
 };
 
