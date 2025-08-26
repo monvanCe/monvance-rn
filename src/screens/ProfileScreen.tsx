@@ -125,9 +125,7 @@ const ProfileScreen = () => {
       <ScreenHeader
         title={t('settings')}
         actions={headerActions}
-        rightExtra={
-          showPromo ? <PromoButton trialTime={trialTime as string} /> : null
-        }
+        promoButton={showPromo}
       />
       <ScrollView
         style={styles.scrollView}

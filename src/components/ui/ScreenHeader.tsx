@@ -6,6 +6,7 @@ import {Text} from './Text';
 import NotificationIcon from '../NotificationIcon';
 import {useAppSelector} from '../../store/store';
 import {eventBus} from '../../middleware/eventMiddleware';
+import PromoButton from './PromoButton';
 
 export interface HeaderAction {
   iconName: string;
@@ -22,6 +23,7 @@ interface ScreenHeaderProps {
   backgroundColor?: string;
   showChat?: boolean; // Still allow disabling chat if needed
   rightExtra?: React.ReactNode;
+  promoButton?: boolean;
 }
 
 const ScreenHeader: React.FC<ScreenHeaderProps> = ({
@@ -31,6 +33,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   backgroundColor,
   showChat = true, // Default to true - show chat everywhere
   rightExtra,
+  promoButton=true,
 }) => {
   const {theme} = useTheme();
   const styles = style(theme);
@@ -65,11 +68,13 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
     );
   };
 
+  const {trialTime} = useAppSelector(state => state.subscription);
   return (
     <View style={[styles.container, backgroundColor && {backgroundColor}]}>
       <Text style={styles.headerTitle}>{title}</Text>
       <View style={styles.rightContainer}>
         {rightExtra}
+        {promoButton && trialTime && <PromoButton trialTime={trialTime} />}
         {actions.map(renderAction)}
         {showNotification && <NotificationIcon />}
         {showChat && (
