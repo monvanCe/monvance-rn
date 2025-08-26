@@ -19,7 +19,9 @@ const PriceTag: React.FC<PriceTagProps> = ({
   return (
     <View style={[styles.priceContainer, containerStyle]}>
       {hasDiscount && <Text style={styles.originalPrice}>{originalPrice}</Text>}
-      
+      <Text style={hasDiscount ? styles.discountedPrice : styles.price}>
+        {price}
+      </Text>
       {!!periodText && <Text style={styles.periodText}>{periodText}</Text>}
     </View>
   );
