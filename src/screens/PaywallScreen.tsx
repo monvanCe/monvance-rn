@@ -47,6 +47,15 @@ const PaywallScreen = () => {
     }
   }, [selectedSubscription]);
 
+  // Auto-select first subscription when entering the screen
+  useEffect(() => {
+    if (subscriptions.length > 0 && !activePlan) {
+      const firstSubscription = subscriptions[0];
+      setActivePlan(firstSubscription._id);
+      handlePlanSelection(firstSubscription);
+    }
+  }, [subscriptions, activePlan, handlePlanSelection]);
+
   useEffect(() => {
     const onPaid = () => {
       navigation.goBack();
@@ -291,7 +300,6 @@ const PaywallScreen = () => {
         <BenefitsList
           benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
           title={t('premium_benefits')}
-          compact={true}
           style={styles.benefitsContainer}
         />
 

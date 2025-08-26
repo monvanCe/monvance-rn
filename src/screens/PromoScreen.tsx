@@ -147,6 +147,15 @@ const PromoScreen = () => {
     }
   }, [selectedSubscription]);
 
+  // Auto-select first subscription when entering the screen
+  useEffect(() => {
+    if (subscriptions.length > 0 && !activePlan) {
+      const firstSubscription = subscriptions[0];
+      setActivePlan(firstSubscription._id);
+      handlePlanSelection(firstSubscription);
+    }
+  }, [subscriptions, activePlan, handlePlanSelection]);
+
   useEffect(() => {
     const onPaid = () => {
       navigation.goBack();
@@ -403,12 +412,11 @@ const PromoScreen = () => {
         </View>
 
         {/* Premium Advantages Section */}
-        <BenefitsList
-          benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
-          title={t('premium_benefits')}
-          compact={true}
-          style={styles.benefitsContainer}
-        />
+                  <BenefitsList
+            benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
+            title={t('premium_benefits')}
+            style={styles.benefitsContainer}
+          />
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>
