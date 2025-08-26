@@ -408,15 +408,25 @@ const PromoScreen = () => {
               />
               <Text style={styles.appName}>Vens Signal</Text>
             </View>
-            <Text style={styles.heroTitle}>{t('upgraded_plans')}</Text>
-            <View style={styles.countdownBadge}>
-              <LinearGradient
-                colors={['#FFEA00', '#FFC400', '#FF9100']}
-                start={{x: 0, y: 0}}
-                end={{x: 1, y: 1}}
-                style={styles.countdownGradient}>
-                <Text style={styles.countdownText}>{remainingText}</Text>
-              </LinearGradient>
+            
+            {/* Limited Offer Banner */}
+            <View style={styles.offerBanner}>
+              <Text style={styles.limitedOfferText}>🔥 LIMITED TIME OFFER</Text>
+              <Text style={styles.discountText}>Save up to 70% OFF</Text>
+            </View>
+
+            {/* Big Timer */}
+            <View style={styles.bigTimerContainer}>
+              <Text style={styles.timerLabel}>Offer expires in:</Text>
+              <View style={styles.bigCountdownBadge}>
+                <LinearGradient
+                  colors={['#FF6B35', '#F7931E', '#FFD600', '#FFEA00']}
+                  start={{x: 0, y: 0}}
+                  end={{x: 1, y: 1}}
+                  style={styles.bigCountdownGradient}>
+                  <Text style={styles.bigCountdownText}>{remainingText}</Text>
+                </LinearGradient>
+              </View>
             </View>
           </View>
         </View>
@@ -583,7 +593,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF59D',
   },
   heroSection: {
-    height: 250,
+    height: 300,
     position: 'relative',
   },
   heroContent: {
@@ -628,6 +638,60 @@ const styles = StyleSheet.create({
     color: '#000',
     fontWeight: '800',
     fontSize: 12,
+  },
+  offerBanner: {
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  limitedOfferText: {
+    color: '#FFD700',
+    fontSize: 18,
+    fontWeight: '900',
+    textAlign: 'center',
+    marginBottom: 4,
+    letterSpacing: 1,
+    textShadowColor: '#000',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 2,
+  },
+  discountText: {
+    color: '#FF4444',
+    fontSize: 16,
+    fontWeight: '800',
+    textAlign: 'center',
+    letterSpacing: 0.5,
+  },
+  bigTimerContainer: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  timerLabel: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  bigCountdownBadge: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  bigCountdownGradient: {
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
+  bigCountdownText: {
+    color: '#000',
+    fontWeight: '900',
+    fontSize: 24,
+    textAlign: 'center',
+    letterSpacing: 2,
+    textShadowColor: 'rgba(255,255,255,0.3)',
+    textShadowOffset: {width: 1, height: 1},
+    textShadowRadius: 1,
   },
   pricingContainer: {
     paddingHorizontal: 20,
