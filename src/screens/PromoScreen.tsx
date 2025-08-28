@@ -20,8 +20,7 @@ import PriceTag from '../components/PriceTag';
 import BenefitsList from '../components/ui/BenefitsList';
 import {getPlanBadgeText} from '../utils/paywall';
 import {getCompactPremiumBenefits} from '../const/defaultBenefits';
-import {eventBus} from '../middleware/eventMiddleware';
-import {useTheme} from '../context/ThemeContext';
+  import {eventBus} from '../middleware/eventMiddleware';
 
 const PromoScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
@@ -30,7 +29,6 @@ const PromoScreen = () => {
   const navigation = useNavigation<any>();
   const user = useAppSelector(state => state.auth);
   const {trialTime} = useAppSelector(state => state.subscription);
-  const {theme} = useTheme();
 
   const {
     subscriptions,
@@ -841,7 +839,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   upgradeButtonText: {
-    color: '#000',
+    color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
   },

@@ -161,8 +161,8 @@ const PaywallScreen = () => {
         <LinearGradient
           colors={
             isActive
-              ? ['#E74C3C', '#F39C12', '#E67E22', '#D35400', '#C0392B']
-              : ['#999', '#666', '#333', '#111', '#333', '#666', '#999']
+              ? ['#16C784', '#14B8A6', '#0EA5E9', '#8B5CF6', '#EC4899']
+              : ['#333', '#222', '#111', '#000', '#111', '#222', '#333']
           }
           start={{x: 0, y: 0}}
           end={{x: 1, y: isActive ? 0 : 1}}
@@ -345,7 +345,7 @@ const PaywallScreen = () => {
           <LinearGradient
             colors={
               selectedSubscription
-                ? ['#E74C3C', '#F39C12', '#E67E22', '#D35400', '#C0392B']
+                ? ['#16C784', '#14B8A6', '#0EA5E9', '#8B5CF6', '#EC4899']
                 : ['#666', '#555', '#444']
             }
             start={{x: 0, y: 0}}
