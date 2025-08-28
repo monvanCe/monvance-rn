@@ -190,7 +190,6 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
   const handleRestorePurchases = async () => {
     try {
       const purchases = await getPurchaseHistory();
-      console.log('purchases', purchases);
       const purchaseToken = purchases[0].purchaseToken;
       const packageName = 'com.cekolabs.vens';
       const productId = purchases[0].productId;

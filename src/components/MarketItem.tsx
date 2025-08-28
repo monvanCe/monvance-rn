@@ -10,6 +10,7 @@ import {t} from '../localization';
 
 import {useAppSelector} from '../store/store';
 import {eventBus} from '../middleware/eventMiddleware';
+import {ROUTE_NAMES} from '../const/routeNames';
 
 interface MarketItemProps {
   symbol: string;
@@ -31,7 +32,7 @@ export const MarketItem = ({
   variant,
 }: MarketItemProps) => {
   const theme = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const styles = style(theme.theme);
   const colors = theme.theme.colors;
   const {watchAll, coins, period, percent, loading} = useAppSelector(
@@ -57,7 +58,7 @@ export const MarketItem = ({
   };
 
   const onItemPress = () => {
-    navigation.navigate('CoinDetails' as never, {coin: symbol} as never);
+    navigation.navigate(ROUTE_NAMES.COIN_DETAILS, {coin: symbol});
   };
 
   const resolvedVariant = variant || theme.theme.ui.defaultVariant;

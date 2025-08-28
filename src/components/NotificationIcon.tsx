@@ -5,16 +5,17 @@ import {useTheme as useAppTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
 import {Text} from './ui/Text';
 import {useNavigation} from '@react-navigation/native';
+import {ROUTE_NAMES} from '../const/routeNames';
 
 const NotificationIcon = () => {
   const {theme: appTheme} = useAppTheme();
   const styles = style(appTheme);
   const {unreadCount} = useAppSelector(state => state.notification);
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('Notifications' as never)}
+      onPress={() => navigation.navigate(ROUTE_NAMES.NOTIFICATIONS)}
       style={styles.button}>
       <Icon
         name="notifications"

@@ -20,6 +20,7 @@ import ScreenHeader, {HeaderAction} from '../components/ui/ScreenHeader';
 import PromoButton from '../components/ui/PromoButton';
 import WebView from '../components/ui/WebView';
 import {useNavigation} from '@react-navigation/native';
+import {ROUTE_NAMES} from '../const/routeNames';
 
 const AVATAR_SIZE = 64;
 const PLACEHOLDER =
@@ -28,7 +29,7 @@ const PLACEHOLDER =
 const APP_VERSION = '1.0.0';
 
 const ProfileScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const {theme} = useTheme();
   const styles = style(theme);
   const user = useAppSelector(state => state.auth);
@@ -48,18 +49,23 @@ const ProfileScreen = () => {
   };
 
   const handleFeedback = () => {
-    navigation.navigate('FeedbackScreen' as never);
+    navigation.navigate(ROUTE_NAMES.FEEDBACK);
   };
 
   const handleSupportEmail = () => {
     const userId = user._id || 'unknown';
     const emailSubject = encodeURIComponent('Support Request');
-    const emailBody = encodeURIComponent(`User ID: ${userId}\n\nThis ID will help you identify my account. Please don't delete this ID.\n\nSupport Request:\n\n`);
+    const emailBody = encodeURIComponent(
+      `User ID: ${userId}\n\nThis ID will help you identify my account. Please don't delete this ID.\n\nSupport Request:\n\n`,
+    );
     const mailtoUrl = `mailto:support@cekolabs.com?subject=${emailSubject}&body=${emailBody}`;
-    
-    Linking.openURL(mailtoUrl).catch((error) => {
+
+    Linking.openURL(mailtoUrl).catch(error => {
       console.error('Error opening email app:', error);
-      Alert.alert('Error', 'Could not open email app. Please contact support@cekolabs.com manually.');
+      Alert.alert(
+        'Error',
+        'Could not open email app. Please contact support@cekolabs.com manually.',
+      );
     });
   };
 
@@ -80,7 +86,7 @@ const ProfileScreen = () => {
   };
 
   const handleGoPremium = () => {
-    navigation.navigate('Paywall' as never);
+    navigation.navigate(ROUTE_NAMES.PAYWALL);
   };
 
   const headerActions: HeaderAction[] = [
@@ -144,7 +150,10 @@ const ProfileScreen = () => {
               leftIcon="crown"
               leftIconColor="#FFD700"
               rightElement={
-                <PremiumButton title={t('go_premium')} onPress={handleGoPremium} />
+                <PremiumButton
+                  title={t('go_premium')}
+                  onPress={handleGoPremium}
+                />
               }
             />
           </SettingsSection>
@@ -270,7 +279,6 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       gap: theme.ui.spacing * 1.5,
       paddingHorizontal: theme.ui.spacing * 2,
     },
-
   });
 
 export default ProfileScreen;

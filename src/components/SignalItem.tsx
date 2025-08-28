@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../store/store';
+import {ROUTE_NAMES} from '../const/routeNames';
 
 interface SignalItemProps {
   signal: ISignal;
@@ -11,7 +12,7 @@ interface SignalItemProps {
 
 const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
   const {theme} = useTheme();
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const appLang = useAppSelector(state => state.appConfig.appLanguage);
 
   const formatPrice = (price: number) => {
@@ -43,10 +44,7 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
         },
       ]}
       onPress={() =>
-        navigation.navigate(
-          'CoinDetails' as never,
-          {coin: signal.coin} as never,
-        )
+        navigation.navigate(ROUTE_NAMES.COIN_DETAILS, {coin: signal.coin})
       }>
       <View style={styles.header}>
         <Text style={[styles.coinName, {color: theme.colors.onSurface}]}>

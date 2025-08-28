@@ -1,9 +1,5 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import {FlashList} from '@shopify/flash-list';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
@@ -179,7 +175,7 @@ const SignalsScreen: React.FC = () => {
     );
   };
 
-  const headerActions = [
+  const headerActions: any = [
     /*
     {
       iconName: 'chart-line',
@@ -206,10 +202,7 @@ const SignalsScreen: React.FC = () => {
     <View
       style={[styles.container, {backgroundColor: theme.colors.background}]}>
       {/* Header */}
-      <ScreenHeader 
-        title={t('signals')} 
-        actions={headerActions}
-      />
+      <ScreenHeader title={t('signals')} actions={headerActions} />
 
       {/* Filters */}
       <View

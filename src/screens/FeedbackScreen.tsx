@@ -32,43 +32,50 @@ const FeedbackScreen = () => {
   const [retryCount, setRetryCount] = useState(0);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-
-
   const validateForm = () => {
     setError('');
-    
+
     if (!message.trim()) {
       setError(t('please_enter_message'));
       return false;
     }
-    
+
     if (message.trim().length < 5) {
       setError('Message must be at least 5 characters long');
       return false;
     }
-    
+
     if (message.trim().length > 1000) {
       setError('Message is too long (max 1000 characters)');
       return false;
     }
-    
+
     return true;
   };
 
-  const sendFeedbackRequest = async (feedbackData: any, attempt: number = 1): Promise<boolean> => {
+  const sendFeedbackRequest = async (
+    feedbackData: any,
+    attempt: number = 1,
+  ): Promise<boolean> => {
     try {
-      await api.post(INTERNAL_ENDPOINTS.SEND_FEEDBACK, 'internal', feedbackData);
+      await api.post(
+        INTERNAL_ENDPOINTS.SEND_FEEDBACK,
+        'internal',
+        feedbackData,
+      );
       return true;
     } catch (error: any) {
       console.error(`Feedback send attempt ${attempt} failed:`, error);
-      
+
       // If it's a network error and we haven't exceeded max retries, try again
-      if (attempt < 3 && (error.code === 'NETWORK_ERROR' || error.message?.includes('Network'))) {
-        console.log(`Retrying feedback send (attempt ${attempt + 1}/3)...`);
+      if (
+        attempt < 3 &&
+        (error.code === 'NETWORK_ERROR' || error.message?.includes('Network'))
+      ) {
         await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
         return sendFeedbackRequest(feedbackData, attempt + 1);
       }
-      
+
       throw error;
     }
   };
@@ -80,7 +87,7 @@ const FeedbackScreen = () => {
 
     setIsLoading(true);
     setError('');
-    
+
     try {
       const feedbackData = {
         message: message.trim(),
@@ -93,41 +100,49 @@ const FeedbackScreen = () => {
       };
 
       const success = await sendFeedbackRequest(feedbackData);
-      
+
       if (success) {
         // Reset form
         setMessage('');
         setRating(0);
         setRetryCount(0);
-        
+
         // Show success modal
         setShowSuccessModal(true);
       }
     } catch (error: any) {
       console.error('Final feedback send error:', error);
-      
+
       let errorMessage = t('failed_to_send_feedback');
-      
-      if (error.message?.includes('Network') || error.code === 'NETWORK_ERROR') {
-        errorMessage = 'Network error. Please check your connection and try again.';
+
+      if (
+        error.message?.includes('Network') ||
+        error.code === 'NETWORK_ERROR'
+      ) {
+        errorMessage =
+          'Network error. Please check your connection and try again.';
       } else if (error.status === 400) {
-        errorMessage = 'Invalid feedback data. Please check your message and try again.';
+        errorMessage =
+          'Invalid feedback data. Please check your message and try again.';
       } else if (error.status === 500) {
         errorMessage = 'Server error. Please try again later.';
       }
-      
+
       setError(errorMessage);
       setRetryCount(prev => prev + 1);
-      
+
       // Show retry option for network errors
-      if (error.message?.includes('Network') || error.code === 'NETWORK_ERROR') {
+      if (
+        error.message?.includes('Network') ||
+        error.code === 'NETWORK_ERROR'
+      ) {
         Alert.alert(
           'Connection Error',
           'Failed to send feedback due to network issues. Would you like to try again?',
           [
-            { text: 'Cancel', style: 'cancel' },
-            { text: 'Retry', onPress: () => handleSendFeedback() }
-          ]
+            {text: 'Cancel', style: 'cancel'},
+            {text: 'Retry', onPress: () => handleSendFeedback()},
+          ],
         );
       } else {
         Alert.alert(t('error'), errorMessage);
@@ -154,12 +169,12 @@ const FeedbackScreen = () => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
-        
         <Text style={[styles.title, {color: theme.colors.onSurface}]}>
           {t('your_feedback')}
         </Text>
-        
-        <Text style={[styles.description, {color: theme.colors.onSurfaceVariant}]}>
+
+        <Text
+          style={[styles.description, {color: theme.colors.onSurfaceVariant}]}>
           {t('feedback_description')}
         </Text>
 
@@ -167,11 +182,7 @@ const FeedbackScreen = () => {
           <Text style={[styles.label, {color: theme.colors.onSurface}]}>
             {t('rating')} ({t('optional')})
           </Text>
-          <StarRating
-            rating={rating}
-            onRatingChange={setRating}
-            size={32}
-          />
+          <StarRating rating={rating} onRatingChange={setRating} size={32} />
         </View>
 
         <View style={styles.section}>
@@ -180,18 +191,21 @@ const FeedbackScreen = () => {
           </Text>
           <TextInput
             value={message}
-            onChangeText={(text) => {
+            onChangeText={text => {
               setMessage(text);
               if (error) setError(''); // Clear error when user starts typing
             }}
             placeholder={t('enter_your_feedback')}
             multiline
             numberOfLines={6}
-            style={[styles.textInput, {
-              backgroundColor: theme.colors.surface,
-              color: theme.colors.onSurface,
-              borderColor: error ? theme.colors.error : theme.colors.outline,
-            }]}
+            style={[
+              styles.textInput,
+              {
+                backgroundColor: theme.colors.surface,
+                color: theme.colors.onSurface,
+                borderColor: error ? theme.colors.error : theme.colors.outline,
+              },
+            ]}
             textAlignVertical="top"
           />
           {error ? (
@@ -200,43 +214,59 @@ const FeedbackScreen = () => {
             </Text>
           ) : null}
           {retryCount > 0 && (
-            <Text style={[styles.retryText, {color: theme.colors.onSurfaceVariant}]}>
+            <Text
+              style={[
+                styles.retryText,
+                {color: theme.colors.onSurfaceVariant},
+              ]}>
               Attempt {retryCount + 1} - Please try again
             </Text>
           )}
         </View>
 
         {/* Transaction Info Card */}
-    
 
         <View style={styles.buttonContainer}>
-          <View style={[styles.bigButton, {
-            backgroundColor: (!message.trim() || isLoading || message.trim().length < 5) 
-              ? theme.colors.onSurfaceDisabled 
-              : theme.colors.green
-          }]}>
+          <View
+            style={[
+              styles.bigButton,
+              {
+                backgroundColor:
+                  !message.trim() || isLoading || message.trim().length < 5
+                    ? theme.colors.onSurfaceDisabled
+                    : theme.colors.green,
+              },
+            ]}>
             <Button
               onPress={handleSendFeedback}
               loading={isLoading}
-              disabled={!message.trim() || isLoading || message.trim().length < 5}
+              disabled={
+                !message.trim() || isLoading || message.trim().length < 5
+              }
               style={styles.buttonInside}>
-              <Text style={[styles.buttonText, {
-                color: (!message.trim() || isLoading || message.trim().length < 5) 
-                  ? theme.colors.onSurfaceVariant 
-                  : '#FFFFFF'
-              }]}>
+              <Text
+                style={[
+                  styles.buttonText,
+                  {
+                    color:
+                      !message.trim() || isLoading || message.trim().length < 5
+                        ? theme.colors.onSurfaceVariant
+                        : '#FFFFFF',
+                  },
+                ]}>
                 {isLoading ? 'Sending...' : t('send_feedback')}
               </Text>
             </Button>
           </View>
           {message.trim().length > 0 && message.trim().length < 5 && (
-            <Text style={[styles.helpText, {color: theme.colors.onSurfaceVariant}]}>
+            <Text
+              style={[styles.helpText, {color: theme.colors.onSurfaceVariant}]}>
               Message too short (minimum 5 characters)
             </Text>
           )}
         </View>
       </ScrollView>
-      
+
       <SuccessModal
         visible={showSuccessModal}
         title={t('success')}
@@ -353,4 +383,4 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
   });
 
-export default FeedbackScreen; 
+export default FeedbackScreen;

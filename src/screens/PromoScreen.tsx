@@ -21,6 +21,7 @@ import BenefitsList from '../components/ui/BenefitsList';
 import {getPlanBadgeText} from '../utils/paywall';
 import {getCompactPremiumBenefits} from '../const/defaultBenefits';
 import {eventBus} from '../middleware/eventMiddleware';
+import {useTheme} from '../context/ThemeContext';
 
 const PromoScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
@@ -29,6 +30,7 @@ const PromoScreen = () => {
   const navigation = useNavigation<any>();
   const user = useAppSelector(state => state.auth);
   const {trialTime} = useAppSelector(state => state.subscription);
+  const {theme} = useTheme();
 
   const {
     subscriptions,
@@ -40,6 +42,10 @@ const PromoScreen = () => {
     handlePurchase,
     handleRestorePurchases,
   } = usePaywall({usePromo: true});
+
+  const maxDiscountValue = subscriptions.reduce((max, sub) => {
+    return Math.max(max, sub.discount);
+  }, 0);
 
   // Countdown for trial time
   const [remainingText, setRemainingText] = useState('');
@@ -157,8 +163,8 @@ const PromoScreen = () => {
   }, [subscriptions, activePlan, handlePlanSelection]);
 
   useEffect(() => {
-    if (subscriptions.length > 0 ) {
-    setActivePlan(subscriptions[0]._id);
+    if (subscriptions.length > 0) {
+      setActivePlan(subscriptions[0]._id);
     }
   }, [subscriptions]);
 
@@ -188,10 +194,6 @@ const PromoScreen = () => {
       // Close will be handled by event listener
     }
   };
-
-  useEffect(() => {
-    console.log('selectedSubscription', selectedSubscription);
-  }, [selectedSubscription]);
 
   const renderPlanCard = (subscription: ISubscription) => {
     const isActive = subscription._id === activePlan;
@@ -266,8 +268,8 @@ const PromoScreen = () => {
         <LinearGradient
           colors={
             isActive
-              ? ['#FFF59D', '#FFE082', '#FFCA28', '#FFC107', '#FFB300']
-              : ['#999', '#666', '#333', '#111', '#333', '#666', '#999']
+              ? ['#16C784', '#14B8A6', '#0EA5E9', '#8B5CF6', '#EC4899']
+              : ['#333', '#222', '#111', '#000', '#111', '#222', '#333']
           }
           start={{x: 0, y: 0}}
           end={{x: 1, y: isActive ? 0 : 1}}
@@ -408,35 +410,44 @@ const PromoScreen = () => {
               />
               <Text style={styles.appName}>Vens Signal</Text>
             </View>
-            
+
             {/* Limited Offer Banner */}
             <View style={styles.offerBanner}>
-              <Text style={styles.limitedOfferText}>🔥 LIMITED TIME OFFER</Text>
-              <Text style={styles.discountText}>Save up to 70% OFF</Text>
+              <View style={styles.offerBadge}>
+                <Icon name="local-fire-department" size={16} color="#FF6B35" />
+                <Text style={styles.limitedOfferText}>LIMITED TIME OFFER</Text>
+              </View>
+              <Text style={styles.discountText}>
+                Save up to{' '}
+                <Text style={styles.discountHighlight}>
+                  {maxDiscountValue}% OFF
+                </Text>
+              </Text>
             </View>
 
             {/* Big Timer */}
             <View style={styles.bigTimerContainer}>
-              <Text style={styles.timerLabel}>Offer expires in:</Text>
-              <View style={styles.bigCountdownBadge}>
-                <LinearGradient
-                  colors={['#FF6B35', '#F7931E', '#FFD600', '#FFEA00']}
-                  start={{x: 0, y: 0}}
-                  end={{x: 1, y: 1}}
-                  style={styles.bigCountdownGradient}>
+              <View style={styles.countdownBadge}>
+                <View style={styles.countdownContent}>
+                  <Text style={styles.offerExpiresText}>OFFER EXPIRES IN</Text>
                   <Text style={styles.bigCountdownText}>{remainingText}</Text>
-                </LinearGradient>
+                  <View style={styles.countdownGlow} />
+                </View>
               </View>
             </View>
           </View>
         </View>
 
         {/* Premium Advantages Section */}
-                  <BenefitsList
-            benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
-            title={t('premium_benefits')}
-            style={styles.benefitsContainer}
-          />
+        <BenefitsList
+          benefits={
+            premiumAdvantages.length > 0
+              ? premiumAdvantages
+              : getCompactPremiumBenefits()
+          }
+          title={t('premium_benefits')}
+          style={styles.benefitsContainer}
+        />
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>
@@ -480,7 +491,7 @@ const PromoScreen = () => {
           <LinearGradient
             colors={
               selectedSubscription
-                ? ['#FFF59D', '#FFE082', '#FFCA28', '#FFC107', '#FFB300']
+                ? ['#16C784', '#14B8A6', '#0EA5E9', '#8B5CF6', '#EC4899']
                 : ['#666', '#555', '#444']
             }
             start={{x: 0, y: 0}}
@@ -590,22 +601,20 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: 2.5,
-    backgroundColor: '#FFF59D',
+    backgroundColor: '#16C784',
   },
-  heroSection: {
-    height: 300,
-    position: 'relative',
-  },
+  heroSection: {},
   heroContent: {
-    position: 'absolute',
-    bottom: 30,
-    left: 20,
-    right: 20,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginTop: 75,
   },
   logoContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
+    justifyContent: 'center',
   },
   logo: {
     width: 40,
@@ -641,57 +650,82 @@ const styles = StyleSheet.create({
   },
   offerBanner: {
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
+    paddingHorizontal: 16,
+  },
+  offerBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 107, 53, 0.3)',
+    shadowColor: '#FF6B35',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   limitedOfferText: {
-    color: '#FFD700',
-    fontSize: 18,
-    fontWeight: '900',
-    textAlign: 'center',
-    marginBottom: 4,
-    letterSpacing: 1,
-    textShadowColor: '#000',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 2,
-  },
-  discountText: {
-    color: '#FF4444',
-    fontSize: 16,
+    color: '#FF6B35',
+    fontSize: 13,
     fontWeight: '800',
     textAlign: 'center',
-    letterSpacing: 0.5,
+    letterSpacing: 1.2,
+    marginLeft: 6,
+    textTransform: 'uppercase',
+  },
+  discountText: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+    letterSpacing: 0.3,
+    lineHeight: 28,
+  },
+  discountHighlight: {
+    color: '#FF6B35',
+    fontWeight: '800',
   },
   bigTimerContainer: {
     alignItems: 'center',
-    marginTop: 8,
+    paddingHorizontal: 20,
   },
-  timerLabel: {
-    color: '#fff',
+
+  countdownContent: {
+    position: 'relative',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  offerExpiresText: {
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
-    marginBottom: 8,
     textAlign: 'center',
-  },
-  bigCountdownBadge: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: '#FFD700',
-  },
-  bigCountdownGradient: {
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 20,
+    marginBottom: 4,
+    textTransform: 'uppercase',
   },
   bigCountdownText: {
-    color: '#000',
-    fontWeight: '900',
+    color: '#16C784',
+    fontWeight: '800',
     fontSize: 24,
     textAlign: 'center',
     letterSpacing: 2,
-    textShadowColor: 'rgba(255,255,255,0.3)',
-    textShadowOffset: {width: 1, height: 1},
-    textShadowRadius: 1,
+    fontFamily: 'monospace',
+  },
+  countdownGlow: {
+    position: 'absolute',
+    top: -10,
+    left: -10,
+    right: -10,
+    bottom: -10,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    borderRadius: 30,
+    zIndex: -1,
   },
   pricingContainer: {
     paddingHorizontal: 20,
@@ -716,7 +750,7 @@ const styles = StyleSheet.create({
     left: -4,
     right: -4,
     bottom: -4,
-    backgroundColor: 'rgba(255, 234, 0, 0.25)',
+    backgroundColor: 'rgba(22, 199, 132, 0.25)',
     borderRadius: 22,
     zIndex: 1,
   },

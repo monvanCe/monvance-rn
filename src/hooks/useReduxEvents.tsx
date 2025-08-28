@@ -65,7 +65,6 @@ export const useReduxEvents = () => {
       dispatch(setUser(null));
     });
     eventBus.on('updateUserSuccess', ({user}) => {
-      console.log('updateUserSuccess', user);
       dispatch(setUserUpdate(user));
     });
 

@@ -4,4 +4,6 @@ export const ROUTE_NAMES = {
   COIN_DETAILS: 'CoinDetails',
   PROMO: 'Promo',
   FEEDBACK: 'FeedbackScreen',
+  PAYWALL: 'Paywall',
+  NOTIFICATIONS: 'Notifications',
 } as const;

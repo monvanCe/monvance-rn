@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../../context/ThemeContext';
 import {Text} from './Text';
 import {useNavigation} from '@react-navigation/native';
+import {ROUTE_NAMES} from '../../const/routeNames';
 
 interface PromoButtonProps {
   trialTime: string;
@@ -150,7 +151,7 @@ const PromoButton: React.FC<PromoButtonProps> = ({trialTime}) => {
   });
 
   const onPress = () => {
-    navigation.navigate('Promo');
+    navigation.navigate(ROUTE_NAMES.PROMO);
   };
 
   return (

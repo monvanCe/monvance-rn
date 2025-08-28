@@ -7,13 +7,15 @@ import {t} from '../localization';
 import {WatchlistPeriod, WatchlistPercent} from '../const/enums';
 import {eventBus} from '../middleware/eventMiddleware';
 import {useAppSelector} from '../store/store';
+import {useNavigation} from '@react-navigation/native';
+import {ROUTE_NAMES} from '../const/routeNames';
 
-type Option = {label: string; value: string};
+type Option = {label: string; value: string; premium?: boolean};
 
 const periodOptions: Option[] = [
-  {label: '1m', value: WatchlistPeriod.MINUTE_1.toString()},
-  {label: '2m', value: WatchlistPeriod.MINUTE_2.toString()},
-  {label: '3m', value: WatchlistPeriod.MINUTE_3.toString()},
+  {label: '1m', value: WatchlistPeriod.MINUTE_1.toString(), premium: true},
+  {label: '2m', value: WatchlistPeriod.MINUTE_2.toString(), premium: true},
+  {label: '3m', value: WatchlistPeriod.MINUTE_3.toString(), premium: true},
   {label: '5m', value: WatchlistPeriod.MINUTE_5.toString()},
   {label: '15m', value: WatchlistPeriod.MINUTE_15.toString()},
   {label: '30m', value: WatchlistPeriod.MINUTE_30.toString()},
@@ -22,9 +24,9 @@ const periodOptions: Option[] = [
 ];
 
 const percentOptions: Option[] = [
-  {label: '1%', value: WatchlistPercent.PERCENT_1.toString()},
-  {label: '2%', value: WatchlistPercent.PERCENT_2.toString()},
-  {label: '3%', value: WatchlistPercent.PERCENT_3.toString()},
+  {label: '1%', value: WatchlistPercent.PERCENT_1.toString(), premium: true},
+  {label: '2%', value: WatchlistPercent.PERCENT_2.toString(), premium: true},
+  {label: '3%', value: WatchlistPercent.PERCENT_3.toString(), premium: true},
   {label: '5%', value: WatchlistPercent.PERCENT_5.toString()},
   {label: '10%', value: WatchlistPercent.PERCENT_10.toString()},
   {label: '25%', value: WatchlistPercent.PERCENT_25.toString()},
@@ -37,6 +39,8 @@ const ExpandableFilter = () => {
   const styles = style(appTheme);
   const [isExpanded, setIsExpanded] = useState(false);
   const {period, percent, loading} = useAppSelector(state => state.watchlist);
+  const isUserPremium = useAppSelector(state => state.auth.isPremium);
+  const navigation = useNavigation<any>();
 
   return (
     <View style={styles.container}>
@@ -86,6 +90,9 @@ const ExpandableFilter = () => {
                   key={option.value}
                   onPress={() => {
                     eventBus.emit('periodChanged', option.value);
+                    if (option.premium && !isUserPremium) {
+                      navigation.navigate(ROUTE_NAMES.PAYWALL);
+                    }
                   }}
                   style={{
                     backgroundColor:
@@ -106,7 +113,12 @@ const ExpandableFilter = () => {
               {percentOptions.map(option => (
                 <Button
                   key={option.value}
-                  onPress={() => eventBus.emit('percentChanged', option.value)}
+                  onPress={() => {
+                    eventBus.emit('percentChanged', option.value);
+                    if (option.premium && !isUserPremium) {
+                      navigation.navigate(ROUTE_NAMES.PAYWALL);
+                    }
+                  }}
                   style={{
                     backgroundColor:
                       percent === Number(option.value)
