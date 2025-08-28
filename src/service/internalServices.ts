@@ -16,7 +16,7 @@ export const internalService = {
   login: async (): Promise<IUser> => {
     const deviceId = await DeviceInfo.getUniqueId();
     const user = await api.post<IUser>(INTERNAL_ENDPOINTS.LOGIN, 'internal', {
-      deviceId: 'omerpromoveraq',
+      deviceId: deviceId,
       platform: Platform.OS === 'ios' ? 'IOS' : 'ANDROID',
       version: Platform.OS === 'ios' ? IOS_VERSION : ANDROID_VERSION,
     });
