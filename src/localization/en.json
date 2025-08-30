@@ -87,21 +87,5 @@
   "failed_to_send_feedback": "Failed to send feedback. Please try again.",
   "transaction_details": "Transaction Details",
   "include_transaction_info": "Include recent transaction information",
-  "transaction_info_help": "This helps us better understand and resolve any payment-related issues",
-  "benefit_instant_signals": "⚡ Fast Signals",
-  "benefit_instant_signals_desc": "Real-time trading notifications",
-  "benefit_advanced_analytics": "📊 Market Data",
-  "benefit_advanced_analytics_desc": "Professional charts and indicators",
-  "benefit_priority_support": "🎯 Premium Support",
-  "benefit_priority_support_desc": "Priority customer assistance",
-  "benefit_ad_free": "🚫 No Ads",
-  "benefit_ad_free_desc": "Clean, ad-free experience",
-  "benefit_unlimited_alerts": "🔔 Price Alerts",
-  "benefit_unlimited_alerts_desc": "Custom price notifications",
-  "benefit_exclusive_insights": "💎 Expert Analysis",
-  "benefit_exclusive_insights_desc": "Professional market insights",
-  "benefit_early_access": "🚀 New Features",
-  "benefit_early_access_desc": "Access latest updates first",
-  "benefit_portfolio_tracking": "📈 Portfolio Tools",
-  "benefit_portfolio_tracking_desc": "Track your investments"
+  "transaction_info_help": "This helps us better understand and resolve any payment-related issues"
 }

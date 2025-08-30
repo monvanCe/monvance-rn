@@ -251,6 +251,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
+      paddingBottom: 60,
     },
     scrollView: {
       flex: 1,

@@ -87,21 +87,5 @@
   "failed_to_send_feedback": "Geri bildirim gönderilemedi. Lütfen tekrar deneyin.",
   "transaction_details": "İşlem Detayları",
   "include_transaction_info": "Son işlem bilgilerini dahil et",
-  "transaction_info_help": "Bu, ödeme ile ilgili sorunları daha iyi anlamamıza ve çözmemize yardımcı olur",
-  "benefit_instant_signals": "⚡ Hızlı Sinyaller",
-  "benefit_instant_signals_desc": "Gerçek zamanlı ticaret bildirimleri",
-  "benefit_advanced_analytics": "📊 Piyasa Verileri",
-  "benefit_advanced_analytics_desc": "Profesyonel grafikler ve göstergeler",
-  "benefit_priority_support": "🎯 Premium Destek",
-  "benefit_priority_support_desc": "Öncelikli müşteri yardımı",
-  "benefit_ad_free": "🚫 Reklamsız",
-  "benefit_ad_free_desc": "Temiz, reklamsız deneyim",
-  "benefit_unlimited_alerts": "🔔 Fiyat Uyarıları",
-  "benefit_unlimited_alerts_desc": "Özel fiyat bildirimleri",
-  "benefit_exclusive_insights": "💎 Uzman Analizi",
-  "benefit_exclusive_insights_desc": "Profesyonel piyasa içgörüleri",
-  "benefit_early_access": "🚀 Yeni Özellikler",
-  "benefit_early_access_desc": "Son güncellemelere ilk erişim",
-  "benefit_portfolio_tracking": "📈 Portföy Araçları",
-  "benefit_portfolio_tracking_desc": "Yatırımlarınızı takip edin"
+  "transaction_info_help": "Bu, ödeme ile ilgili sorunları daha iyi anlamamıza ve çözmemize yardımcı olur"
 }

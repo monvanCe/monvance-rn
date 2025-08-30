@@ -18,9 +18,10 @@ import {useAppSelector} from '../store/store';
 import {useNavigation} from '@react-navigation/native';
 import PriceTag from '../components/PriceTag';
 import BenefitsList from '../components/ui/BenefitsList';
+import BenefitsSkeleton from '../components/ui/BenefitsSkeleton';
+import PackageSkeleton from '../components/ui/PackageSkeleton';
 import {getPlanBadgeText} from '../utils/paywall';
 import {eventBus} from '../middleware/eventMiddleware';
-import {getCompactPremiumBenefits} from '../const/defaultBenefits';
 
 const PaywallScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
@@ -296,19 +297,25 @@ const PaywallScreen = () => {
           </View>
         </View>
 
-                {/* Premium Advantages Section */}
-        <BenefitsList
-          benefits={premiumAdvantages.length > 0 ? premiumAdvantages : getCompactPremiumBenefits()}
-          title={t('premium_benefits')}
-          style={styles.benefitsContainer}
-        />
+        {/* Premium Advantages Section */}
+        {loading ? (
+          <BenefitsSkeleton />
+        ) : (
+          <BenefitsList
+            benefits={premiumAdvantages}
+            title={t('premium_benefits')}
+            style={styles.benefitsContainer}
+          />
+        )}
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>
           {loading ? (
-            <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>{t('packages_loading')}</Text>
-            </View>
+            <>
+              <PackageSkeleton />
+              <PackageSkeleton />
+              <PackageSkeleton />
+            </>
           ) : subscriptions.length > 0 ? (
             subscriptions.map(renderPlanCard)
           ) : (
@@ -634,17 +641,6 @@ const styles = StyleSheet.create({
   benefitsContainer: {
     marginHorizontal: 20,
     marginTop: 12,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 50,
-  },
-  loadingText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   noDataContainer: {
     flex: 1,

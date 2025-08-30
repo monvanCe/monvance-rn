@@ -19,8 +19,9 @@ import {useNavigation} from '@react-navigation/native';
 import PriceTag from '../components/PriceTag';
 import BenefitsList from '../components/ui/BenefitsList';
 import {getPlanBadgeText} from '../utils/paywall';
-import {getCompactPremiumBenefits} from '../const/defaultBenefits';
-  import {eventBus} from '../middleware/eventMiddleware';
+import BenefitsSkeleton from '../components/ui/BenefitsSkeleton';
+import PackageSkeleton from '../components/ui/PackageSkeleton';
+import {eventBus} from '../middleware/eventMiddleware';
 
 const PromoScreen = () => {
   const [activePlan, setActivePlan] = useState<string | null>(null);
@@ -437,22 +438,24 @@ const PromoScreen = () => {
         </View>
 
         {/* Premium Advantages Section */}
-        <BenefitsList
-          benefits={
-            premiumAdvantages.length > 0
-              ? premiumAdvantages
-              : getCompactPremiumBenefits()
-          }
-          title={t('premium_benefits')}
-          style={styles.benefitsContainer}
-        />
+        {loading ? (
+          <BenefitsSkeleton />
+        ) : (
+          <BenefitsList
+            benefits={premiumAdvantages}
+            title={t('premium_benefits')}
+            style={styles.benefitsContainer}
+          />
+        )}
 
         {/* Pricing Cards */}
         <View style={styles.pricingContainer}>
           {loading ? (
-            <View style={styles.loadingContainer}>
-              <Text style={styles.loadingText}>{t('packages_loading')}</Text>
-            </View>
+            <>
+              <PackageSkeleton />
+              <PackageSkeleton />
+              <PackageSkeleton />
+            </>
           ) : subscriptions.length > 0 ? (
             subscriptions.map(renderPlanCard)
           ) : (

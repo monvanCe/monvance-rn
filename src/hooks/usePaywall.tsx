@@ -29,6 +29,7 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
     loading,
     selectedSubscription,
     promoPackages,
+    paywallData,
   } = useAppSelector(state => state.subscription);
   const [isLoading, setIsLoading] = useState(false);
   const [subscriptionsWithPrices, setSubscriptionsWithPrices] = useState<
@@ -42,8 +43,11 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
   );
 
   useEffect(() => {
-    fetchPaywallData();
-  }, []);
+    // Only fetch paywall data if it doesn't already exist
+    if (!paywallData) {
+      fetchPaywallData();
+    }
+  }, [paywallData]);
 
   useEffect(() => {
     if (sourceSubscriptions.length > 0) {
@@ -52,6 +56,11 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
   }, [sourceSubscriptions]);
 
   const fetchPaywallData = async () => {
+    // Don't fetch if paywall data already exists
+    if (paywallData) {
+      return;
+    }
+
     try {
       setIsLoading(true);
       await internalService.getPaywall();
@@ -133,27 +142,6 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
     try {
       if (Platform.OS === 'android') {
         await initConnection();
-        // Ensure we have a current Activity (foreground + interactions flushed)
-        await new Promise<void>(resolve => {
-          if (AppState.currentState === 'active') {
-            InteractionManager.runAfterInteractions(() => {
-              setTimeout(() => resolve(), 50);
-            });
-            return;
-          }
-          let sub: {remove: () => void} | undefined;
-          const onChange = (state: string) => {
-            if (state === 'active') {
-              if (sub) sub.remove();
-              InteractionManager.runAfterInteractions(() => {
-                setTimeout(() => resolve(), 50);
-              });
-            }
-          };
-          sub = AppState.addEventListener('change', onChange) as unknown as {
-            remove: () => void;
-          };
-        });
 
         if (!subscription.offerToken) {
           throw new Error('Offer token not found');
