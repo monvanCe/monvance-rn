@@ -3,7 +3,7 @@ import {loggerInterceptor} from '../middleware/loggerInterceptor';
 import {authInterceptor} from '../middleware/authInterceptor';
 
 const instance = axios.create({
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
