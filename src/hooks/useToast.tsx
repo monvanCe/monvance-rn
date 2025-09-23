@@ -1,6 +1,7 @@
 import {useEffect} from 'react';
 import Toast from 'react-native-toast-message';
 import {eventBus} from '../middleware/eventMiddleware';
+import {t} from '../localization';
 
 export const useToast = () => {
   useEffect(() => {
@@ -19,10 +20,22 @@ export const useToast = () => {
       });
     });
 
-    eventBus.on('signalReceived', ({title, body}) => {
+    eventBus.on('signalReceived', data => {
+      const previous = Number(data.previousPrice);
+      const current = Number(data.currentPrice);
+      const diff = current - previous;
+      const percent = previous !== 0 ? (diff / previous) * 100 : 0;
+      const directionKey = percent >= 0 ? 'increased' : 'decreased';
+
       Toast.show({
-        text1: title,
-        text2: body,
+        text1: t('signal_toast_title'),
+        text2: t('signal_toast_body', {
+          percent: Math.abs(percent).toFixed(2),
+          direction: t(directionKey),
+          period: data.period,
+          prev: data.previousPrice,
+          curr: data.currentPrice,
+        }),
         type: 'info',
       });
     });

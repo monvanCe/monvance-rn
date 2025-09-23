@@ -193,6 +193,17 @@ interface ISignalsResponse {
   limit: number;
 }
 
+interface ISignalPushData {
+  currentPrice: string;
+  previousPrice: string;
+  period: string; // minutes as string
+  userPercent: string; // threshold percent as string
+  messageNumber: string; // backend message/status code
+  type: 'signal';
+  status: string;
+  language?: string;
+}
+
 interface ISignalsState {
   allSignals: ISignal[];
   watchlistSignals: ISignal[];
