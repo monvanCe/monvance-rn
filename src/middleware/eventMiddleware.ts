@@ -35,7 +35,7 @@ type eventType = {
   getMessagesByChatIdSuccess: IGetMessagesByChatIdResponse;
   sendMessageSuccess: ISendMessageResponse;
   getMessageFromCentrifuge: IMessage;
-  signalReceived: {title: string; body: string};
+  signalReceived: ISignalPushData;
   // Signals events
   getAllSignalsSuccess: ISignalsResponse;
   getWatchlistSignalsSuccess: ISignalsResponse;

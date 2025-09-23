@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {t} from '../localization';
 import {eventBus} from '../middleware/eventMiddleware';
 import {useAppDispatch} from '../store/store';
 import {
@@ -219,15 +220,27 @@ export const useReduxEvents = () => {
     });
 
     //SIGNAL
-    eventBus.on('signalReceived', ({title, body}) => {
+    eventBus.on('signalReceived', data => {
+      const previous = Number(data.previousPrice);
+      const current = Number(data.currentPrice);
+      const diff = current - previous;
+      const percent = previous !== 0 ? (diff / previous) * 100 : 0;
+      const directionKey = percent >= 0 ? 'increased' : 'decreased';
+
       const notification: INotification = {
         _id: Math.random().toString(36).substr(2, 9),
         timestamp: Date.now().toString(),
         isRead: false,
         type: 'info',
-        data: null,
-        title,
-        body,
+        data,
+        title: t('signal_toast_title'),
+        body: t('signal_toast_body', {
+          percent: Math.abs(percent).toFixed(2),
+          direction: t(directionKey),
+          period: data.period,
+          prev: data.previousPrice,
+          curr: data.currentPrice,
+        }),
       };
       dispatch(addNotification(notification));
     });
