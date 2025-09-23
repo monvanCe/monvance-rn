@@ -126,7 +126,7 @@ const ProfileScreen = () => {
     !user?.isPremium &&
     new Date(trialTime || 0).getTime() > Date.now();
 
-  const ringPadding = 3;
+  const ringPadding = 4;
   const ringColor = user?.isPremium ? '#FFD700' : theme.colors.surface;
 
   return (
