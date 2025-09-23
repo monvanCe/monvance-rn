@@ -126,6 +126,9 @@ const ProfileScreen = () => {
     !user?.isPremium &&
     new Date(trialTime || 0).getTime() > Date.now();
 
+  const ringPadding = 3;
+  const ringColor = user?.isPremium ? '#FFD700' : theme.colors.surface;
+
   return (
     <View style={styles.container}>
       <ScreenHeader
@@ -138,25 +141,33 @@ const ProfileScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.avatarContainer}>
-          <Image source={{uri: avatar}} style={styles.avatar} />
+          <View
+            style={[
+              styles.avatarRing,
+              {padding: ringPadding, backgroundColor: ringColor},
+            ]}>
+            <Image source={{uri: avatar}} style={styles.avatar} />
+          </View>
           <Text style={styles.username}>{username}</Text>
         </View>
         <View style={styles.cardsWrapper}>
           {/* Premium Card */}
-          <SettingsSection>
-            <SettingsItem
-              title={t('premium')}
-              subtitle={t('unlock_all_features')}
-              leftIcon="crown"
-              leftIconColor="#FFD700"
-              rightElement={
-                <PremiumButton
-                  title={t('go_premium')}
-                  onPress={handleGoPremium}
-                />
-              }
-            />
-          </SettingsSection>
+          {!user?.isPremium && (
+            <SettingsSection>
+              <SettingsItem
+                title={t('premium')}
+                subtitle={t('unlock_all_features')}
+                leftIcon="crown"
+                leftIconColor="#FFD700"
+                rightElement={
+                  <PremiumButton
+                    title={t('go_premium')}
+                    onPress={handleGoPremium}
+                  />
+                }
+              />
+            </SettingsSection>
+          )}
           {/*
         <View
           style={[
@@ -267,8 +278,11 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       width: AVATAR_SIZE,
       height: AVATAR_SIZE,
       borderRadius: AVATAR_SIZE / 2,
-      borderWidth: 2,
-      borderColor: theme.colors.surface,
+    },
+    avatarRing: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: (AVATAR_SIZE + 6) / 2,
       marginBottom: theme.ui.spacing,
     },
     username: {
