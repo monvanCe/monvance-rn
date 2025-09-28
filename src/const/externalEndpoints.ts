@@ -1,3 +1,3 @@
 export const BINANCE_ENDPOINTS = {
-  TICKER_PRICE: '/ticker/price',
+  TICKER_PRICE: '/ticker/24hr',
 } as const;

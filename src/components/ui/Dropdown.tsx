@@ -69,7 +69,7 @@ export const Dropdown = ({
           borderRadius: appTheme.ui.radius,
           borderWidth: appTheme.ui.borderWidth,
           backgroundColor: colors.surface,
-          borderColor: colors.outline,
+          borderColor: colors.onSurface,
         },
       ]}>
       {items.map(item => (
@@ -81,12 +81,12 @@ export const Dropdown = ({
             }}
             title={item.label}
             titleStyle={{
-              color: colors.onSurface,
+              color: colors.text,
             }}
             leadingIcon={selectedValue === item.value ? 'check' : undefined}
           />
           {item.value !== items[items.length - 1].value && (
-            <Divider style={{backgroundColor: colors.outline}} />
+            <Divider style={{backgroundColor: colors.onSurface}} />
           )}
         </React.Fragment>
       ))}

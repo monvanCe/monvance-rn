@@ -78,7 +78,7 @@ const NotificationItem = ({
       case 'warning':
         return appTheme.colors.premium;
       case 'error':
-        return appTheme.colors.error;
+        return appTheme.colors.red;
       default:
         return appTheme.colors.primary;
     }
@@ -103,7 +103,7 @@ const NotificationItem = ({
           style={[
             styles.swipeAction,
             styles.deleteAction,
-            {backgroundColor: appTheme.colors.error},
+            {backgroundColor: appTheme.colors.red},
           ]}>
           <Icon
             name="delete"

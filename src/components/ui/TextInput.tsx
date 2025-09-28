@@ -44,7 +44,7 @@ export const TextInput = ({
       borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
       borderColor: isOutlined
         ? error
-          ? colors.error
+          ? colors.red
           : colors.outline
         : 'transparent',
       borderRadius: appTheme.ui.radius,

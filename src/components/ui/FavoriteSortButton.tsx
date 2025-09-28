@@ -17,7 +17,7 @@ const FavoriteSortButton: React.FC<FavoriteSortButtonProps> = ({onPress}) => {
         styles.button,
         {
           backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.outline,
+          borderColor: theme.colors.border,
         },
       ]}
       onPress={onPress}
@@ -25,11 +25,11 @@ const FavoriteSortButton: React.FC<FavoriteSortButtonProps> = ({onPress}) => {
       <Icon
         name="heart"
         size={20}
-        color={theme.colors.primary}
+        color={theme.colors.error}
         style={{marginRight: 6}}
       />
       <View>
-        <Icon name="sort" size={16} color={theme.colors.onSurface} />
+        <Icon name="sort" size={16} color={theme.colors.text} />
       </View>
     </TouchableOpacity>
   );

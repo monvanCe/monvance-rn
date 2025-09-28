@@ -31,7 +31,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 }) => {
   const {theme} = useTheme();
   const styles = createStyles(theme);
-  
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
@@ -72,7 +72,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
       visible={visible}
       animationType="none"
       onRequestClose={onClose}>
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.overlay}
         activeOpacity={1}
         onPress={onClose}>
@@ -91,37 +91,39 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
                 styles.modal,
                 {
                   backgroundColor: theme.colors.surface,
-                  transform: [
-                    {scale: scaleAnim},
-                  ],
+                  transform: [{scale: scaleAnim}],
                   opacity: fadeAnim,
                 },
               ]}>
-              
               {/* Success Icon */}
-              <View style={[styles.iconContainer, {backgroundColor: theme.colors.green}]}>
+              <View
+                style={[
+                  styles.iconContainer,
+                  {backgroundColor: theme.colors.success},
+                ]}>
                 <Icon name="check" size={32} color="#FFFFFF" />
               </View>
 
               {/* Title */}
-              <Text style={[styles.title, {color: theme.colors.onSurface}]}>
+              <Text style={[styles.title, {color: theme.colors.text}]}>
                 {title}
               </Text>
 
               {/* Message */}
-              <Text style={[styles.message, {color: theme.colors.onSurfaceVariant}]}>
+              <Text
+                style={[styles.message, {color: theme.colors.textSecondary}]}>
                 {message}
               </Text>
 
               {/* Button */}
               <View style={styles.buttonContainer}>
-                <View style={[styles.bigButton, {backgroundColor: theme.colors.green}]}>
-                  <Button
-                    onPress={onClose}
-                    style={styles.buttonInside}>
-                    <Text style={styles.buttonText}>
-                      {buttonText}
-                    </Text>
+                <View
+                  style={[
+                    styles.bigButton,
+                    {backgroundColor: theme.colors.success},
+                  ]}>
+                  <Button onPress={onClose} style={styles.buttonInside}>
+                    <Text style={styles.buttonText}>{buttonText}</Text>
                   </Button>
                 </View>
               </View>
@@ -155,7 +157,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
       paddingHorizontal: theme.ui.spacing * 3,
     },
     modal: {
-      width: Math.min(screenWidth - (theme.ui.spacing * 6), 320),
+      width: Math.min(screenWidth - theme.ui.spacing * 6, 320),
       borderRadius: theme.ui.radius * 2,
       padding: theme.ui.spacing * 3,
       alignItems: 'center',
@@ -209,4 +211,4 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
   });
 
-export default SuccessModal; 
+export default SuccessModal;

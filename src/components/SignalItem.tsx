@@ -40,14 +40,14 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
         styles.container,
         {
           backgroundColor: theme.colors.surface,
-          borderColor: theme.colors.outline,
+          borderColor: theme.colors.border,
         },
       ]}
       onPress={() =>
         navigation.navigate(ROUTE_NAMES.COIN_DETAILS, {coin: signal.coin})
       }>
       <View style={styles.header}>
-        <Text style={[styles.coinName, {color: theme.colors.onSurface}]}>
+        <Text style={[styles.coinName, {color: theme.colors.text}]}>
           {signal.coin}
         </Text>
         <View
@@ -55,16 +55,16 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
             styles.changeContainer,
             {
               backgroundColor: signal.isIncrease
-                ? theme.colors.green
-                : theme.colors.error,
+                ? theme.colors.ascent
+                : theme.colors.descent,
             },
           ]}>
           <Icon
             name={signal.isIncrease ? 'trending-up' : 'trending-down'}
             size={12}
-            color={theme.colors.onSurface}
+            color={theme.colors.text}
           />
-          <Text style={[styles.changeText, {color: theme.colors.onSurface}]}>
+          <Text style={[styles.changeText, {color: theme.colors.text}]}>
             {formatChangePercent(signal.changePercent)}
           </Text>
         </View>
@@ -73,26 +73,25 @@ const SignalItem: React.FC<SignalItemProps> = ({signal}) => {
       <View style={styles.details}>
         <View style={styles.priceContainer}>
           <Text
-            style={[styles.priceLabel, {color: theme.colors.onSurfaceVariant}]}>
+            style={[styles.priceLabel, {color: theme.colors.textSecondary}]}>
             Current Price
           </Text>
-          <Text style={[styles.priceValue, {color: theme.colors.onSurface}]}>
+          <Text style={[styles.priceValue, {color: theme.colors.text}]}>
             ${formatPrice(signal.currentPrice)}
           </Text>
         </View>
 
         <View style={styles.priceContainer}>
           <Text
-            style={[styles.priceLabel, {color: theme.colors.onSurfaceVariant}]}>
+            style={[styles.priceLabel, {color: theme.colors.textSecondary}]}>
             Previous Price
           </Text>
-          <Text style={[styles.priceValue, {color: theme.colors.onSurface}]}>
+          <Text style={[styles.priceValue, {color: theme.colors.text}]}>
             ${formatPrice(signal.previousPrice)}
           </Text>
         </View>
         <View style={{justifyContent: 'flex-end'}}>
-          <Text
-            style={[styles.timeText, {color: theme.colors.onSurfaceVariant}]}>
+          <Text style={[styles.timeText, {color: theme.colors.textSecondary}]}>
             {formatTime(signal.periodStartTime)}
           </Text>
         </View>

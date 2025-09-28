@@ -45,11 +45,11 @@ export const Button = ({
       justifyContent: 'center',
       backgroundColor:
         variant === 'contained'
-          ? colors.primary
+          ? colors.brand
           : variant === 'outlined'
           ? 'transparent'
           : 'transparent',
-      borderColor: variant === 'outlined' ? colors.outline : 'transparent',
+      borderColor: variant === 'outlined' ? colors.border : 'transparent',
     },
     iconContainer: {
       flexDirection: 'row',
@@ -67,7 +67,7 @@ export const Button = ({
     <PaperButton
       mode={variant || appTheme.ui.defaultVariant}
       style={[styles.button, buttonStyle, style]}
-      textColor={variant === 'contained' ? colors.onSurface : colors.primary}
+      textColor={variant === 'contained' ? colors.text : colors.brand}
       onPress={onPress}
       disabled={disabled}
       loading={loading}

@@ -28,7 +28,7 @@ export const Switch = ({
     width: 50,
     height: 28,
     borderRadius: 14,
-    backgroundColor: value ? colors.primary : colors.surface,
+    backgroundColor: colors.surface,
     padding: 2,
     position: 'relative' as const,
   };
@@ -37,7 +37,7 @@ export const Switch = ({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: value ? colors.surface : colors.outline,
+    backgroundColor: value ? colors.brand : colors.background,
     position: 'absolute' as const,
     top: 2,
     left: value ? 24 : 2,

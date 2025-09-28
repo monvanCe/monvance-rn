@@ -1,17 +1,15 @@
 import {getApp} from '@react-native-firebase/app';
 import {
   getMessaging,
-  requestPermission,
   getToken,
-  hasPermission,
   onMessage,
   setBackgroundMessageHandler,
   isDeviceRegisteredForRemoteMessages,
   registerDeviceForRemoteMessages,
-  AuthorizationStatus,
 } from '@react-native-firebase/messaging';
 import {getItem, setItem} from './storage';
 import {eventBus} from '../middleware/eventMiddleware';
+import {PermissionsAndroid} from 'react-native';
 
 const NOTIFICATION_TOKEN_KEY = 'notification_token';
 
@@ -20,10 +18,10 @@ const messaging = getMessaging(app);
 
 export const requestNotificationPermission = async (): Promise<boolean> => {
   try {
-    const authStatus = await requestPermission(messaging);
-    const enabled =
-      authStatus === AuthorizationStatus.AUTHORIZED ||
-      authStatus === AuthorizationStatus.PROVISIONAL;
+    const authStatus = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+    );
+    const enabled = authStatus === PermissionsAndroid.RESULTS.GRANTED;
     return enabled;
   } catch (error) {
     console.error('Notification permission request failed:', error);
@@ -31,22 +29,9 @@ export const requestNotificationPermission = async (): Promise<boolean> => {
   }
 };
 
-export const checkNotificationPermission = async (): Promise<boolean> => {
-  try {
-    const authStatus = await hasPermission(messaging);
-    return (
-      authStatus === AuthorizationStatus.AUTHORIZED ||
-      authStatus === AuthorizationStatus.PROVISIONAL
-    );
-  } catch (error) {
-    console.error('Notification permission check failed:', error);
-    return false;
-  }
-};
-
 export const getNotificationToken = async (): Promise<string | null> => {
   try {
-    if (!(await isDeviceRegisteredForRemoteMessages(messaging))) {
+    if (!isDeviceRegisteredForRemoteMessages(messaging)) {
       await registerDeviceForRemoteMessages(messaging);
     }
     const token = await getToken(messaging);
@@ -94,14 +79,8 @@ export const setupNotificationListeners = () => {
 
 export const initializeNotification = async (): Promise<void> => {
   try {
-    const hasPerm = await checkNotificationPermission();
-    if (!hasPerm) {
-      const permissionGranted = await requestNotificationPermission();
-      if (!permissionGranted) {
-        console.log('Notification permission denied');
-        return;
-      }
-    }
+    await requestNotificationPermission();
+
     const currentToken = await getNotificationToken();
     if (!currentToken) {
       console.log('Failed to get notification token');

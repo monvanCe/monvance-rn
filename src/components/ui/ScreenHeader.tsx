@@ -33,7 +33,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   backgroundColor,
   showChat = true, // Default to true - show chat everywhere
   rightExtra,
-  promoButton=true,
+  promoButton = true,
 }) => {
   const {theme} = useTheme();
   const styles = style(theme);
@@ -62,7 +62,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
         <IconComponent
           name={action.iconName}
           size={action.size || theme.ui.spacing * 3}
-          color={action.color || theme.colors.onSurface}
+          color={action.color || theme.colors.text}
         />
       </TouchableOpacity>
     );
@@ -85,7 +85,7 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
               <Icon
                 name="chat"
                 size={theme.ui.spacing * 3.5}
-                color={theme.colors.primary}
+                color={theme.colors.onSurfaceContent}
               />
             </TouchableOpacity>
             {hasNewMessages && <View style={styles.newMessageBadge} />}
@@ -110,7 +110,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
     headerTitle: {
       fontSize: theme.ui.fontSize * 2,
       fontWeight: '700',
-      color: theme.colors.onSurface,
+      color: theme.colors.text,
     },
     rightContainer: {
       flexDirection: 'row',
@@ -124,7 +124,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       position: 'relative',
     },
     chatButton: {
-      backgroundColor: theme.colors.surfaceVariant,
+      backgroundColor: theme.colors.onSurface,
       borderRadius: 100,
       padding: theme.ui.spacing,
     },

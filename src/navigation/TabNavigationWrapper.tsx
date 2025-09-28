@@ -133,30 +133,26 @@ const TabNavigationWrapper = () => {
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>
-
-        <GestureDetector gesture={panGesture}>
-          <View
-            style={[
-              styles.container,
-              {backgroundColor: appTheme.colors.background},
-            ]}>
-            <View style={styles.mainContainer}>
-                        <TabNavigation
-
-          />
-            </View>
-
-            <Animated.View
-              style={[styles.darkOverlay, overlayAnimatedStyle]}
-              pointerEvents="none"
-            />
-
-            <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
-              <ChatScreen onNavigateToTab={navigateToTab} />
-            </Animated.View>
+      <GestureDetector gesture={panGesture}>
+        <View
+          style={[
+            styles.container,
+            {backgroundColor: appTheme.colors.background},
+          ]}>
+          <View style={styles.mainContainer}>
+            <TabNavigation />
           </View>
-        </GestureDetector>
-      
+
+          <Animated.View
+            style={[styles.darkOverlay, overlayAnimatedStyle]}
+            pointerEvents="none"
+          />
+
+          <Animated.View style={[styles.chatOverlay, chatAnimatedStyle]}>
+            <ChatScreen onNavigateToTab={navigateToTab} />
+          </Animated.View>
+        </View>
+      </GestureDetector>
     </GestureHandlerRootView>
   );
 };

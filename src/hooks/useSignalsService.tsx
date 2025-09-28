@@ -7,8 +7,6 @@ export const useSignalsService = () => {
     const handleLoginSuccess = async () => {
       try {
         const response = await signalsService.getAllSignals({
-          period: 5,
-          percent: 3,
           limit: 50,
           skip: 0,
         });

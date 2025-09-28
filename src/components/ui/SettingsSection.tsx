@@ -17,10 +17,7 @@ const SettingsSection: React.FC<SettingsSectionProps> = ({title, children}) => {
     <SettingsCard>
       {title && (
         <Text
-          style={[
-            styles.sectionTitle,
-            {color: theme.colors.onSurfaceVariant},
-          ]}>
+          style={[styles.sectionTitle, {color: theme.colors.textSecondary}]}>
           {title}
         </Text>
       )}
@@ -41,4 +38,4 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
   });
 
-export default SettingsSection; 
+export default SettingsSection;

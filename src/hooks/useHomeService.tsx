@@ -6,6 +6,9 @@ export const useHomeService = () => {
   useEffect(() => {
     eventBus.on('appStarted', () => {
       fetchPrices();
+      setInterval(() => {
+        fetchPrices();
+      }, 10000);
     });
   }, []);
 

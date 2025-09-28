@@ -25,7 +25,7 @@ const WatchAll = () => {
         style={{
           fontWeight: '600',
           fontSize: appTheme.ui.spacing * 1.7,
-          color: appTheme.colors.primary,
+          color: appTheme.colors.text,
         }}>
         {t('watch_all')}
       </Text>

@@ -89,7 +89,7 @@ const NotificationScreen = () => {
               <Icon
                 name="delete-sweep"
                 size={appTheme.ui.spacing * 3}
-                color={appTheme.colors.error}
+                color={appTheme.colors.red}
               />
             </TouchableOpacity>
           )}

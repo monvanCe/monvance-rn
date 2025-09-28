@@ -49,7 +49,7 @@ const ExpandableFilter = () => {
           <View style={{flexDirection: 'column', gap: appTheme.ui.spacing}}>
             <View
               style={{
-                backgroundColor: appTheme.colors.surfaceVariant,
+                backgroundColor: appTheme.colors.onSurface,
                 width: 100,
                 height: 30,
                 borderRadius: appTheme.ui.radius,
@@ -57,7 +57,7 @@ const ExpandableFilter = () => {
             />
             <View
               style={{
-                backgroundColor: appTheme.colors.surfaceVariant,
+                backgroundColor: appTheme.colors.onSurface,
                 width: 100,
                 height: 30,
                 borderRadius: appTheme.ui.radius,
@@ -97,8 +97,8 @@ const ExpandableFilter = () => {
                   style={{
                     backgroundColor:
                       period === Number(option.value)
-                        ? appTheme.colors.primary
-                        : appTheme.colors.surfaceVariant,
+                        ? appTheme.colors.brand
+                        : appTheme.colors.onSurface,
                     marginRight: appTheme.ui.spacing / 2,
                     marginBottom: appTheme.ui.spacing / 2,
                   }}>
@@ -122,8 +122,8 @@ const ExpandableFilter = () => {
                   style={{
                     backgroundColor:
                       percent === Number(option.value)
-                        ? appTheme.colors.primary
-                        : appTheme.colors.surfaceVariant,
+                        ? appTheme.colors.brand
+                        : appTheme.colors.onSurface,
                     marginRight: appTheme.ui.spacing / 2,
                     marginBottom: appTheme.ui.spacing / 2,
                   }}>
@@ -160,7 +160,7 @@ const style = (appTheme: any) => ({
     marginBottom: appTheme.ui.spacing / 2,
   },
   periodLabel: {
-    color: appTheme.colors.onSurfaceVariant,
+    color: appTheme.colors.textSecondary,
     fontSize: appTheme.ui.spacing * 1.8,
     fontWeight: '500' as const,
     textTransform: 'uppercase' as const,
@@ -168,7 +168,7 @@ const style = (appTheme: any) => ({
     marginRight: appTheme.ui.spacing / 2,
   },
   periodValue: {
-    color: appTheme.colors.onSurface,
+    color: appTheme.colors.text,
     fontSize: appTheme.ui.spacing * 2,
     fontWeight: '700' as const,
   },
@@ -179,7 +179,7 @@ const style = (appTheme: any) => ({
     marginBottom: appTheme.ui.spacing / 2,
   },
   percentLabel: {
-    color: appTheme.colors.onSurfaceVariant,
+    color: appTheme.colors.textSecondary,
     fontSize: appTheme.ui.spacing * 1.8,
     fontWeight: '500' as const,
     textTransform: 'uppercase' as const,
@@ -187,14 +187,14 @@ const style = (appTheme: any) => ({
     marginRight: appTheme.ui.spacing / 2,
   },
   percentValue: {
-    color: appTheme.colors.onSurface,
+    color: appTheme.colors.text,
     fontSize: appTheme.ui.spacing * 2,
     fontWeight: '700' as const,
   },
   changeButtonText: {
     fontSize: appTheme.ui.spacing * 2,
     fontWeight: '700' as const,
-    color: appTheme.colors.primary,
+    color: appTheme.colors.text,
   },
   expandedContainer: {
     paddingTop: appTheme.ui.spacing,
@@ -203,7 +203,7 @@ const style = (appTheme: any) => ({
     marginBottom: appTheme.ui.spacing,
   },
   expandedTitle: {
-    color: appTheme.colors.onSurface,
+    color: appTheme.colors.text,
     fontWeight: '600' as const,
     fontSize: appTheme.ui.spacing * 1.8,
     marginBottom: appTheme.ui.spacing / 2,
@@ -213,7 +213,7 @@ const style = (appTheme: any) => ({
     flexWrap: 'wrap' as const,
   },
   optionText: {
-    color: appTheme.colors.onSurface,
+    color: appTheme.colors.text,
     fontSize: appTheme.ui.spacing * 1.6,
     fontWeight: '500' as const,
   },

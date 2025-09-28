@@ -97,7 +97,10 @@ interface IHomeState {
 
 interface BinanceTickerPrice {
   symbol: string;
-  price: string;
+  lastPrice: string;
+  quoteVolume: string;
+  priceChangePercent: string;
+  priceChange: string;
 }
 
 interface INotification {
@@ -214,8 +217,8 @@ interface ISignalsState {
   hasMoreWatchlist: boolean;
   currentTab: 'all' | 'watchlist';
   filters: {
-    period: number;
-    percent: number;
+    period?: number;
+    percent?: number;
   };
 }
 

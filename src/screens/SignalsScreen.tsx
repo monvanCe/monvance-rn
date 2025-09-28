@@ -24,8 +24,12 @@ const SignalsScreen: React.FC = () => {
     filters,
   } = useAppSelector(state => state.signals);
 
-  const [selectedPeriod, setSelectedPeriod] = useState(filters.period);
-  const [selectedPercent, setSelectedPercent] = useState(filters.percent);
+  const [selectedPeriod, setSelectedPeriod] = useState<number | undefined>(
+    filters.period,
+  );
+  const [selectedPercent, setSelectedPercent] = useState<number | undefined>(
+    filters.percent,
+  );
 
   const currentSignals = currentTab === 'all' ? allSignals : watchlistSignals;
   const isLoading =
@@ -81,27 +85,27 @@ const SignalsScreen: React.FC = () => {
   };
 
   const handleFilterClear = () => {
-    setSelectedPeriod(WatchlistPeriod.MINUTE_5);
-    setSelectedPercent(WatchlistPercent.PERCENT_3);
+    setSelectedPeriod(undefined);
+    setSelectedPercent(undefined);
     eventBus.emit('updateSignalsFilters', {
-      period: WatchlistPeriod.MINUTE_5,
-      percent: WatchlistPercent.PERCENT_3,
+      period: undefined,
+      percent: undefined,
     });
     eventBus.emit('setAllSignalsLoading', true);
     eventBus.emit('setWatchlistSignalsLoading', true);
 
     if (currentTab === 'all') {
       eventBus.emit('loadAllSignals', {
-        period: WatchlistPeriod.MINUTE_5,
-        percent: WatchlistPercent.PERCENT_3,
+        period: undefined,
+        percent: undefined,
         limit: 50,
         skip: 0,
         isRefresh: true,
       });
     } else {
       eventBus.emit('loadWatchlistSignals', {
-        period: WatchlistPeriod.MINUTE_5,
-        percent: WatchlistPercent.PERCENT_3,
+        period: undefined,
+        percent: undefined,
         limit: 50,
         skip: 0,
         isRefresh: true,
@@ -167,8 +171,7 @@ const SignalsScreen: React.FC = () => {
     if (!isLoading) return null;
     return (
       <View style={styles.loadingContainer}>
-        <Text
-          style={[styles.loadingText, {color: theme.colors.onSurfaceVariant}]}>
+        <Text style={[styles.loadingText, {color: theme.colors.textSecondary}]}>
           Loading...
         </Text>
       </View>
@@ -213,15 +216,12 @@ const SignalsScreen: React.FC = () => {
         <View style={styles.filterRow}>
           <View style={styles.filterInput}>
             <Text
-              style={[
-                styles.filterLabel,
-                {color: theme.colors.onSurfaceVariant},
-              ]}>
+              style={[styles.filterLabel, {color: theme.colors.textSecondary}]}>
               Period
             </Text>
             <Dropdown
               items={periodOptions}
-              selectedValue={selectedPeriod.toString()}
+              selectedValue={selectedPeriod?.toString() || ''}
               onSelect={value => setSelectedPeriod(parseInt(value))}
               placeholder="Select period"
             />
@@ -229,15 +229,12 @@ const SignalsScreen: React.FC = () => {
 
           <View style={styles.filterInput}>
             <Text
-              style={[
-                styles.filterLabel,
-                {color: theme.colors.onSurfaceVariant},
-              ]}>
+              style={[styles.filterLabel, {color: theme.colors.textSecondary}]}>
               Percent
             </Text>
             <Dropdown
               items={percentOptions}
-              selectedValue={selectedPercent.toString()}
+              selectedValue={selectedPercent?.toString() || ''}
               onSelect={value => setSelectedPercent(parseInt(value))}
               placeholder="Select percent"
             />
@@ -249,16 +246,12 @@ const SignalsScreen: React.FC = () => {
             style={[
               styles.filterButton,
               {
-                backgroundColor: theme.colors.primary,
+                backgroundColor: theme.colors.onSurface,
               },
             ]}
-            onPress={handleFilterApply}>
-            <Text
-              style={[
-                styles.filterButtonText,
-                {color: theme.colors.onSurface},
-              ]}>
-              Apply
+            onPress={handleFilterClear}>
+            <Text style={[styles.filterButtonText, {color: theme.colors.text}]}>
+              Clear
             </Text>
           </TouchableOpacity>
 
@@ -266,16 +259,13 @@ const SignalsScreen: React.FC = () => {
             style={[
               styles.filterButton,
               {
-                backgroundColor: theme.colors.surfaceVariant,
+                backgroundColor: theme.colors.onSurface,
               },
             ]}
-            onPress={handleFilterClear}>
+            onPress={handleFilterApply}>
             <Text
-              style={[
-                styles.filterButtonText,
-                {color: theme.colors.onSurface},
-              ]}>
-              Clear
+              style={[styles.filterButtonText, {color: theme.colors.brand}]}>
+              Apply
             </Text>
           </TouchableOpacity>
         </View>

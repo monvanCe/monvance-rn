@@ -69,7 +69,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
         )}
         <View style={styles.messageContent}>
           {isFirstInGroup && !isCurrentUser && (
-            <Text style={[styles.username, {color: colors.primary}]}>
+            <Text style={[styles.username, {color: colors.brand}]}>
               {message?.userId?.username || t('unknown_user')}
             </Text>
           )}
@@ -183,11 +183,11 @@ const style = (
     marginLeft: 8,
   },
   messageText: {
-    color: colors.onSurface,
+    color: colors.text,
     fontSize: 14,
   },
   messageTextCurrentUser: {
-    color: colors.background,
+    color: colors.text,
   },
   username: {
     fontSize: 12,
@@ -202,12 +202,12 @@ const style = (
   },
 
   messageTimeCurrentUser: {
-    color: colors.background,
+    color: colors.text,
     marginLeft: 0,
     marginRight: 2,
   },
   messageTimeOther: {
-    color: colors.onSurfaceVariant,
+    color: colors.textSecondary,
     marginLeft: 2,
     marginRight: 0,
   },

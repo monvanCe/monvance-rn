@@ -23,8 +23,8 @@ const WebView: React.FC<WebViewProps> = ({uri, title, onClose}) => {
 
   const renderLoading = () => (
     <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={theme.colors.primary} />
-      <Text style={[styles.loadingText, {color: theme.colors.onSurface}]}>
+      <ActivityIndicator size="large" color={theme.colors.brand} />
+      <Text style={[styles.loadingText, {color: theme.colors.text}]}>
         Loading...
       </Text>
     </View>
@@ -34,11 +34,9 @@ const WebView: React.FC<WebViewProps> = ({uri, title, onClose}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <Icon name="close" size={24} color={theme.colors.onSurface} />
+          <Icon name="close" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.title, {color: theme.colors.onSurface}]}>
-          {title}
-        </Text>
+        <Text style={[styles.title, {color: theme.colors.text}]}>{title}</Text>
         <View style={styles.placeholder} />
       </View>
       <RNWebView

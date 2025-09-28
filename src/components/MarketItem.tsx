@@ -64,7 +64,7 @@ export const MarketItem = ({
   const resolvedVariant = variant || theme.theme.ui.defaultVariant;
 
   const changeColor =
-    parseFloat(changePercent) >= 0 ? colors.green : colors.error;
+    parseFloat(changePercent) >= 0 ? colors.ascent : colors.descent;
 
   return (
     <View style={styles.container}>
@@ -74,21 +74,16 @@ export const MarketItem = ({
             <Icon
               name={isFav ? 'favorite' : 'favorite-border'}
               size={22}
-              color={isFav ? colors.error : colors.onSurfaceVariant}
+              color={isFav ? colors.favorite : colors.onSurface}
             />
           </TouchableOpacity>
           <View>
             <Text style={styles.symbol}>{symbol}</Text>
-            <Text style={styles.volume}>{t('volume', {volume})}</Text>
+            <Text style={styles.volume}>Vol {volume} (USDT)</Text>
           </View>
         </View>
         <View style={styles.priceCol}>
-          <Text style={styles.price}>
-            {parseFloat(price).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </Text>
+          <Text style={styles.price}>{price}</Text>
           <Text style={[styles.change, {color: changeColor}]}>
             {parseFloat(changePercent) >= 0 ? '+' : ''}
             {changePercent}%
@@ -141,7 +136,7 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) => ({
     letterSpacing: 0.2,
   },
   volume: {
-    color: theme.colors.onSurfaceVariant,
+    color: theme.colors.textSecondary,
     fontSize: theme.ui.fontSize * 0.8125,
     marginTop: 2,
     fontWeight: '400' as const,

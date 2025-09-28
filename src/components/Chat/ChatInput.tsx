@@ -18,9 +18,8 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   handleSend,
   scrollToBottom,
 }) => {
-  const theme = useTheme();
-  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
+  const colors = appTheme.colors;
 
   const styles = style(appTheme, colors);
 
@@ -29,7 +28,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       'keyboardDidShow',
       () => {
         scrollToBottom(true);
-      }
+      },
     );
 
     return () => {
@@ -42,7 +41,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       <TextInput
         style={styles.input}
         placeholder={t('write_message')}
-        placeholderTextColor={colors.onSurfaceVariant}
+        placeholderTextColor={colors.onSurface}
         value={message}
         onChangeText={setMessage}
         onFocus={() => scrollToBottom(true)}

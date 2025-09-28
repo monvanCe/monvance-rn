@@ -51,8 +51,7 @@ const CoinDetailsScreen: React.FC = () => {
     if (!loading) return null;
     return (
       <View style={styles.loadingContainer}>
-        <Text
-          style={[styles.loadingText, {color: theme.colors.onSurfaceVariant}]}>
+        <Text style={[styles.loadingText, {color: theme.colors.textSecondary}]}>
           Loading...
         </Text>
       </View>
@@ -86,7 +85,7 @@ const CoinDetailsScreen: React.FC = () => {
           background-color: ${theme.colors.background};
         }
         .tradingview-widget-copyright a {
-          color: ${theme.colors.primary};
+          color: ${theme.colors.brand};
           text-decoration: none;
           font-size: 12px;
         }
@@ -142,11 +141,9 @@ const CoinDetailsScreen: React.FC = () => {
         <TouchableOpacity
           style={styles.backButton}
           onPress={() => navigation.goBack()}>
-          <Icon name="arrow-left" size={24} color={theme.colors.onSurface} />
+          <Icon name="arrow-left" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.title, {color: theme.colors.onSurface}]}>
-          {coin}
-        </Text>
+        <Text style={[styles.title, {color: theme.colors.text}]}>{coin}</Text>
         <View style={styles.headerRight} />
       </View>
 

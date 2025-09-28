@@ -12,18 +12,18 @@ interface ChatHeaderProps {
 }
 
 export const ChatHeader: React.FC<ChatHeaderProps> = ({onNavigateToTab}) => {
-  const theme = useTheme();
-  const colors = theme.theme.colors;
   const {theme: appTheme} = useAppTheme();
+
+  const colors = appTheme.colors;
 
   const styles = style(appTheme, colors);
 
   return (
     <View style={styles.headerContainer}>
       <TouchableOpacity style={styles.backButton} onPress={onNavigateToTab}>
-        <Icon name="arrow-left" size={22} color={colors.onSurfaceVariant} />
+        <Icon name="arrow-left" size={22} color={colors.onSurfaceContent} />
       </TouchableOpacity>
-      <Text style={styles.title}>{t('sohbetler')}</Text>
+      <Text style={styles.title}>{t('chats')}</Text>
     </View>
   );
 };
@@ -49,7 +49,7 @@ const style = (appTheme: any, colors: any) => ({
   },
   title: {
     fontSize: appTheme.ui.fontSize * 1.125,
-    color: colors.onSurface,
+    color: colors.onSurfaceContent,
     fontWeight: '700' as const,
     textAlign: 'center' as const,
     flex: 1,

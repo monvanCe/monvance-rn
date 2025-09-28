@@ -6,7 +6,6 @@ interface ProcessedPrice {
   volume: string;
   change: string;
   changePercent: string;
-  isFavorite: boolean;
 }
 
 interface IHomeState {

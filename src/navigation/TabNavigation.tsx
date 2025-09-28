@@ -15,18 +15,19 @@ const TabNavigation = () => {
 
   return (
     <Tab.Navigator
-     
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          ...(Platform.OS === 'android' ? styles.tabBarAndorid : styles.tabBarIos),
+          ...(Platform.OS === 'android'
+            ? styles.tabBarAndorid
+            : styles.tabBarIos),
           backgroundColor: theme.colors.surface,
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
         },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.onSurfaceVariant,
+        tabBarActiveTintColor: theme.colors.brand,
+        tabBarInactiveTintColor: theme.colors.textSecondary,
       }}>
       <Tab.Screen
         name="Home"
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
   tabBarIos: {
     position: 'absolute',
     display: 'flex',
-    bottom:0,
+    bottom: 0,
     paddingTop: 7,
     borderTopLeftRadius: 32,
     borderTopRightRadius: 32,

@@ -39,19 +39,16 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
           <Icon
             name={leftIcon}
             size={24}
-            color={leftIconColor || theme.colors.primary}
+            color={leftIconColor || theme.colors.brand}
           />
         )}
         <View style={styles.textContainer}>
-          <Text style={[styles.title, {color: theme.colors.onSurface}]}>
+          <Text style={[styles.title, {color: theme.colors.text}]}>
             {title}
           </Text>
           {subtitle && (
             <Text
-              style={[
-                styles.subtitle,
-                {color: theme.colors.onSurfaceVariant},
-              ]}>
+              style={[styles.subtitle, {color: theme.colors.textSecondary}]}>
               {subtitle}
             </Text>
           )}
@@ -63,7 +60,7 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
           <Icon
             name={rightIcon}
             size={22}
-            color={rightIconColor || theme.colors.primary}
+            color={rightIconColor || theme.colors.brand}
           />
         )}
       </View>
@@ -117,4 +114,4 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
   });
 
-export default SettingsItem; 
+export default SettingsItem;

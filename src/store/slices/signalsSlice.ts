@@ -10,8 +10,8 @@ const initialState: ISignalsState = {
   hasMoreWatchlist: true,
   currentTab: 'all',
   filters: {
-    period: 5,
-    percent: 3,
+    period: undefined,
+    percent: undefined,
   },
 };
 

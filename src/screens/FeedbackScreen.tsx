@@ -158,9 +158,9 @@ const FeedbackScreen = () => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
+          <Icon name="arrow-back" size={24} color={theme.colors.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, {color: theme.colors.onSurface}]}>
+        <Text style={[styles.headerTitle, {color: theme.colors.text}]}>
           {t('feedback')}
         </Text>
         <View style={styles.headerSpacer} />
@@ -169,24 +169,23 @@ const FeedbackScreen = () => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
-        <Text style={[styles.title, {color: theme.colors.onSurface}]}>
+        <Text style={[styles.title, {color: theme.colors.text}]}>
           {t('your_feedback')}
         </Text>
 
-        <Text
-          style={[styles.description, {color: theme.colors.onSurfaceVariant}]}>
+        <Text style={[styles.description, {color: theme.colors.textSecondary}]}>
           {t('feedback_description')}
         </Text>
 
         <View style={styles.section}>
-          <Text style={[styles.label, {color: theme.colors.onSurface}]}>
+          <Text style={[styles.label, {color: theme.colors.text}]}>
             {t('rating')} ({t('optional')})
           </Text>
           <StarRating rating={rating} onRatingChange={setRating} size={32} />
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.label, {color: theme.colors.onSurface}]}>
+          <Text style={[styles.label, {color: theme.colors.text}]}>
             {t('message')} *
           </Text>
           <TextInput
@@ -202,8 +201,8 @@ const FeedbackScreen = () => {
               styles.textInput,
               {
                 backgroundColor: theme.colors.surface,
-                color: theme.colors.onSurface,
-                borderColor: error ? theme.colors.error : theme.colors.outline,
+                color: theme.colors.text,
+                borderColor: error ? theme.colors.error : theme.colors.border,
               },
             ]}
             textAlignVertical="top"
@@ -215,10 +214,7 @@ const FeedbackScreen = () => {
           ) : null}
           {retryCount > 0 && (
             <Text
-              style={[
-                styles.retryText,
-                {color: theme.colors.onSurfaceVariant},
-              ]}>
+              style={[styles.retryText, {color: theme.colors.textSecondary}]}>
               Attempt {retryCount + 1} - Please try again
             </Text>
           )}
@@ -233,8 +229,8 @@ const FeedbackScreen = () => {
               {
                 backgroundColor:
                   !message.trim() || isLoading || message.trim().length < 5
-                    ? theme.colors.onSurfaceDisabled
-                    : theme.colors.green,
+                    ? theme.colors.textDisabled
+                    : theme.colors.success,
               },
             ]}>
             <Button
@@ -250,7 +246,7 @@ const FeedbackScreen = () => {
                   {
                     color:
                       !message.trim() || isLoading || message.trim().length < 5
-                        ? theme.colors.onSurfaceVariant
+                        ? theme.colors.textSecondary
                         : '#FFFFFF',
                   },
                 ]}>
@@ -260,7 +256,7 @@ const FeedbackScreen = () => {
           </View>
           {message.trim().length > 0 && message.trim().length < 5 && (
             <Text
-              style={[styles.helpText, {color: theme.colors.onSurfaceVariant}]}>
+              style={[styles.helpText, {color: theme.colors.textSecondary}]}>
               Message too short (minimum 5 characters)
             </Text>
           )}
@@ -338,7 +334,7 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
       padding: theme.ui.spacing * 1.5,
       fontSize: theme.ui.fontSize * 1,
       borderWidth: 1,
-      borderColor: theme.colors.outline,
+      borderColor: theme.colors.border,
     },
     buttonContainer: {
       marginTop: theme.ui.spacing * 2,

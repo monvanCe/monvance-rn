@@ -15,42 +15,69 @@ const uiProperties: ITheme = {
 
 const darkTheme = {
   colors: {
-    primary: '#16C784', // primary color for buttons and links
-    secondary: '#23262F', // secondary color for background
-    background: '#0A0A0A', // background color for the app
-    surface: '#181A20', // surface color for cards and other elements
-    surfaceVariant: '#23262F', // surface variant color for cards and other elements
-    onSurface: '#FFFFFF', // on surface color for text and icons
-    onSurfaceVariant: '#A3A3A3', // on surface variant color for text and icons
-    onSurfaceDisabled: '#666666', // on surface disabled color for text and icons
-    outline: '#333333', // outline color for cards and other elements
-    outlineVariant: '#23262F', // outline variant color for cards and other elements
-    text: '#FFFFFF', // text color for text and icons
-    error: '#CF6679', // error color for errors
-    shadow: '#000000', // shadow color for shadows
+    // Brand colors
+    brand: '#ff6f17', // primary brand color for buttons and links
     premium: '#FFD700', // premium color for premium elements
-    green: '#16C784', // green color for success
+
+    // Layout colors
+    background: '#0A0A0A', // main background color
+    surface: '#181A20', // card and component background
+    onSurface: '#23262F', // surface element backgrounds (buttons, icons)
+    onSurfaceContent: '#ccd2d9', // surface element colors
+
+    // Text colors
+    text: '#FFFFFF', // primary text color
+    textSecondary: '#A3A3A3', // secondary text color
+    textDisabled: '#666666', // disabled text color
+
+    // Border colors
+    border: '#333333', // primary border color
+    borderVariant: '#23262F', // alternative border color
+
+    // Semantic colors
+    success: '#16C784', // success states and ascent indicators
+    error: '#CF6679', // error states and descent indicators
+    ascent: '#16C784', // price/trend ascent indicators
+    descent: '#CF6679', // price/trend descent indicators
+    notification: '#FF4444', // notification badges and alerts
+    favorite: '#CF6679', // favorite icon color
+
+    // Utility colors
+    shadow: '#000000', // shadow color
   },
   ui: uiProperties,
 };
 
 const lightTheme = {
   colors: {
-    primary: '#059669', // primary color for buttons and links - emerald green to match dark theme
-    secondary: '#F8FAFC', // secondary color for background - light gray
-    background: '#FFFFFF', // background color for the app
-    surface: '#F1F5F9', // surface color for cards and other elements - light gray
-    surfaceVariant: '#ccd2d9', // surface variant color for cards and other elements - slightly darker gray
-    onSurface: '#1E293B', // on surface color for text and icons - dark slate
-    onSurfaceVariant: '#64748B', // on surface variant color for text and icons - medium gray
-    onSurfaceDisabled: '#94A3B8', // on surface disabled color for text and icons - light gray
-    outline: '#CBD5E1', // outline color for cards and other elements - light gray
-    outlineVariant: '#E2E8F0', // outline variant color for cards and other elements
-    text: '#0F172A', // text color for text and icons - very dark slate
-    error: '#DC2626', // error color for errors - red
-    shadow: '#000000', // shadow color for shadows
-    premium: '#F59E0B', // premium color for premium elements - amber
-    green: '#059669', // green color for success - emerald green
+    // Brand colors
+    brand: '#059669', // primary brand color for buttons and links
+    premium: '#F59E0B', // premium color for premium elements
+
+    // Layout colors
+    background: '#FFFFFF', // main background color
+    surface: '#F1F5F9', // card and component background
+    onSurface: '#ccd2d9', // surface element backgrounds (buttons, icons)
+    onSurfaceContent: '#0F172A', // surface element colors
+
+    // Text colors
+    text: '#0F172A', // primary text color
+    textSecondary: '#64748B', // secondary text color
+    textDisabled: '#94A3B8', // disabled text color
+
+    // Border colors
+    border: '#CBD5E1', // primary border color
+    borderVariant: '#E2E8F0', // alternative border color
+
+    // Semantic colors
+    success: '#059669', // success states and ascent indicators
+    error: '#DC2626', // error states and descent indicators
+    ascent: '#059669', // price/trend ascent indicators
+    descent: '#DC2626', // price/trend descent indicators
+    notification: '#EF4444', // notification badges and alerts
+    favorite: '#EF4444', // favorite icon color
+    // Utility colors
+    shadow: '#000', // shadow color
   },
   ui: uiProperties,
 };

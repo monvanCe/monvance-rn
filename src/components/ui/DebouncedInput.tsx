@@ -54,11 +54,7 @@ export const DebouncedInput: React.FC<DebouncedInputProps> = ({
     },
     input: {
       borderWidth: theme.theme.ui.borderWidth,
-      borderColor: error
-        ? colors.error
-        : success
-        ? colors.green
-        : colors.outline,
+      borderColor: error ? colors.red : success ? colors.green : colors.outline,
       borderRadius: theme.theme.ui.radius,
       padding: theme.theme.ui.spacing,
       fontSize: theme.theme.ui.fontSize,
@@ -94,7 +90,7 @@ export const DebouncedInput: React.FC<DebouncedInputProps> = ({
             </Text>
           )}
           {error && (
-            <Text style={[styles.messageText, {color: colors.error}]}>
+            <Text style={[styles.messageText, {color: colors.red}]}>
               {error}
             </Text>
           )}

@@ -22,7 +22,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   const renderStar = (index: number) => {
     const isFilled = index < rating;
     const starName = isFilled ? 'star' : 'star-outline';
-    const starColor = isFilled ? '#FFD700' : theme.colors.onSurfaceVariant;
+    const starColor = isFilled ? '#FFD700' : theme.colors.textSecondary;
 
     if (readonly) {
       return (
@@ -47,9 +47,7 @@ const StarRating: React.FC<StarRatingProps> = ({
   };
 
   return (
-    <View style={styles.container}>
-      {[0, 1, 2, 3, 4].map(renderStar)}
-    </View>
+    <View style={styles.container}>{[0, 1, 2, 3, 4].map(renderStar)}</View>
   );
 };
 
@@ -68,4 +66,4 @@ const createStyles = (theme: ReturnType<typeof useTheme>['theme']) =>
     },
   });
 
-export default StarRating; 
+export default StarRating;

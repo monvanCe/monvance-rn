@@ -180,7 +180,7 @@ const ProfileScreen = () => {
             
           <View style={styles.cardRow}>
             <View style={[styles.cardRowLeft, {gap: theme.ui.spacing}]}>
-              <Text style={[styles.cardTitle, {color: theme.colors.onSurface}]}>
+              <Text style={[styles.cardTitle, {color: theme.colors.text}]}>
                 👑 {t('dark_mode')}
               </Text>
             </View>
@@ -190,7 +190,7 @@ const ProfileScreen = () => {
           <Text
             style={[
               styles.cardSubtitle,
-              {color: theme.colors.onSurfaceVariant, marginTop: 2},
+              {color: theme.colors.textSecondary, marginTop: 2},
             ]}>
             {t('switch_to_light')}
           </Text>
@@ -245,7 +245,7 @@ const ProfileScreen = () => {
             <SettingsItem
               title={t('version')}
               rightElement={
-                <Text style={{color: theme.colors.onSurfaceVariant}}>
+                <Text style={{color: theme.colors.textSecondary}}>
                   {user.version}
                 </Text>
               }

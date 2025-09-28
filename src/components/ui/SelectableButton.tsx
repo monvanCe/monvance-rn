@@ -21,7 +21,7 @@ const SelectableButton: React.FC<SelectableButtonProps> = ({
       style={[
         styles.button,
         {
-          borderColor: isSelected ? theme.colors.primary : theme.colors.outline,
+          borderColor: isSelected ? theme.colors.brand : theme.colors.border,
           backgroundColor: theme.colors.surface,
         },
       ]}
@@ -31,7 +31,7 @@ const SelectableButton: React.FC<SelectableButtonProps> = ({
           style={[
             styles.title,
             {
-              color: isSelected ? theme.colors.primary : theme.colors.onSurface,
+              color: isSelected ? theme.colors.brand : theme.colors.text,
             },
           ]}>
           {title}
@@ -40,7 +40,7 @@ const SelectableButton: React.FC<SelectableButtonProps> = ({
           <Icon
             name="check"
             size={16}
-            color={theme.colors.primary}
+            color={theme.colors.brand}
             style={styles.icon}
           />
         )}
