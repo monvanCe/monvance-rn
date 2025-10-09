@@ -41,7 +41,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
       <TextInput
         style={styles.input}
         placeholder={t('write_message')}
-        placeholderTextColor={colors.onSurface}
+        placeholderTextColor={colors.onSurfaceContent}
         value={message}
         onChangeText={setMessage}
         onFocus={() => scrollToBottom(true)}
@@ -52,7 +52,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         blurOnSubmit={false}
       />
       <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-        <Icon name="send" size={16} color={colors.onSurface} />
+        <Icon name="send" size={16} color={colors.onSurfaceContent} />
       </TouchableOpacity>
     </View>
   );
@@ -74,7 +74,7 @@ const style = (appTheme: any, colors: any) => ({
     paddingHorizontal: appTheme.ui.spacing,
     paddingVertical: appTheme.ui.spacing / 2,
     marginRight: appTheme.ui.spacing,
-    color: colors.onSurface,
+    color: colors.onSurfaceContent,
     height: 36,
   },
   sendButton: {

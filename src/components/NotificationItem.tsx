@@ -60,27 +60,19 @@ const NotificationItem = ({
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'success':
-        return 'check-circle';
-      case 'warning':
-        return 'warning';
-      case 'error':
-        return 'error';
-      default:
+      case 'signal':
         return 'info';
+      default:
+        return '';
     }
   };
 
   const getNotificationColor = (type: string) => {
     switch (type) {
-      case 'success':
-        return appTheme.colors.green;
-      case 'warning':
-        return appTheme.colors.premium;
-      case 'error':
-        return appTheme.colors.red;
+      case 'signal':
+        return appTheme.colors.descent;
       default:
-        return appTheme.colors.primary;
+        return '';
     }
   };
 
@@ -91,24 +83,24 @@ const NotificationItem = ({
           style={[
             styles.swipeAction,
             styles.markAsReadAction,
-            {backgroundColor: appTheme.colors.primary},
+            {backgroundColor: appTheme.colors.success},
           ]}>
           <Icon
             name="check"
             size={appTheme.ui.spacing * 2.5}
-            color={appTheme.colors.onSurface}
+            color={appTheme.colors.onSurfaceContent}
           />
         </View>
         <View
           style={[
             styles.swipeAction,
             styles.deleteAction,
-            {backgroundColor: appTheme.colors.red},
+            {backgroundColor: appTheme.colors.error},
           ]}>
           <Icon
             name="delete"
             size={appTheme.ui.spacing * 2.5}
-            color={appTheme.colors.onSurface}
+            color={appTheme.colors.onSurfaceContent}
           />
         </View>
       </View>
@@ -121,12 +113,12 @@ const NotificationItem = ({
             styles.notificationItem,
             {
               backgroundColor: appTheme.colors.surface,
-              borderColor: appTheme.colors.outline,
+              borderColor: appTheme.colors.border,
               transform: [{translateX}, {scale}],
             },
             !item.isRead && {
               borderLeftWidth: appTheme.ui.borderWidth * 4,
-              borderLeftColor: appTheme.colors.primary,
+              borderLeftColor: appTheme.colors.brand,
             },
           ]}>
           <View style={styles.notificationHeader}>
@@ -142,7 +134,7 @@ const NotificationItem = ({
                 style={[
                   styles.notificationTitle,
                   {
-                    color: appTheme.colors.onSurface,
+                    color: appTheme.colors.onSurfaceContent,
                     fontWeight: item.isRead
                       ? ('400' as const)
                       : ('700' as const),
@@ -153,14 +145,14 @@ const NotificationItem = ({
               <Text
                 style={[
                   styles.notificationMessage,
-                  {color: appTheme.colors.onSurfaceVariant},
+                  {color: appTheme.colors.textSecondary},
                 ]}>
                 {item.body}
               </Text>
               <Text
                 style={[
                   styles.notificationTime,
-                  {color: appTheme.colors.onSurfaceDisabled},
+                  {color: appTheme.colors.textDisabled},
                 ]}>
                 {item.timestamp}
               </Text>
@@ -169,7 +161,7 @@ const NotificationItem = ({
               <View
                 style={[
                   styles.unreadIndicator,
-                  {backgroundColor: appTheme.colors.primary},
+                  {backgroundColor: appTheme.colors.brand},
                 ]}
               />
             )}
@@ -202,6 +194,7 @@ const style = (appTheme: any) => ({
     flex: 1,
     alignItems: 'center' as const,
     justifyContent: 'center' as const,
+    borderRadius: appTheme.ui.radius,
   },
   markAsReadAction: {
     borderTopLeftRadius: appTheme.ui.radius,

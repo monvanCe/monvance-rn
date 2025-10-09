@@ -103,6 +103,14 @@ interface BinanceTickerPrice {
   priceChange: string;
 }
 
+interface BinanceStreamTicker {
+  s: string; // symbol
+  c: string; // price (current)
+  q: string; // volume
+  p: string; // change
+  P: string; // changePercent
+}
+
 interface INotification {
   _id: string;
   title: string;

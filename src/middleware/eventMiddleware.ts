@@ -13,6 +13,7 @@ type eventType = {
   checkUsernameSuccess: {username: string; available: boolean};
   languageChanged: string;
   tickerPricesFetched: BinanceTickerPrice[];
+  tickerPricesUpdated: ProcessedPrice[];
   getNotificationsSuccess: INotificationResponse;
   getSignalsSuccess: INotificationResponse;
   getUnreadCountSuccess: IUnreadCountResponse;

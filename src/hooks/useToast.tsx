@@ -36,7 +36,7 @@ export const useToast = () => {
           prev: data.previousPrice,
           curr: data.currentPrice,
         }),
-        type: 'info',
+        type: directionKey === 'increased' ? 'success' : 'error',
       });
     });
   }, []);

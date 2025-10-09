@@ -108,7 +108,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                       : 'check'
                   }
                   size={16}
-                  color={colors.background}
+                  color={colors.onSurfaceContent}
                   style={styles.statusIcon}
                 />
               )}
@@ -162,7 +162,7 @@ const style = (
   messageBubble: {
     padding: appTheme.ui.spacing * 1.5,
     borderRadius: 20,
-    backgroundColor: isCurrentUser ? colors.primary : colors.surface,
+    backgroundColor: colors.surface,
     borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
     borderColor: isOutlined ? colors.outline : 'transparent',
     marginBottom: 2,

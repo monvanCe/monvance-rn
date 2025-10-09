@@ -31,7 +31,7 @@ const NotificationScreen = () => {
           styles.header,
           {
             backgroundColor: appTheme.colors.surface,
-            borderBottomColor: appTheme.colors.outline,
+            borderBottomColor: appTheme.colors.border,
           },
         ]}>
         <View style={styles.headerContent}>
@@ -41,12 +41,15 @@ const NotificationScreen = () => {
             <Icon
               name="arrow-back"
               size={appTheme.ui.spacing * 3}
-              color={appTheme.colors.onSurface}
+              color={appTheme.colors.onSurfaceContent}
             />
           </TouchableOpacity>
           <View style={styles.titleContainer}>
             <Text
-              style={[styles.headerTitle, {color: appTheme.colors.onSurface}]}>
+              style={[
+                styles.headerTitle,
+                {color: appTheme.colors.onSurfaceContent},
+              ]}>
               {t('notifications')}
             </Text>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
@@ -55,7 +58,7 @@ const NotificationScreen = () => {
                 <View
                   style={[
                     styles.unreadBadge,
-                    {backgroundColor: appTheme.colors.primary},
+                    {backgroundColor: appTheme.colors.brand},
                   ]}>
                   <Text
                     style={[
@@ -78,7 +81,7 @@ const NotificationScreen = () => {
               <Icon
                 name="done-all"
                 size={appTheme.ui.spacing * 3}
-                color={appTheme.colors.primary}
+                color={appTheme.colors.brand}
               />
             </TouchableOpacity>
           )}
@@ -89,7 +92,7 @@ const NotificationScreen = () => {
               <Icon
                 name="delete-sweep"
                 size={appTheme.ui.spacing * 3}
-                color={appTheme.colors.red}
+                color={appTheme.colors.error}
               />
             </TouchableOpacity>
           )}
@@ -102,13 +105,10 @@ const NotificationScreen = () => {
             <Icon
               name="notifications-off"
               size={appTheme.ui.spacing * 8}
-              color={appTheme.colors.onSurfaceDisabled}
+              color={appTheme.colors.textDisabled}
             />
             <Text
-              style={[
-                styles.emptyText,
-                {color: appTheme.colors.onSurfaceDisabled},
-              ]}>
+              style={[styles.emptyText, {color: appTheme.colors.textDisabled}]}>
               {t('no_notifications')}
             </Text>
           </View>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   unreadBadge: {
     minWidth: 20,
     height: 20,
-    borderRadius: 10,
+    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 6,

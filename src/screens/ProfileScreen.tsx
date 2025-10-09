@@ -7,6 +7,7 @@ import {
   Linking,
   Alert,
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
 import {Text} from '../components/ui/Text';
@@ -126,9 +127,6 @@ const ProfileScreen = () => {
     !user?.isPremium &&
     new Date(trialTime || 0).getTime() > Date.now();
 
-  const ringPadding = 4;
-  const ringColor = user?.isPremium ? '#FFD700' : theme.colors.surface;
-
   return (
     <View style={styles.container}>
       <ScreenHeader
@@ -141,12 +139,16 @@ const ProfileScreen = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.avatarContainer}>
-          <View
-            style={[
-              styles.avatarRing,
-              {padding: ringPadding, backgroundColor: ringColor},
-            ]}>
+          <View style={styles.avatarWrapper}>
             <Image source={{uri: avatar}} style={styles.avatar} />
+            {user?.isPremium && (
+              <MaterialCommunityIcons
+                name="crown"
+                size={28}
+                color="#FFD700"
+                style={styles.crownIcon}
+              />
+            )}
           </View>
           <Text style={styles.username}>{username}</Text>
         </View>
@@ -274,16 +276,24 @@ const style = (theme: ReturnType<typeof useTheme>['theme']) =>
       alignItems: 'center',
       marginBottom: theme.ui.spacing * 2,
     },
+    avatarWrapper: {
+      position: 'relative',
+      marginBottom: theme.ui.spacing,
+      width: AVATAR_SIZE + 20,
+      height: AVATAR_SIZE + 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     avatar: {
       width: AVATAR_SIZE,
       height: AVATAR_SIZE,
       borderRadius: AVATAR_SIZE / 2,
     },
-    avatarRing: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: (AVATAR_SIZE + 6) / 2,
-      marginBottom: theme.ui.spacing,
+    crownIcon: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      transform: [{rotate: '-45deg'}],
     },
     username: {
       fontSize: theme.ui.fontSize * 1.25,

@@ -11,6 +11,7 @@ import {t} from '../localization';
 import {useAppSelector} from '../store/store';
 import {eventBus} from '../middleware/eventMiddleware';
 import {ROUTE_NAMES} from '../const/routeNames';
+import {formatPrice, formatVolume} from '../utils/formatNumbers';
 
 interface MarketItemProps {
   symbol: string;
@@ -79,11 +80,11 @@ export const MarketItem = ({
           </TouchableOpacity>
           <View>
             <Text style={styles.symbol}>{symbol}</Text>
-            <Text style={styles.volume}>Vol {volume} (USDT)</Text>
+            <Text style={styles.volume}>Vol {formatVolume(volume)} (USDT)</Text>
           </View>
         </View>
         <View style={styles.priceCol}>
-          <Text style={styles.price}>{price}</Text>
+          <Text style={styles.price}>{formatPrice(price)}</Text>
           <Text style={[styles.change, {color: changeColor}]}>
             {parseFloat(changePercent) >= 0 ? '+' : ''}
             {changePercent}%

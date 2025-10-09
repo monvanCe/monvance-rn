@@ -14,7 +14,7 @@ import {
   updateMessageByLocalId,
 } from '../store/slices/chatSlice';
 import {setAppLanguage} from '../store/slices/appConfigSlice';
-import {setPrices} from '../store/slices/homeSlice';
+import {setPrices, updatePrices} from '../store/slices/homeSlice';
 import {
   setNotifications,
   setUnreadCount,
@@ -51,8 +51,8 @@ import {
   setSelectedSubscription,
   setHasVisitedPaywall,
 } from '../store/slices/subscriptionSlice';
-import {processTickerPrices} from '../utils/processTickerPrices';
 import {addFavorite, removeFavorite} from '../store/slices/favoritesSlice';
+import {processTickerPrices} from '../utils/processTickerPrices';
 
 export const useReduxEvents = () => {
   const dispatch = useAppDispatch();
@@ -90,6 +90,9 @@ export const useReduxEvents = () => {
     eventBus.on('tickerPricesFetched', (data: BinanceTickerPrice[]) => {
       const processedData = processTickerPrices(data);
       dispatch(setPrices(processedData));
+    });
+    eventBus.on('tickerPricesUpdated', (data: ProcessedPrice[]) => {
+      dispatch(updatePrices(data));
     });
     eventBus.on('getSignalsSuccess', (response: INotificationResponse) => {
       dispatch(setNotifications(response.data));
