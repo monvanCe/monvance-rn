@@ -91,5 +91,16 @@
   "signal_toast_title": "Yüzde Değişimi",
   "signal_toast_body": "%{period} dk içinde %{percent}% %{direction}. %{prev} → %{curr}",
   "increased": "arttı",
-  "decreased": "azaldı"
+  "decreased": "azaldı",
+  "onboarding_page1_title": "Klyra'ya Hoş Geldiniz",
+  "onboarding_page1_description": "Nihai kripto sinyal takip asistanınız. Gerçek zamanlı sinyallerle piyasanın önünde olun.",
+  "onboarding_page2_title": "Gerçek Zamanlı Sinyaller",
+  "onboarding_page2_description": "Fiyatlar önemli ölçüde değiştiğinde anında uyarı alın. Önemli bir piyasa hareketini asla kaçırmayın.",
+  "onboarding_page3_title": "Özel İzleme Listesi",
+  "onboarding_page3_description": "Kişiselleştirilmiş izleme listenizi oluşturun ve sadece sizin için önemli olan coinleri takip edin.",
+  "onboarding_page4_title": "Hadi Başlayalım",
+  "onboarding_page4_description": "Favori kripto paralarınızı takip etmeye başlayın ve gerçek zamanlı fiyat değişiklikleri hakkında bilgilendirilme alın.",
+  "skip": "Atla",
+  "next": "Sonraki",
+  "get_started": "Başlayalım"
 }

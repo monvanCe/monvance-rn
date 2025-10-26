@@ -91,5 +91,16 @@
   "signal_toast_title": "Percentage Change",
   "signal_toast_body": "%{percent}% %{direction} in %{period} min. %{prev} → %{curr}",
   "increased": "increased",
-  "decreased": "decreased"
+  "decreased": "decreased",
+  "onboarding_page1_title": "Welcome to Klyra",
+  "onboarding_page1_description": "Your ultimate crypto signal tracking companion. Stay ahead of the market with real-time signals.",
+  "onboarding_page2_title": "Real-Time Signals",
+  "onboarding_page2_description": "Get instant alerts when prices change significantly. Never miss an important market movement.",
+  "onboarding_page3_title": "Custom Watchlist",
+  "onboarding_page3_description": "Create your personalized watchlist and track only the coins that matter to you.",
+  "onboarding_page4_title": "Let's Get Started",
+  "onboarding_page4_description": "Start tracking your favorite cryptocurrencies and get notified about price changes in real-time.",
+  "skip": "Skip",
+  "next": "Next",
+  "get_started": "Get Started"
 }

@@ -75,6 +75,9 @@ type eventType = {
   subscriptionSelected: ISubscription;
   restorePurchasesSuccess: IUser;
   paywallOpened: null;
+  // Onboarding events
+  onboardingCompleted: null;
+  setHasSeenOnboarding: boolean;
 };
 
 class EventManager<Events extends Record<string, any>> {

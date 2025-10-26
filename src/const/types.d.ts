@@ -3,6 +3,13 @@ interface IAppConfig {
   appTheme: string;
 }
 
+interface IOnboardingPage {
+  id: number;
+  title: string;
+  description: string;
+  image: any;
+}
+
 interface IUser {
   _id: string;
   username?: string;

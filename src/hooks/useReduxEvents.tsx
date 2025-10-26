@@ -13,7 +13,10 @@ import {
   setMessages,
   updateMessageByLocalId,
 } from '../store/slices/chatSlice';
-import {setAppLanguage} from '../store/slices/appConfigSlice';
+import {
+  setAppLanguage,
+  setHasSeenOnboarding,
+} from '../store/slices/appConfigSlice';
 import {setPrices, updatePrices} from '../store/slices/homeSlice';
 import {
   setNotifications,
@@ -86,6 +89,9 @@ export const useReduxEvents = () => {
     });
     eventBus.on('languageChanged', lang => {
       dispatch(setAppLanguage(lang));
+    });
+    eventBus.on('setHasSeenOnboarding', (hasSeen: boolean) => {
+      dispatch(setHasSeenOnboarding(hasSeen));
     });
     eventBus.on('tickerPricesFetched', (data: BinanceTickerPrice[]) => {
       const processedData = processTickerPrices(data);

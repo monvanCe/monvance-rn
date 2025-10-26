@@ -31,5 +31,19 @@ export enum SubscriptionInterval {
   THREE_MONTHLY = 90,
 }
 
+export enum OnboardingPageKey {
+  PAGE1_TITLE = 'onboarding_page1_title',
+  PAGE1_DESCRIPTION = 'onboarding_page1_description',
+  PAGE2_TITLE = 'onboarding_page2_title',
+  PAGE2_DESCRIPTION = 'onboarding_page2_description',
+  PAGE3_TITLE = 'onboarding_page3_title',
+  PAGE3_DESCRIPTION = 'onboarding_page3_description',
+  PAGE4_TITLE = 'onboarding_page4_title',
+  PAGE4_DESCRIPTION = 'onboarding_page4_description',
+  SKIP = 'skip',
+  NEXT = 'next',
+  GET_STARTED = 'get_started',
+}
+
 export const USERS_CHANNEL_PREFIX = 'users#';
 export const SIGNAL_CHANNEL = 'signal';
