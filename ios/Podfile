@@ -6,7 +6,7 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 # Specify the Xcode project
-project 'monvance.xcodeproj'
+project 'vens.xcodeproj'
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
@@ -15,7 +15,7 @@ linkage = ENV['USE_FRAMEWORKS']
 Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
 use_frameworks! :linkage => :static
 
-target 'monvance' do
+target 'vens' do
   config = use_native_modules!
 
   use_react_native!(
