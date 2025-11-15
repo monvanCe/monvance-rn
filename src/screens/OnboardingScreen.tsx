@@ -39,13 +39,13 @@ const OnboardingScreen = () => {
       id: 2,
       title: t(OnboardingPageKey.PAGE2_TITLE),
       description: t(OnboardingPageKey.PAGE2_DESCRIPTION),
-      image: require('../assets/logo.png'),
+      image: require('../assets/onboarding_switch_explain.png'),
     },
     {
       id: 3,
       title: t(OnboardingPageKey.PAGE3_TITLE),
       description: t(OnboardingPageKey.PAGE3_DESCRIPTION),
-      image: require('../assets/logo.png'),
+      image: require('../assets/onboarding_parameters_explain.png'),
     },
     {
       id: 4,
@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     marginBottom: 40,
   },
   title: {

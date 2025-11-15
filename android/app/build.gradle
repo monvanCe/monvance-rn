@@ -86,8 +86,8 @@ android {
         applicationId "com.cekolabs.vens"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.0.1"
+        versionCode 11
+        versionName "1.1.0"
         missingDimensionStrategy "store", "play"
     }
     signingConfigs {

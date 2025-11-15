@@ -39,13 +39,13 @@ export const TextInput = ({
   const inputStyle = [
     styles.input,
     {
-      color: colors.onSurface,
+      color: colors.text,
       backgroundColor: isContained ? colors.surface : 'transparent',
       borderWidth: isOutlined ? appTheme.ui.borderWidth : 0,
       borderColor: isOutlined
         ? error
-          ? colors.red
-          : colors.outline
+          ? colors.brand
+          : colors.border
         : 'transparent',
       borderRadius: appTheme.ui.radius,
       paddingLeft: leftIcon ? 36 : appTheme.ui.spacing,
@@ -65,21 +65,21 @@ export const TextInput = ({
         <Icon
           name={leftIcon}
           size={20}
-          color={colors.onSurfaceVariant}
+          color={colors.textSecondary}
           style={[styles.leftIcon, {left: appTheme.ui.spacing}]}
         />
       )}
       <RNTextInput
         {...rest}
         style={inputStyle}
-        placeholderTextColor={colors.onSurfaceVariant}
+        placeholderTextColor={colors.textSecondary}
       />
       {rightIcon && (
         <TouchableOpacity
           onPress={onRightIconPress}
           style={[styles.rightIcon, {right: appTheme.ui.spacing}]}
           hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}>
-          <Icon name={rightIcon} size={20} color={colors.onSurfaceVariant} />
+          <Icon name={rightIcon} size={20} color={colors.textSecondary} />
         </TouchableOpacity>
       )}
     </View>

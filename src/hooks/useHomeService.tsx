@@ -6,6 +6,8 @@ import {BINANCE_WS_URL} from '../const/externalEndpoints';
 export const useHomeService = () => {
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const latestUpdatesRef = useRef<ProcessedPrice[]>([]);
 
   useEffect(() => {
     eventBus.on('appStarted', () => {
@@ -21,6 +23,9 @@ export const useHomeService = () => {
       }
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
+      }
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
       }
     };
   }, []);
@@ -53,12 +58,17 @@ export const useHomeService = () => {
             volume: ticker.q,
             change: ticker.p,
             changePercent: ticker.P,
-            isFavorite: false,
-            switchValue: false,
           }));
 
           // Emit update event
-          eventBus.emit('tickerPricesUpdated', updates);
+          latestUpdatesRef.current = updates;
+          if (debounceTimeoutRef.current) {
+            clearTimeout(debounceTimeoutRef.current);
+          }
+          debounceTimeoutRef.current = setTimeout(() => {
+            eventBus.emit('tickerPricesUpdated', latestUpdatesRef.current);
+            debounceTimeoutRef.current = null;
+          }, 1000);
         } catch (error) {
           console.error('Error parsing WebSocket message:', error);
         }
@@ -74,6 +84,10 @@ export const useHomeService = () => {
         reconnectTimeoutRef.current = setTimeout(() => {
           connectWebSocket();
         }, 5000);
+        if (debounceTimeoutRef.current) {
+          clearTimeout(debounceTimeoutRef.current);
+          debounceTimeoutRef.current = null;
+        }
       };
     } catch (error) {
       console.error('Error connecting to WebSocket:', error);

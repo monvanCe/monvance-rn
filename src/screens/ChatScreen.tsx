@@ -7,7 +7,7 @@ import {ChatInput} from '../components/Chat/ChatInput';
 import {UsernameSetupModal} from '../components/UsernameSetupModal';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {useTheme} from '../context/ThemeContext';
-import KeyboardAvoidingView from '../components/ui/KeyboarAvoidinView';
+import KeyboardAvoidingView from '../components/ui/KeyboardAvoidingView';
 
 interface ChatScreenProps {
   onNavigateToTab: () => void;
