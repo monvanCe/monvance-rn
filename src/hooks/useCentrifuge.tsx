@@ -1,4 +1,3 @@
-import {useAppSelector} from '../store/store';
 import {useRef, useEffect} from 'react';
 import {USERS_CHANNEL_PREFIX, SIGNAL_CHANNEL} from '../const/enums';
 import {eventBus} from '../middleware/eventMiddleware';
@@ -6,7 +5,6 @@ import {internalService} from '../service/internalServices';
 import {centrifugeCases} from '../utils/centrifugeCases';
 
 export const useCentrifuge = () => {
-  const user = useAppSelector(state => state.auth);
   const centrifugeRef = useRef<any | null>(null);
   const subscriptionsRef = useRef<{[key: string]: any}>({});
   const centrifugeModule = require('centrifuge');
@@ -24,8 +22,7 @@ export const useCentrifuge = () => {
     subscriptionsRef.current[channel] = sub;
   };
 
-  const connect = async () => {
-    console.log('connect');
+  const connect = async (user: IUser) => {
     try {
       const res = await internalService.getSocket();
       if (centrifugeRef.current) centrifugeRef.current.disconnect();
@@ -33,7 +30,6 @@ export const useCentrifuge = () => {
       centrifugeRef.current = centrifuge;
       centrifuge.setToken(res.token);
       centrifuge.on('connected', () => {
-        console.log('Bağlandı!');
         subscribeToChannel(SIGNAL_CHANNEL);
         if (user && user._id)
           subscribeToChannel(`${USERS_CHANNEL_PREFIX}${user._id}`);
@@ -63,7 +59,7 @@ export const useCentrifuge = () => {
   };
 
   useEffect(() => {
-    const handleLogin = () => connect();
+    const handleLogin = (payload: {user: IUser}) => connect(payload.user);
     eventBus.on('loginSuccess', handleLogin);
 
     const handleCentrifugeSent = (payload: {channel: string; message: any}) => {

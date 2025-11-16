@@ -88,8 +88,6 @@
   "transaction_details": "Transaction Details",
   "include_transaction_info": "Include recent transaction information",
   "transaction_info_help": "This helps us better understand and resolve any payment-related issues",
-  "signal_toast_title": "Percentage Change",
-  "signal_toast_body": "%{percent}% %{direction} in %{period} min. %{prev} → %{curr}",
   "increased": "increased",
   "decreased": "decreased",
   "onboarding_page1_title": "Welcome to Vens",

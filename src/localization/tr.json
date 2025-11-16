@@ -88,8 +88,6 @@
   "transaction_details": "İşlem Detayları",
   "include_transaction_info": "Son işlem bilgilerini dahil et",
   "transaction_info_help": "Bu, ödeme ile ilgili sorunları daha iyi anlamamıza ve çözmemize yardımcı olur",
-  "signal_toast_title": "Yüzde Değişimi",
-  "signal_toast_body": "%{period} dk içinde %{percent}% %{direction}. %{prev} → %{curr}",
   "increased": "arttı",
   "decreased": "azaldı",
   "onboarding_page1_title": "Vens'e Hoş Geldiniz",

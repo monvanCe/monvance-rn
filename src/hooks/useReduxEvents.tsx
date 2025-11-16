@@ -230,26 +230,13 @@ export const useReduxEvents = () => {
 
     //SIGNAL
     eventBus.on('signalReceived', data => {
-      const previous = Number(data.previousPrice);
-      const current = Number(data.currentPrice);
-      const diff = current - previous;
-      const percent = previous !== 0 ? (diff / previous) * 100 : 0;
-      const directionKey = percent >= 0 ? 'increased' : 'decreased';
-
       const notification: INotification = {
         _id: Math.random().toString(36).substr(2, 9),
-        timestamp: Date.now().toString(),
         isRead: false,
-        type: 'info',
+        type: data.type,
         data,
-        title: t('signal_toast_title'),
-        body: t('signal_toast_body', {
-          percent: Math.abs(percent).toFixed(2),
-          direction: t(directionKey),
-          period: data.period,
-          prev: data.previousPrice,
-          curr: data.currentPrice,
-        }),
+        title: data.title,
+        body: data.body,
       };
       dispatch(addNotification(notification));
     });

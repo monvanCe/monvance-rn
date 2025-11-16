@@ -28,14 +28,8 @@ export const useToast = () => {
       const directionKey = percent >= 0 ? 'increased' : 'decreased';
 
       Toast.show({
-        text1: t('signal_toast_title'),
-        text2: t('signal_toast_body', {
-          percent: Math.abs(percent).toFixed(2),
-          direction: t(directionKey),
-          period: data.period,
-          prev: data.previousPrice,
-          curr: data.currentPrice,
-        }),
+        text1: data.title,
+        text2: data.body,
         type: directionKey === 'increased' ? 'success' : 'error',
       });
     });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {useChatScreen} from '../hooks/useChatScreen';
 import {ChatHeader} from '../components/Chat/ChatHeader';
@@ -21,7 +21,6 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
     message,
     setMessage,
     uniqueMessages,
-    getUserColor,
     scrollToBottom,
     handleSend,
     showUsernameModal,
@@ -43,7 +42,6 @@ export default function ChatScreen({onNavigateToTab}: ChatScreenProps) {
         <ChatMessagesList
           scrollViewRef={scrollViewRef}
           messages={uniqueMessages}
-          getUserColor={getUserColor}
           scrollToBottom={scrollToBottom}
           variant="text"
         />

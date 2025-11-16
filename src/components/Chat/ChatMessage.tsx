@@ -13,7 +13,6 @@ interface ChatMessageProps {
   message: IMessage;
   index: number;
   messages: IMessage[];
-  getUserColor: (userId: string) => string;
   variant?: 'contained' | 'outlined' | 'text';
 }
 
@@ -21,7 +20,6 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   message,
   index,
   messages,
-  getUserColor,
   variant,
 }) => {
   const theme = useTheme();

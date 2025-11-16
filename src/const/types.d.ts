@@ -73,7 +73,7 @@ interface IMessage {
   userId: {
     _id: string;
     username: string;
-    avatar: string;
+    avatar?: string;
   };
   message: string;
   createdAt: string;
@@ -122,9 +122,9 @@ interface INotification {
   _id: string;
   title: string;
   body: string;
-  timestamp: string;
+  timestamp?: string;
   isRead: boolean;
-  type: 'info' | 'warning' | 'success' | 'error';
+  type: 'signal';
   data: any;
 }
 
@@ -220,6 +220,8 @@ interface ISignalPushData {
   type: 'signal';
   status: string;
   language?: string;
+  body: string;
+  title: string;
 }
 
 interface ISignalsState {

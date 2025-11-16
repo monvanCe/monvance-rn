@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlashList} from '@shopify/flash-list';
 
 import {useTheme as useAppTheme} from '../../context/ThemeContext';
@@ -7,7 +7,6 @@ import {ChatMessage} from './ChatMessage';
 interface ChatMessagesListProps {
   scrollViewRef: React.RefObject<FlashList<IMessage> | null>;
   messages: IMessage[];
-  getUserColor: (userId: string) => string;
   scrollToBottom: (withTimeout?: boolean) => void;
   variant?: 'text' | 'contained' | 'outlined';
 }
@@ -15,7 +14,6 @@ interface ChatMessagesListProps {
 export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
   scrollViewRef,
   messages,
-  getUserColor,
   scrollToBottom,
   variant,
 }) => {
@@ -26,7 +24,6 @@ export const ChatMessagesList: React.FC<ChatMessagesListProps> = ({
       message={item}
       index={index}
       messages={messages}
-      getUserColor={getUserColor}
       variant={variant}
     />
   );

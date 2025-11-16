@@ -1,25 +1,12 @@
 import {FlashList} from '@shopify/flash-list';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../store/store';
 import {addMessage} from '../store/slices/chatSlice';
 import {internalService} from '../service/internalServices';
 import {CHAT_ID} from '../const/env';
 
-const COLORS = [
-  '#FF6B6B',
-  '#4ECDC4',
-  '#45B7D1',
-  '#96CEB4',
-  '#FFEEAD',
-  '#D4A5A5',
-  '#9B59B6',
-  '#3498DB',
-  '#1ABC9C',
-];
-
 export const useChatScreen = () => {
   const scrollViewRef = useRef<FlashList<IMessage>>(null);
-  const userColorsRef = useRef<{[key: string]: string}>({});
   const [message, setMessage] = useState('');
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const messages = useAppSelector(state => state.chat.messages);
@@ -33,20 +20,6 @@ export const useChatScreen = () => {
     }
     return acc;
   }, []);
-
-  const getUserColor = (userId: string) => {
-    if (!userColorsRef.current[userId]) {
-      const availableColors = COLORS.filter(
-        color => !Object.values(userColorsRef.current).includes(color),
-      );
-      const colorToUse =
-        availableColors.length > 0
-          ? availableColors[Math.floor(Math.random() * availableColors.length)]
-          : COLORS[Math.floor(Math.random() * COLORS.length)];
-      userColorsRef.current[userId] = colorToUse;
-    }
-    return userColorsRef.current[userId];
-  };
 
   const scrollToBottom = (withTimeout = true) => {
     if (withTimeout) {
@@ -111,7 +84,6 @@ export const useChatScreen = () => {
     message,
     setMessage,
     uniqueMessages,
-    getUserColor,
     scrollToBottom,
     handleSend,
     showUsernameModal,
