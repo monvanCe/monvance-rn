@@ -93,9 +93,8 @@ export const useReduxEvents = () => {
     eventBus.on('setHasSeenOnboarding', (hasSeen: boolean) => {
       dispatch(setHasSeenOnboarding(hasSeen));
     });
-    eventBus.on('tickerPricesFetched', (data: BinanceTickerPrice[]) => {
-      const processedData = processTickerPrices(data);
-      dispatch(setPrices(processedData));
+    eventBus.on('tickerPricesFetched', (data: ProcessedPrice[]) => {
+      dispatch(setPrices(data));
     });
     eventBus.on('tickerPricesUpdated', (data: ProcessedPrice[]) => {
       dispatch(updatePrices(data));

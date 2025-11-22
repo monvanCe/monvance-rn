@@ -5,27 +5,25 @@ import {BINANCE_WS_URL} from '../const/externalEndpoints';
 
 export const useHomeService = () => {
   const wsRef = useRef<WebSocket | null>(null);
-  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const latestUpdatesRef = useRef<ProcessedPrice[]>([]);
+  const fallbackIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isUsingFallbackRef = useRef<boolean>(false);
 
   useEffect(() => {
     eventBus.on('appStarted', () => {
-      fetchPrices().then(() => {
-        connectWebSocket();
-      });
+      fetchPrices();
     });
 
     return () => {
-      // Cleanup WebSocket on unmount
       if (wsRef.current) {
         wsRef.current.close();
       }
-      if (reconnectTimeoutRef.current) {
-        clearTimeout(reconnectTimeoutRef.current);
-      }
       if (debounceTimeoutRef.current) {
         clearTimeout(debounceTimeoutRef.current);
+      }
+      if (fallbackIntervalRef.current) {
+        clearInterval(fallbackIntervalRef.current);
       }
     };
   }, []);
@@ -33,8 +31,38 @@ export const useHomeService = () => {
   const fetchPrices = async () => {
     try {
       await binanceService.getTickerPrices();
+      connectWebSocket();
     } catch (error) {
-      console.error('Error fetching prices:', error);
+      startFallbackPolling();
+    }
+  };
+
+  const startFallbackPolling = () => {
+    if (isUsingFallbackRef.current) {
+      return;
+    }
+    isUsingFallbackRef.current = true;
+
+    fetchUSDTPrices();
+    fallbackIntervalRef.current = setInterval(() => {
+      fetchUSDTPrices();
+    }, 5000);
+  };
+
+  const fetchUSDTPrices = async () => {
+    try {
+      const response = await binanceService.getUSDTPrices();
+      const updates: ProcessedPrice[] = response.data.map(item => ({
+        symbol: item.symbol,
+        price: item.price.toString(),
+        volume: (item.volume * item.price).toString(),
+        change: item.changePrice.toString(),
+        changePercent: item.changePercent.toString(),
+      }));
+
+      eventBus.emit('tickerPricesFetched', updates);
+    } catch (error) {
+      console.error('Error fetching USDT prices:', error);
     }
   };
 
@@ -79,11 +107,7 @@ export const useHomeService = () => {
       };
 
       ws.onclose = () => {
-        console.log('WebSocket disconnected, attempting to reconnect...');
-        // Attempt to reconnect after 5 seconds
-        reconnectTimeoutRef.current = setTimeout(() => {
-          connectWebSocket();
-        }, 5000);
+        console.log('WebSocket disconnected');
         if (debounceTimeoutRef.current) {
           clearTimeout(debounceTimeoutRef.current);
           debounceTimeoutRef.current = null;

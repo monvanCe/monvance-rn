@@ -118,6 +118,23 @@ interface BinanceStreamTicker {
   P: string; // changePercent
 }
 
+interface USDTPriceItem {
+  symbol: string;
+  price: number;
+  volume: number;
+  lowPrice: number;
+  highPrice: number;
+  changePercent: number;
+  changePrice: number;
+  openPrice: number;
+  weightedAvgPrice: number;
+}
+
+interface USDTPricesResponse {
+  data: USDTPriceItem[];
+  message: string;
+}
+
 interface INotification {
   _id: string;
   title: string;
