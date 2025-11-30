@@ -7,11 +7,9 @@ import {
   isDeviceRegisteredForRemoteMessages,
   registerDeviceForRemoteMessages,
 } from '@react-native-firebase/messaging';
-import {getItem, setItem} from './storage';
+
 import {eventBus} from '../middleware/eventMiddleware';
 import {PermissionsAndroid} from 'react-native';
-
-const NOTIFICATION_TOKEN_KEY = 'notification_token';
 
 const app = getApp();
 const messaging = getMessaging(app);
@@ -38,23 +36,6 @@ export const getNotificationToken = async (): Promise<string | null> => {
     return token;
   } catch (error) {
     console.error('Failed to get notification token:', error);
-    return null;
-  }
-};
-
-export const saveNotificationToken = async (token: string): Promise<void> => {
-  try {
-    await setItem(NOTIFICATION_TOKEN_KEY, token);
-  } catch (error) {
-    console.error('Failed to save notification token:', error);
-  }
-};
-
-export const getStoredNotificationToken = async (): Promise<string | null> => {
-  try {
-    return await getItem(NOTIFICATION_TOKEN_KEY);
-  } catch (error) {
-    console.error('Failed to get stored notification token:', error);
     return null;
   }
 };
@@ -86,16 +67,8 @@ export const initializeNotification = async (): Promise<void> => {
       console.log('Failed to get notification token');
       return;
     }
-    const storedToken = await getStoredNotificationToken();
-    if (storedToken === currentToken) {
-      eventBus.emit('notificationIdInitialized', currentToken);
-    } else if (!storedToken) {
-      await saveNotificationToken(currentToken);
-      eventBus.emit('notificationIdCreated', currentToken);
-    } else {
-      await saveNotificationToken(currentToken);
-      eventBus.emit('notificationIdRefreshed', currentToken);
-    }
+
+    eventBus.emit('notificationIdInitialized', currentToken);
     setupNotificationListeners();
   } catch (error) {
     console.error('Notification initialization failed:', error);

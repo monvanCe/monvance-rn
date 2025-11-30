@@ -78,12 +78,6 @@ export const useReduxEvents = () => {
     });
 
     //APP
-    eventBus.on('notificationIdCreated', token => {
-      dispatch(setNotificationId(token));
-    });
-    eventBus.on('notificationIdRefreshed', token => {
-      dispatch(setNotificationId(token));
-    });
     eventBus.on('notificationIdInitialized', token => {
       dispatch(setNotificationId(token));
     });

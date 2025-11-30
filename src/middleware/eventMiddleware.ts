@@ -6,8 +6,6 @@ type eventType = {
   logoutSuccess: null;
   notification: {title: string; body: string; data: string};
   error: string;
-  notificationIdRefreshed: string;
-  notificationIdCreated: string;
   notificationIdInitialized: string;
   updateUserSuccess: {user: IUserUpdate};
   checkUsernameSuccess: {username: string; available: boolean};

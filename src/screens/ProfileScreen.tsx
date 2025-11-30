@@ -27,8 +27,6 @@ const AVATAR_SIZE = 64;
 const PLACEHOLDER =
   'https://ui-avatars.com/api/?name=User&background=aaa&color=fff&size=192';
 
-const APP_VERSION = '1.0.0';
-
 const ProfileScreen = () => {
   const navigation = useNavigation<any>();
   const {theme} = useTheme();
