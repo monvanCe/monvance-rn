@@ -2,8 +2,9 @@ import {useEffect, useMemo, useState} from 'react';
 import {useAppSelector} from '../store/store';
 import {internalService} from '../service/internalServices';
 import {eventBus} from '../middleware/eventMiddleware';
-import {AppState, InteractionManager, Platform} from 'react-native';
+import {Platform} from 'react-native';
 import {
+  acknowledgePurchaseAndroid,
   getPurchaseHistory,
   getSubscriptions,
   initConnection,
@@ -166,12 +167,23 @@ export const usePaywall = (opts?: {usePromo?: boolean}) => {
           purchaseToken,
         };
 
+        await acknowledgePurchase(purchaseToken);
         await internalService.postPayment(paymentRequest);
       } else {
         //TODO: iOS için işlem yapılacak
       }
     } catch (error: any) {
       eventBus.emit('error', error.message as string);
+    }
+  };
+
+  const acknowledgePurchase = async (purchaseToken: string) => {
+    try {
+      await acknowledgePurchaseAndroid({
+        token: purchaseToken,
+      });
+    } catch (error: any) {
+      acknowledgePurchase(purchaseToken);
     }
   };
 

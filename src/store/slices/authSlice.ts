@@ -27,13 +27,13 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      return action.payload;
+      return {...state, ...action.payload};
     },
     setUserUpdate: (state, action) => {
       return {...state, ...action.payload};
     },
     setNotificationId: (state, action) => {
-      state.notificationId = action.payload;
+      return {...state, notificationId: action.payload};
     },
   },
 });

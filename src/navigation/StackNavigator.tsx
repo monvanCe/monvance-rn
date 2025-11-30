@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import TabNavigationWrapper from './TabNavigationWrapper';
 import NotificationScreen from '../screens/NotificationScreen';
@@ -11,6 +11,7 @@ import {View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTheme} from '../context/ThemeContext';
 import {useAppSelector} from '../store/store';
+import {useNavigation} from '@react-navigation/native';
 
 export type RootStackParamList = {
   Onboarding: undefined;
@@ -32,6 +33,12 @@ const StackNavigator = () => {
   const hasSeenOnboarding = useAppSelector(
     state => state.appConfig.hasSeenOnboarding,
   );
+  const navigation = useNavigation<any>();
+  useEffect(() => {
+    if (!hasSeenOnboarding) {
+      navigation.navigate('Onboarding');
+    }
+  }, [hasSeenOnboarding]);
 
   return (
     <View
@@ -45,7 +52,7 @@ const StackNavigator = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={hasSeenOnboarding ? 'Main' : 'Onboarding'}>
+        initialRouteName="Main">
         <Stack.Screen name="Onboarding" component={OnboardingScreen} />
         <Stack.Screen name="Main" component={TabNavigationWrapper} />
         <Stack.Screen name="Notifications" component={NotificationScreen} />
